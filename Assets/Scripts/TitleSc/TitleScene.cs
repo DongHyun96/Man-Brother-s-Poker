@@ -19,7 +19,8 @@ public class TitleScene : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //StartCoroutine("FadeRoutine");
-            SceneManager.LoadScene(1);
+            //SceneManager.LoadScene(1);
+            LoadingSceneController.LoadScene("EnteringScene");
         }
     }
 
