@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: e975a9b6a196d5045b245363f6eaa49b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Colby
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 7240806e9c77888478e04b346e28447e, type: 3}
+  - {fileID: 12800000, guid: b4b4686c7c2985c4b9dd8ef78196f315, type: 3}
+  - {fileID: 12800000, guid: f7a99cac598a163459c12daf709be314, type: 3}
+  - {fileID: 12800000, guid: 92451418a6839f14fa0d876ac5a65225, type: 3}
+  - {fileID: 12800000, guid: 2cab0c8776f81b0469128ecc35ead68c, type: 3}
+  - {fileID: 12800000, guid: 36c6b1322fc28214e9c43029af91ab25, type: 3}
+  - {fileID: 12800000, guid: 641d27178b041914993201cfae5fd683, type: 3}
+  - {fileID: 12800000, guid: 97d46bddb5496604d8312a43a38b602f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
