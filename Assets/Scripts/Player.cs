@@ -6,6 +6,9 @@ public class Player
 {
     public string name;
 
+    // Whether player is available to get invitation
+    public bool invitable = true;
+    
     /********************************************************************************************************
     In game ref
     *********************************************************************************************************/

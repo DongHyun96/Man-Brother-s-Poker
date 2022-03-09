@@ -8,6 +8,6 @@ public class Room
     public List<Player> players;
     public GameTable gameTable;
 
-    // Rooms properyt etc...
+    // Rooms property etc...
     
 }

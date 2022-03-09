@@ -13,6 +13,7 @@ public class SpaceController : MonoBehaviour
     void Start()
     {
         inputField.onValueChanged.AddListener(delegate { RemoveSpaces(); });
+
     }
 
     void RemoveSpaces()

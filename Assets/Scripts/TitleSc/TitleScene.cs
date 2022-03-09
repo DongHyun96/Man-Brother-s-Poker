@@ -13,6 +13,12 @@ public class TitleScene : MonoBehaviour
 
     private float fadeSpeed = 0.05f;
 
+    private void Start() {
+        // Initialize and connect websockets
+        MainMsgHandler.GetInstance();
+    }
+    
+    
     // Update is called once per frame
     void Update()
     {
