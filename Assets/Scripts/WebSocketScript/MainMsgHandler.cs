@@ -47,7 +47,7 @@ public class MainMsgHandler : MonoBehaviour
 
 
 
-    public void ReceiveMessage(object sender, MessageEventArgs e)
+    private void ReceiveMessage(object sender, MessageEventArgs e)
     {
         Debug.Log("Message received: " + e.Data);
         try{
@@ -57,12 +57,16 @@ public class MainMsgHandler : MonoBehaviour
 
             switch (message.type)
             {
-                case MainMessage.MessageType.SIGNUP: // Valid Sign up received. Add player to Game
+                // Valid Sign up received. Add player to the Game
+                case MainMessage.MessageType.SIGNUP:
 
                     if(GameManager.thisPlayer == null) // Sign up checked by me(this player)
                     {
                         Debug.Log("Valid Sign up");
+                        
                         GameManager.thisPlayer = new Player(message.name);
+                        GameManager.state = GameManager.State.LOBBY;
+                        print(GameManager.state);
                     }
                     else
                     {
@@ -70,6 +74,7 @@ public class MainMsgHandler : MonoBehaviour
                     }
                     break;
 
+                // Invalid Sign up
                 case MainMessage.MessageType.DENIED:
                     // Show warning text in main thread
                     UnityMainThread.wkr.AddJob(() => {

@@ -15,19 +15,21 @@ public class GameManager : MonoBehaviour
         LOGIN, LOBBY, ROOM, PLAYING
     }
 
-    public State state{
+    public static State state{
+
+        get => m_state;
+
         set{
             switch(value)
             {
                 case State.LOBBY:
-                    if(state == State.PLAYING)
+                    if(state == State.PLAYING) // PLAYING -> LOBBY : Change invitable to true and notify to other players
                     {
                         thisPlayer.invitable = true;
-
                     }
                     break;
                 case State.ROOM:
-                    if(state == State.PLAYING)
+                    if(state == State.PLAYING) // PLAYING -> ROOM : Change invitable to true and notify to other players
                     {
                         thisPlayer.invitable = true;
                     }
@@ -35,10 +37,11 @@ public class GameManager : MonoBehaviour
                 case State.PLAYING:
                     break;
             }
-            state = value;
+            m_state = value;
         }
-        get => state;
     }
+
+    private static State m_state = State.LOGIN;
 
     void Awake()
     {

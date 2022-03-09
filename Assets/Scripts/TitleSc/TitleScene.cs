@@ -11,8 +11,6 @@ public class TitleScene : MonoBehaviour
     public GameObject titleObj;
     public GameObject wordObj;
 
-    private float fadeSpeed = 0.05f;
-
     private void Start() {
         // Initialize and connect websockets
         MainMsgHandler.GetInstance();

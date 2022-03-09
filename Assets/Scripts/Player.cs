@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 public class Player
 {
@@ -12,7 +15,9 @@ public class Player
     /********************************************************************************************************
     In game ref
     *********************************************************************************************************/
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum State{
+        [EnumMember(Value = "IDLE")]
         IDLE
     }
     public State state;
