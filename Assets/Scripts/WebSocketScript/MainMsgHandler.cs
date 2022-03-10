@@ -85,7 +85,6 @@ public class MainMsgHandler : MonoBehaviour
                             // Check whether current state is LOBBY and then update players panel
                             if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                             {
-                                print("allOther's Count: " + GameManager.allOthers.Count);
                                 EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
                             }
                         });
@@ -101,6 +100,13 @@ public class MainMsgHandler : MonoBehaviour
                     break;
 
                 case MainMessage.MessageType.CHAT:
+                    UnityMainThread.wkr.AddJob(() => {
+                        // check LOBBY state
+                        if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                        {
+                            EnteringSceneUpdater.GetInstance().UpdateChat(message.name, message.msg);
+                        }
+                    });
                     break;
 
                 case MainMessage.MessageType.REMOVE:

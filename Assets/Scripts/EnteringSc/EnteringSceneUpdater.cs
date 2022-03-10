@@ -10,6 +10,10 @@ public class EnteringSceneUpdater : MonoBehaviour
 
     public UnityEvent onLobbyPlayersUpdate;
 
+    public delegate void LobbyChatUpdate(string name, string chat);
+    public event LobbyChatUpdate onLobbyChatUpdate;
+
+
     public static EnteringSceneUpdater GetInstance()
     {
         if(instance == null)
@@ -17,6 +21,11 @@ public class EnteringSceneUpdater : MonoBehaviour
             instance = FindObjectOfType<EnteringSceneUpdater>();
         }
         return instance; // It may be null if it calls in invalid scene.
+    }
+
+    public void UpdateChat(string name, string chat)
+    {
+        EnteringSceneUpdater.GetInstance().onLobbyChatUpdate(name, chat);
     }
 
 }
