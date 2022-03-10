@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class thisPlayer : MonoBehaviour
+public class thisPlayerPrefab : MonoBehaviour
 {
     public Text name;
 
-    public static void setName()
+    public void SetName()
     {
-        //name.text = GameManager.thisPlayer.name;
+        name.text = GameManager.thisPlayer.name;
     }
 }

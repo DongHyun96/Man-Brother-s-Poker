@@ -49,11 +49,10 @@ public class MainMsgHandler : MonoBehaviour
 
     private void ReceiveMessage(object sender, MessageEventArgs e)
     {
-        Debug.Log("Message received: " + e.Data);
         try{
             MainMessage message = JsonConvert.DeserializeObject<MainMessage>(e.Data); // Received message
 
-            Debug.Log(message.type);
+            Debug.Log("Main Message received --> " + message.type);
 
             switch (message.type)
             {
@@ -64,13 +63,32 @@ public class MainMsgHandler : MonoBehaviour
                     {
                         Debug.Log("Valid Sign up");
                         
-                        GameManager.thisPlayer = new Player(message.name);
-                        GameManager.state = GameManager.State.LOBBY;
-                        print(GameManager.state);
+                        // Set thisPlayer & change state to LOBBY
+                        UnityMainThread.wkr.AddJob(() => {
+                            GameManager.thisPlayer = new Player(message.name);
+
+                            // Init allOthers
+                            Dictionary<string, Player> receivedPlayers =
+                            JsonConvert.DeserializeObject<Dictionary<string, Player>>(message.msg);
+
+                            receivedPlayers.Remove(GameManager.thisPlayer.name);  // Remove self
+                            GameManager.allOthers = receivedPlayers;
+  
+                            GameManager.GetInstance().state = GameManager.State.LOBBY;
+                        });
                     }
                     else
                     {
+                        // Valid Sign up by other.
                         GameManager.allOthers.Add(message.name, new Player(message.name));
+                        UnityMainThread.wkr.AddJob(() => {
+                            // Check whether current state is LOBBY and then update players panel
+                            if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                            {
+                                print("allOther's Count: " + GameManager.allOthers.Count);
+                                EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                            }
+                        });
                     }
                     break;
 
