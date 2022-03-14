@@ -14,6 +14,7 @@ public class TitleScene : MonoBehaviour
     private void Start() {
         // Initialize and connect websockets
         MainMsgHandler.GetInstance();
+        RoomMsgHandler.GetInstance();
     }
     
     

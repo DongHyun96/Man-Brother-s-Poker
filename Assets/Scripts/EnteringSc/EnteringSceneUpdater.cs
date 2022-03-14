@@ -10,6 +10,8 @@ public class EnteringSceneUpdater : MonoBehaviour
 
     public UnityEvent onLobbyPlayersUpdate;
 
+    public UnityEvent onLobbyRoomsUpdate;
+
     public delegate void LobbyChatUpdate(string name, string chat);
     public event LobbyChatUpdate onLobbyChatUpdate;
 
@@ -23,9 +25,22 @@ public class EnteringSceneUpdater : MonoBehaviour
         return instance; // It may be null if it calls in invalid scene.
     }
 
+    public void InitLobby()
+    {
+        
+        // Init allOthers and rooms by getting data from server & Invoke updaters
+        MainMsgHandler.SendMessage(new MainMessage(MainMessage.MessageType.GET));
+        RoomMsgHandler.SendMessage(new RoomMessage(RoomMessage.MessageType.GET));
+
+        //onLobbyPlayersUpdate.Invoke(); --> Invoke these in each MsgHandler
+        //onLobbyRoomsUpdate.Invoke();
+        
+
+    }
+
     public void UpdateChat(string name, string chat)
     {
-        EnteringSceneUpdater.GetInstance().onLobbyChatUpdate(name, chat);
+        onLobbyChatUpdate(name, chat);
     }
 
 }

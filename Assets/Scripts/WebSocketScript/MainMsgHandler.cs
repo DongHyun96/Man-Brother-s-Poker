@@ -10,7 +10,7 @@ public class MainMsgHandler : MonoBehaviour
 {
     private static MainMsgHandler instance;
 
-    public static WebSocket webSocket = new WebSocket(UrlBase.addressBase + "mainEcho");
+    private static WebSocket webSocket = new WebSocket(UrlBase.addressBase + "mainEcho");
 
 
 
@@ -41,7 +41,7 @@ public class MainMsgHandler : MonoBehaviour
 
     public static void SendMessage(MainMessage message)
     {
-        Debug.Log("Sending some message: " + JsonConvert.SerializeObject(message));
+        Debug.Log("Sending main message: " + JsonConvert.SerializeObject(message));
         webSocket.Send(JsonConvert.SerializeObject(message)); // Convert to Json(string) form and send
     }
 
@@ -68,8 +68,7 @@ public class MainMsgHandler : MonoBehaviour
                             GameManager.thisPlayer = new Player(message.name);
 
                             // Init allOthers
-                            Dictionary<string, Player> receivedPlayers =
-                            JsonConvert.DeserializeObject<Dictionary<string, Player>>(message.msg);
+                            Dictionary<string, Player> receivedPlayers = message.playerMap;
 
                             receivedPlayers.Remove(GameManager.thisPlayer.name);  // Remove self
                             GameManager.allOthers = receivedPlayers;
@@ -110,7 +109,33 @@ public class MainMsgHandler : MonoBehaviour
                     break;
 
                 case MainMessage.MessageType.REMOVE:
-                    GameManager.allOthers.Remove(message.name);
+                    UnityMainThread.wkr.AddJob(() => {
+                        GameManager.allOthers.Remove(message.name);
+
+                        if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                        {
+                            EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                        }
+                    });
+                    break;
+
+                case MainMessage.MessageType.UPDATE:
+                    if(!message.name.Equals(GameManager.thisPlayer))
+                    {
+                        GameManager.allOthers[message.name].invitable = true;
+                    }
+                    
+                    break;
+                case MainMessage.MessageType.GET:
+                    // Refresh GameManager's allOthers
+                    UnityMainThread.wkr.AddJob(() => {
+                        Dictionary<string, Player> receivedPlayers = message.playerMap;
+
+                        receivedPlayers.Remove(GameManager.thisPlayer.name);  // Remove self
+                        GameManager.allOthers = receivedPlayers;
+
+                        EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                    });
                     break;
                 default:
 

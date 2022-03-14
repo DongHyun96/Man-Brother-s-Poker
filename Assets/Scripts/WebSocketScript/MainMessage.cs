@@ -1,6 +1,8 @@
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
+
 using Newtonsoft.Json.Serialization;
 using System.Runtime.Serialization;
 using System;
@@ -9,6 +11,13 @@ using System;
 public class MainMessage
 
 {
+	/**Summary
+	 * SIGNUP : When player request singup. / or / By server broadcasting, some player made valid signUp.
+	 * DENIED : When player's signup request denied.
+	 * CHAT : Chat in Lobby panel.
+	 * REMOVE : When some player turns off the game completely.
+	 * UPDATE : Update player's isInvitable etc.
+	 */
 	[JsonConverter(typeof(StringEnumConverter))]
 	public enum MessageType{
 		[EnumMember(Value = "SIGNUP")]
@@ -21,7 +30,13 @@ public class MainMessage
 		CHAT, 
 
 		[EnumMember(Value = "REMOVE")]
-		REMOVE
+		REMOVE,
+
+		[EnumMember(Value = "UPDATE")]
+		UPDATE,
+
+		[EnumMember(Value = "GET")]
+		GET
 
 	}
 
@@ -30,6 +45,9 @@ public class MainMessage
 	public string name;
 	public string msg;
 
+	public bool invitable;
+
+	public Dictionary<string, Player> playerMap; 
 	public MainMessage() {}
 
 	public MainMessage(MessageType type)
@@ -47,5 +65,9 @@ public class MainMessage
 		this.type = type;
 		this.name = name;
 		this.msg = msg;
+	}
+	public MainMessage(MessageType type, string name, bool invitable)
+	{
+		
 	}
 }

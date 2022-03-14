@@ -22,10 +22,11 @@ public class L_PlayerPanel : MonoBehaviour
         thisPlayer.GetComponent<thisPlayerPrefab>().SetName();
 
         // Init other players, Add invitable first, and then add non-invitable
-        int cnt = 0;
+        // Count limit - 20
+        int count = 0;
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers) 
         {
-            if(cnt < 20 && pair.Value.invitable)
+            if(count < 20 && pair.Value.invitable)
             {
                 GameObject player = Instantiate(playerObj, transform);
                 player.GetComponent<PlayerPrefab>().SetName_Dot(pair.Key, pair.Value.invitable);
@@ -34,13 +35,12 @@ public class L_PlayerPanel : MonoBehaviour
             else{
                 break;
             }
-            cnt++;
+            count++;
         }
 
-        cnt = 0;
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers) 
         {
-            if(cnt < 20 && !pair.Value.invitable)
+            if(count < 20 && !pair.Value.invitable)
             {
                 GameObject player = Instantiate(playerObj, transform);
                 player.GetComponent<PlayerPrefab>().SetName_Dot(pair.Key, pair.Value.invitable);
@@ -49,7 +49,7 @@ public class L_PlayerPanel : MonoBehaviour
             else{
                 break;
             }
-            cnt++;
+            count++;
         }
 
     }

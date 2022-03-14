@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class GameManager : MonoBehaviour
 
     // For faster search, Using dictionary instead of list, (name, Player) pair
     public static Dictionary<string, Player> allOthers = new Dictionary<string, Player>();
+
+    // RoomDict (Guid, Room) pair
+    public static Dictionary<Guid, Room> rooms = new Dictionary<Guid, Room>();
+
+    // This player's current room
+    public static Room thisPlayerRoom;
 
     /// Changing scene(panel) events
     public UnityEvent onValidSignUp;
@@ -47,9 +54,12 @@ public class GameManager : MonoBehaviour
                     {
                         onRoomToLobby.Invoke();
                     }
-                    else if(state == State.LOGIN) // SIGNUP -> LOBBY
+                    else if(state == State.LOGIN) // SIGNUP -> LOBBY (initialize Room session)
                     {
                         onValidSignUp.Invoke();
+                        
+                        RoomMessage message = new RoomMessage(RoomMessage.MessageType.INIT, thisPlayer.name);
+                        RoomMsgHandler.SendMessage(message);
                     }
 
                     break;
@@ -57,6 +67,15 @@ public class GameManager : MonoBehaviour
                     if(state == State.PLAYING) // PLAYING -> ROOM : Change invitable to true and notify to other players
                     {
                         thisPlayer.invitable = true;
+                    }
+                    else if(state == State.ROOM) // ROOM -> ROOM
+                    {
+
+                    }
+                    else // LOBBY -> ROOM
+                    {
+                        // Initialize room features here ( room UI )
+                        onLobbyToRoom.Invoke();
                     }
                     break;
                 case State.PLAYING:
