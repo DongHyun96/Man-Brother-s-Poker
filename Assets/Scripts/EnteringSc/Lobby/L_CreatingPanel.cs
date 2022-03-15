@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class L_CreatingPanel : MonoBehaviour
 {
@@ -34,16 +35,19 @@ public class L_CreatingPanel : MonoBehaviour
         Room.Mode m = GetModeFromToggleName(mToggle);
 
         // Set new room to GameManager
-        Room newRoom = new Room(GameManager.thisPlayer.name, title.text, password.text, b, m);
+        Room newRoom = new Room(Guid.NewGuid(), GameManager.thisPlayer.name, title.text, password.text, b, m);
         newRoom.players.Add(GameManager.thisPlayer);
         GameManager.thisPlayerRoom = newRoom;
 
         // Send message to server
-        RoomMessage msg = new RoomMessage(RoomMessage.MessageType.REGISTER, GameManager.thisPlayer.name, newRoom);
+        RoomMessage msg = new RoomMessage(newRoom.id, RoomMessage.MessageType.REGISTER, GameManager.thisPlayer.name, newRoom);
         RoomMsgHandler.SendMessage(msg);
 
         // Change the GameManager state
         GameManager.GetInstance().state = GameManager.State.ROOM;
+
+        // Turn off this panel
+        this.gameObject.SetActive(false);
     }
 
     private Room.BuyIn GetBuyInFromToggleName(Toggle t)

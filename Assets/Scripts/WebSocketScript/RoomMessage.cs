@@ -54,41 +54,41 @@ public class RoomMessage
 
 	public RoomMessage(MessageType type) 
 	{
-		this.id = Guid.NewGuid();
+		this.id = id;
 		this.type = type;
-	}
-	public RoomMessage(MessageType type, string sender) 
-	{
-		this.id = Guid.NewGuid();
-		this.type = type;
-		this.sender = sender;
 	}
 
-	public RoomMessage(MessageType type, string sender, Room room)
+    public RoomMessage(Guid id, MessageType type, string sender)
 	{
-		this.id = Guid.NewGuid();
+		this.id = id;
+		this.type = type;
+		this.sender = sender;
+	}
+	public RoomMessage(Guid id, MessageType type, string sender, Room room)
+	{
+		this.id = id;
 		this.type = type;
 		this.sender = sender;
 		this.room = room;
 	}
-	public RoomMessage(MessageType type, string sender, string receiver) 
+	public RoomMessage(Guid id, MessageType type, string sender, string receiver) 
 	{
-		this.id = Guid.NewGuid();
+		this.id = id;
 		this.type = type;
 		this.sender = sender;
 		this.receiver = receiver;
 	}
-	public RoomMessage(MessageType type, string sender, string receiver, Room room) 
+	public RoomMessage(Guid id, MessageType type, string sender, string receiver, Room room) 
 	{
-		this.id = Guid.NewGuid();
+		this.id = id;
 		this.type = type;
 		this.sender = sender;
 		this.receiver = receiver;
 		this.room = room;
 	}
-	public RoomMessage(MessageType type, string sender, string receiver, Room room, string msg)
+	public RoomMessage(Guid id, MessageType type, string sender, string receiver, Room room, string msg)
 	{
-		this.id = Guid.NewGuid();
+		this.id = id;
 		this.type = type;
 		this.sender = sender;
 		this.receiver = receiver;

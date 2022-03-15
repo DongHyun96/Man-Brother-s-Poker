@@ -18,13 +18,10 @@ public class L_RoomsPanel : MonoBehaviour
         int count = 0;
         foreach(KeyValuePair<Guid, Room> pair in GameManager.rooms)
         {
-            Room r = pair.Value;
             if (count < 30)
             {
                 GameObject container = Instantiate(prefab, transform);
-                container.GetComponent<RoomButtonPrefab>().SetContents(r.title, r.isPlaying,
-                 r.players.Count, r.buyIn,
-                  r.mode, !String.IsNullOrEmpty(r.password));
+                container.GetComponent<RoomButtonPrefab>().SetContents(pair.Key);
             }
             else
             {

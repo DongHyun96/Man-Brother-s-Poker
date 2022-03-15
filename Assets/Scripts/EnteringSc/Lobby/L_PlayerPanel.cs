@@ -19,7 +19,6 @@ public class L_PlayerPanel : MonoBehaviour
         
         // Init thisPlayer
         GameObject thisPlayer = Instantiate(thisPlayerObj, transform);
-        thisPlayer.GetComponent<thisPlayerPrefab>().SetName();
 
         // Init other players, Add invitable first, and then add non-invitable
         // Count limit - 20

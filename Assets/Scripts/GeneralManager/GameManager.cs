@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
                     {
                         onValidSignUp.Invoke();
                         
-                        RoomMessage message = new RoomMessage(RoomMessage.MessageType.INIT, thisPlayer.name);
+                        RoomMessage message = new RoomMessage(Guid.NewGuid(), RoomMessage.MessageType.INIT, thisPlayer.name);
                         RoomMsgHandler.SendMessage(message);
                     }
 

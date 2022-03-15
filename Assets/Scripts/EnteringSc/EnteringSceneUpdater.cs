@@ -15,6 +15,7 @@ public class EnteringSceneUpdater : MonoBehaviour
     public delegate void LobbyChatUpdate(string name, string chat);
     public event LobbyChatUpdate onLobbyChatUpdate;
 
+    public UnityEvent onRoomUpdate;
 
     public static EnteringSceneUpdater GetInstance()
     {
@@ -34,13 +35,13 @@ public class EnteringSceneUpdater : MonoBehaviour
 
         //onLobbyPlayersUpdate.Invoke(); --> Invoke these in each MsgHandler
         //onLobbyRoomsUpdate.Invoke();
-        
-
     }
 
     public void UpdateChat(string name, string chat)
     {
         onLobbyChatUpdate(name, chat);
     }
+
+    
 
 }

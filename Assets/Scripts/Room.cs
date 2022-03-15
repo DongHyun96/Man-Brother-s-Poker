@@ -4,9 +4,10 @@ using UnityEngine;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
-
+using System;
 public class Room
 {
+    public Guid id;
     public string host;
     public List<Player> players = new List<Player>();
     public GameTable gameTable;
@@ -47,8 +48,9 @@ public class Room
     public bool isPlaying = false;
 
     public Room(){}
-    public Room(string host, string title, string password, BuyIn b, Mode m)
+    public Room(Guid id, string host, string title, string password, BuyIn b, Mode m)
     {
+        this.id = id;
         this.host = host;
         this.title = title;
         this.password = password;

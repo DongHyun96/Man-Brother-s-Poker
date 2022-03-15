@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class thisPlayerPrefab : MonoBehaviour
+public class PlayerPanel_P : MonoBehaviour
 {
     public Text name;
 
-    private void Awake() {
-        name.text = GameManager.thisPlayer.name;
-    }
+    public void Init(string n)
+    {
+        name.text = n;
+    } 
 }

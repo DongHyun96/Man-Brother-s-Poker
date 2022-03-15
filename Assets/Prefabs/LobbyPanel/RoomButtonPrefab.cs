@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class RoomButtonPrefab : MonoBehaviour
 {
@@ -22,23 +23,29 @@ public class RoomButtonPrefab : MonoBehaviour
     private Color modeRed = new Color(243/255f, 86/255f, 29/255f);
     private Color modeGrey = new Color(149/255f, 149/255f, 149/255f);
 
+    public Guid id;
 
-    public void SetContents(string title, bool isPlaying, int n, Room.BuyIn b, Room.Mode mode, bool isSecured)
+    public void SetContents(Guid id)
     {
-        this.title.text = title;
+        this.id = id;
 
-        if(!isPlaying && n < 6)
+        Room room = GameManager.rooms[id];
+
+        this.title.text = room.title;
+
+        if(!room.isPlaying && room.players.Count < 6)
         {
             dot.color = greenDot;
         }
         else
         {
             dot.color = redDot;
+            this.gameObject.GetComponent<Button>().interactable = false;
         }
 
-        num.text = n + "/" + "6";
+        num.text = room.players.Count + "/" + "6";
 
-        switch(b)
+        switch(room.buyIn)
         {
             case Room.BuyIn.ONE:
                 buyIn.text = "1k";
@@ -62,7 +69,7 @@ public class RoomButtonPrefab : MonoBehaviour
                 break;
         }
 
-        switch(mode)
+        switch(room.mode)
         {
             case Room.Mode.CHICKEN:
                 chicken.color = modeRed;
@@ -77,15 +84,37 @@ public class RoomButtonPrefab : MonoBehaviour
              break;
         }
 
-        if(isSecured)
-        {
-            OX.text = "O";
-        }
-        else
+        if(String.IsNullOrEmpty(room.password))
         {
             OX.text = "X";
         }
+        else
+        {
+            OX.text = "O";
+        }
 
+
+    }
+
+    public void onBtnPressed()
+    {
+        // check if the ENTER is valid
+        if (GameManager.rooms[id].players.Count >= 6 || GameManager.rooms[id].isPlaying)
+        {
+            return;
+        }
+        
+        // Add me to GameManager.rooms and init gameManager.thisRoom
+        Room targetRoom = GameManager.rooms[id];
+        targetRoom.players.Add(GameManager.thisPlayer);
+        GameManager.thisPlayerRoom = targetRoom;
+
+        // Send ENTER message to server
+        RoomMessage message = new RoomMessage(id, RoomMessage.MessageType.ENTER, GameManager.thisPlayer.name);
+        RoomMsgHandler.SendMessage(message);
+
+        // Change the current state
+        GameManager.GetInstance().state = GameManager.State.ROOM;
 
     }
 
