@@ -7,7 +7,8 @@ public class PlayerPanel_H : MonoBehaviour
 {
     public Text name;
 
-    private void Awake() {
-        name.text = GameManager.thisPlayer.name;
+    public void Init(string name)
+    {
+        this.name.text = name;
     }
 }

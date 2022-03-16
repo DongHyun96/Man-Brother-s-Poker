@@ -17,7 +17,6 @@ public class L_CreatingPanel : MonoBehaviour
 
     private void Start() {
         Toggle t = mode.ActiveToggles().FirstOrDefault();
-        print(t.name);
     }
 
     public void OnAccept()

@@ -6,12 +6,12 @@ using System;
 
 public class RoomPanel : MonoBehaviour
 {
+    private const int MAXIMUM_NUM_OF_INV = 20;
     public Guid id;
 
     public Text title;
 
-    //public ToggleGroup buyIn;
-    //public ToggleGroup mode;
+    public Text hostName; 
 
     public Toggle[] buyIn;
     public Toggle[] mode;
@@ -27,46 +27,43 @@ public class RoomPanel : MonoBehaviour
 
     public Button playBtn;
     public Button inviteBtn;
+    public Button settingBtn;
 
+    public InputField titleField;
+    public InputField passwordField;
+
+    // Prefabs Container
+    private List<GameObject> playerPanel_prefabs = new List<GameObject>();
+    private List<GameObject> invPanel_prefabs = new List<GameObject>();
+
+    // For handling player updating
+    public enum UpdateType{
+        ENTER_GAME, LEAVE_GAME, ENTER_ROOM, LEAVE_ROOM
+    }
+
+    private void Awake() {
+        EnteringSceneUpdater.GetInstance().onRoomPlayerUpdate += UpdatePlayerToPanels;
+    }
+    /*
+    * Only use this when entering the room
+    */
     public void InitRoomPanel()
     {
-        // Init prefabs
-        foreach(Transform child in playerPanel.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach(Transform child in invitingPanel.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
+        // Init id
+        id = GameManager.thisPlayerRoom.id;
+        
         Room room = GameManager.thisPlayerRoom;
 
-        title.text = room.title;
-        
-        // Init Toggles
-        buyIn[(int)room.buyIn].isOn = true;
-        mode[(int)room.mode].isOn = true;
+        // Init room Features
+        UpdateRoomFeatures();
 
         // Init host player
-        GameObject host = Instantiate(playerPanel_host, playerPanel.transform);
-
+        hostName.text = room.host;
+        
         // Check if thisPlayer is the host
         if(room.host.Equals(GameManager.thisPlayer.name))
         {
-
-            playBtn.interactable = true;
-            inviteBtn.interactable = true;
-
-            // Change toggles to interactive
-            foreach(Toggle t in buyIn)
-            {
-                t.interactable = true;
-            }
-            foreach(Toggle t in mode)
-            {
-                t.interactable = true;
-            }
+            EnableHostFunctions();
         }
 
         // Init playerPanel
@@ -74,48 +71,271 @@ public class RoomPanel : MonoBehaviour
         {
             if(p.name.Equals(room.host))
                 continue;
-            GameObject prefab = Instantiate(playerPanel_player, playerPanel.transform);
-            prefab.GetComponent<PlayerPanel_P>().Init(p.name);
+
+            AddPlayerPanelPrefabs(p.name);
         }
 
         // Init InvitingPanel
-        int count = 0;
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers)
         {
-            if (count < 20 && pair.Value.invitable)
+            if (invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV && pair.Value.invitable && !isIntheRoom(pair.Value))
             {
-                GameObject prefab = Instantiate(invPanel_player, invitingPanel.transform);
-                prefab.GetComponent<InvPanel_P>().InitContents(pair.Value.name, pair.Value.invitable);
+                AddInvPanelPrefabs(pair.Value.name);
             }
             else
             {
                 break;
             }
-            count++;
         }
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers)
         {
-            if (count < 20 && !pair.Value.invitable)
+            if (invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV && !pair.Value.invitable)
             {
-                GameObject prefab = Instantiate(invPanel_player, invitingPanel.transform);
-                prefab.GetComponent<InvPanel_P>().InitContents(pair.Value.name, pair.Value.invitable);
+                AddInvPanelPrefabs(pair.Value.name);
             }
             else
             {
                 break;
             }
-            count++;
         }
     }
 
-    public void onPlay()
+    /**
+    * Update playerPanel and inviting panel based on target player
+    */
+    public void UpdatePlayerToPanels(string name, UpdateType type) 
     {
+
+        switch(type)
+        {
+            case UpdateType.ENTER_ROOM:
+            {
+                // Add to playerPanel
+                AddPlayerPanelPrefabs(name);
+
+                // Remove from inv panel
+                RemoveInvPanelPrefabs(name);
+            }
+            break;
+            case UpdateType.LEAVE_ROOM:
+            {
+                // Init host player
+                hostName.text = GameManager.thisPlayerRoom.host;
+
+                // If thisPlayer becomes host
+                if(GameManager.thisPlayerRoom.host.Equals(GameManager.thisPlayer.name))
+                {
+                    EnableHostFunctions();
+                    hostName.text = GameManager.thisPlayer.name;
+                }
+
+                // Remove from playerPanel
+                RemovePlayerPanelPrefabs(name);
+
+                // Add to invPanel
+                if(invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV)
+                    AddInvPanelPrefabs(name);
+            }
+            break;
+            case UpdateType.ENTER_GAME:
+            {
+                // update invPanel
+                if(invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV)
+                    AddInvPanelPrefabs(name);
+            }
+            break;
+            case UpdateType.LEAVE_GAME:
+            {
+                RemoveInvPanelPrefabs(name);
+            }
+            break;
+        }
+    }
+    /*
+    *  Update room features
+    */
+    public void UpdateRoomFeatures()
+    {
+        Room room = GameManager.thisPlayerRoom;
+
+        title.text = room.title;
+
+        // Init toggles
+        buyIn[(int)room.buyIn].isOn = true;
+        mode[(int)room.mode].isOn = true;
+    }
+
+    public void OnUpdate() // When host changes features in the room
+    {
+        if(GameManager.thisPlayerRoom.host.Equals(GameManager.thisPlayer.name))
+        {
+            // Change the room to updated features
+            Room room = GameManager.thisPlayerRoom;
+            
+            // Update the mode and buyin
+            for(int i = 0; i < buyIn.Length; i++)
+            {
+                if(buyIn[i].isOn)
+                {
+                    room.buyIn = (Room.BuyIn)i;
+                    break;
+                }
+            }
+            for(int i = 0; i < mode.Length; i++)
+            {
+                if(mode[i].isOn)
+                {
+                    room.mode = (Room.Mode)i;
+                    break;
+                }
+            }
+            
+            // Send UPDATE message to the server
+            RoomMessage msg = new RoomMessage(id, RoomMessage.MessageType.UPDATE, room);
+            RoomMsgHandler.SendMessage(msg);
+        }
+    }
+    public void onSettingAccept()
+    {
+        Room room = GameManager.thisPlayerRoom;
+
+        // Update title
+        if(!String.IsNullOrEmpty(titleField.text))
+        {
+            room.title = titleField.text;
+        }
+      
+        room.password = passwordField.text;
+        
+        
+        // Send UPDATE message to server
+        RoomMessage msg = new RoomMessage(id, RoomMessage.MessageType.UPDATE, room);
+        RoomMsgHandler.SendMessage(msg);
+
+    }
+    public void OnPlay()
+    {
+        // Game play start
+    }
+
+    public void onExit()
+    {
+        // Send LEAVE message to server
+        RoomMessage msg = new RoomMessage(id, RoomMessage.MessageType.LEAVE, GameManager.thisPlayer.name);
+        RoomMsgHandler.SendMessage(msg);
+
+        // Empty the room panel fields and GameManager.thisRoom
+        LeavingRoutine();
+
+        // Change state to LOBBY
+        GameManager.GetInstance().state = GameManager.State.LOBBY;
 
     }
 
-    public void onSetting()
+    /*****************************************************************************************************************/
+    /*                                               PRIVATE FUNCTIONS
+    /*****************************************************************************************************************/
+    private void EnableHostFunctions()
     {
+        playBtn.interactable = true;
+        inviteBtn.interactable = true;
+        settingBtn.interactable = true;
 
+        // Change toggles to interactive
+        foreach(Toggle t in buyIn)
+        {
+            t.interactable = true;
+        }
+        foreach(Toggle t in mode)
+        {
+            t.interactable = true;
+        }
+    }
+
+    private bool isIntheRoom(Player p)
+    {
+        foreach(Player player in GameManager.thisPlayerRoom.players)
+        {
+            if(player.name.Equals(p.name))
+                return true;
+        }
+        return false;
+
+    }
+
+    private void LeavingRoutine()
+    {
+        // Empty all the prefabs
+        foreach(GameObject o in playerPanel_prefabs)
+        {
+            Destroy(o);
+        }
+        foreach(GameObject o in invPanel_prefabs)
+        {
+            Destroy(o);
+        }
+        playerPanel_prefabs.Clear();
+        invPanel_prefabs.Clear();
+
+        // Init GameManager.thisRoom
+        GameManager.thisPlayerRoom = null;
+
+        // Init fields
+        id = Guid.Empty;
+        title.text = String.Empty;
+
+        playBtn.interactable = false;
+        inviteBtn.interactable = false;
+        settingBtn.interactable = false;
+
+        foreach(Toggle t in buyIn)
+        {
+            t.interactable = false;
+        }
+        foreach(Toggle t in mode)
+        {
+            t.interactable = false;
+        }
+        
+    }
+
+    private void AddPlayerPanelPrefabs(string name)
+    {
+        GameObject prefab = Instantiate(playerPanel_player, playerPanel.transform);
+        prefab.GetComponent<PlayerPanel_P>().Init(name);
+        playerPanel_prefabs.Add(prefab);
+    }
+    private void RemovePlayerPanelPrefabs(string name)
+    {
+        foreach(GameObject p in playerPanel_prefabs)
+        {
+            if(p.GetComponent<PlayerPanel_P>().name.Equals(name))
+            {
+                playerPanel_prefabs.Remove(p);
+                Destroy(p);
+                return;
+            }
+        }
+    }
+
+    private void AddInvPanelPrefabs(string name)
+    {
+        GameObject prefab = Instantiate(invPanel_player, invitingPanel.transform);
+        prefab.GetComponent<InvPanel_P>().InitContents(name, GameManager.allOthers[name].invitable);
+        invPanel_prefabs.Add(prefab);
+    }
+
+    private void RemoveInvPanelPrefabs(string name)
+    {
+        foreach(GameObject p in invPanel_prefabs)
+        {
+            if(p.GetComponent<InvPanel_P>().name.Equals(name))
+            {
+                invPanel_prefabs.Remove(p);
+                Destroy(p);
+                return;
+            }
+        }
     }
 
 }

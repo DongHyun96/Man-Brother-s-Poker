@@ -69,38 +69,75 @@ public class RoomMsgHandler : MonoBehaviour
                     {
                         GameManager.rooms[message.id] = message.room;
 
+                        if(GameManager.GetInstance().state == GameManager.State.LOBBY) // If LOBBY state, update roomPanel
+                        {
+                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            return;
+                        }
+
                         if(GameManager.thisPlayerRoom.id == message.id) // If the room is currently this player's room
                         {
                             GameManager.thisPlayerRoom = message.room;
-                            EnteringSceneUpdater.GetInstance().onRoomUpdate.Invoke();
+                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.ENTER_ROOM);
                         }
-                        else
-                        {
-                            if(GameManager.GetInstance().state == GameManager.State.LOBBY) // If LOBBY state, update roomPanel
-                            {
-                                EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
-                            }
-                        }
+                        
                     }
                     });
 
                     break;
                 case RoomMessage.MessageType.LEAVE:
+                    UnityMainThread.wkr.AddJob(() => {
+                        GameManager.rooms[message.id] = message.room;
+
+                        if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                        {
+                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            return;
+                        }
+                        if(GameManager.thisPlayerRoom.id == message.id)
+                        {
+                            GameManager.thisPlayerRoom = message.room;
+                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.LEAVE_ROOM);
+                        }
+                    });
                     break;
-                
-                case RoomMessage.MessageType.INVITE:
+                case RoomMessage.MessageType.INVITE: // Show Invitation panel
+                    UnityMainThread.wkr.AddJob(() => {
+                        print(message.id);
+                        print(message.sender);
+                        EnteringSceneUpdater.GetInstance().ReceiveInvitation(message.id, message.sender);
+                    });
                     break;
-                case RoomMessage.MessageType.REJECT:
-                    break;
-                case RoomMessage.MessageType.UPDATE:
+                case RoomMessage.MessageType.UPDATE: // Update room features(No player info change involved)
+                    UnityMainThread.wkr.AddJob(() => {
+                        // Update table
+                        GameManager.rooms[message.id] = message.room;
+
+                        if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                        {
+                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            return;
+                        }
+                        if(GameManager.thisPlayerRoom.id == message.id) // Current room feature changed
+                        {
+                            GameManager.thisPlayerRoom = message.room;
+                            EnteringSceneUpdater.GetInstance().onRoomUpdate.Invoke();
+                        }
+                    });
                     break;
                 case RoomMessage.MessageType.REMOVE_ROOM:
                     UnityMainThread.wkr.AddJob(() => {
                         // Remove room from the table
                         GameManager.rooms.Remove(message.id);
+
+                        if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                        {
+                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                        }
+
                     });
                     break;
-                case RoomMessage.MessageType.GET:
+                case RoomMessage.MessageType.GET: // Get room table
                     // Init room tables
                     UnityMainThread.wkr.AddJob(() => {
                         Dictionary<Guid, Room> receivedRooms = message.roomMap;

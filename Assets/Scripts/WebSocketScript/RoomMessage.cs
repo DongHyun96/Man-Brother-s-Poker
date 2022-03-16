@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
-using Newtonsoft.Json.Serialization;
 using System.Runtime.Serialization;
 using System;
 
@@ -31,8 +30,6 @@ public class RoomMessage
 		LEAVE,
 		[EnumMember(Value = "INVITE")]
 		INVITE,
-		[EnumMember(Value = "REJECT")]
-		REJECT,
 		[EnumMember(Value = "UPDATE")]
 		UPDATE,
 		[EnumMember(Value = "REMOVE_ROOM")]
@@ -54,7 +51,6 @@ public class RoomMessage
 
 	public RoomMessage(MessageType type) 
 	{
-		this.id = id;
 		this.type = type;
 	}
 
@@ -63,6 +59,12 @@ public class RoomMessage
 		this.id = id;
 		this.type = type;
 		this.sender = sender;
+	}
+	public RoomMessage(Guid id, MessageType type, Room room)
+	{
+		this.id = id;
+		this.type = type;
+		this.room = room;
 	}
 	public RoomMessage(Guid id, MessageType type, string sender, Room room)
 	{
@@ -95,4 +97,5 @@ public class RoomMessage
 		this.room = room;
 		this.msg = msg;
 	}
+
 }

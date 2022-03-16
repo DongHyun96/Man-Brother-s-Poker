@@ -76,15 +76,20 @@ public class MainMsgHandler : MonoBehaviour
                             GameManager.GetInstance().state = GameManager.State.LOBBY;
                         });
                     }
-                    else
+                    else // Valid Sign up by other.
                     {
-                        // Valid Sign up by other.
-                        GameManager.allOthers.Add(message.name, new Player(message.name));
                         UnityMainThread.wkr.AddJob(() => {
+                            
+                            GameManager.allOthers.Add(message.name, new Player(message.name));
+
                             // Check whether current state is LOBBY and then update players panel
                             if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                             {
                                 EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                            }
+                            else if(GameManager.GetInstance().state == GameManager.State.ROOM) // Update inviting panel
+                            {
+                                EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.ENTER_GAME);
                             }
                         });
                     }
@@ -115,6 +120,11 @@ public class MainMsgHandler : MonoBehaviour
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
                             EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                        }
+                        else if(GameManager.GetInstance().state == GameManager.State.ROOM)
+                        {
+                            // Update inviting panel in Room Panel
+                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.LEAVE_GAME);
                         }
                     });
                     break;

@@ -10,5 +10,5 @@ public class PlayerPanel_P : MonoBehaviour
     public void Init(string n)
     {
         name.text = n;
-    } 
+    }
 }

@@ -271,7 +271,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1475564640760110414}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1686534239858148940}
+        m_TargetAssemblyTypeName: InvPanel_P, Assembly-CSharp
+        m_MethodName: onBtnPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1475564641136430099
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: {fileID: 1475564641136430093}
   button: {fileID: 1475564640760110413}
-  timer: {fileID: 1475564640629159262}
+  timer: {fileID: 1475564640629159260}
   fill: {fileID: 1475564640656256809}
 --- !u!1 &1475564641945361119
 GameObject:

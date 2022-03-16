@@ -3878,7 +3878,19 @@ MonoBehaviour:
   m_Group: {fileID: 1388882325}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &127349643
 GameObject:
@@ -3945,7 +3957,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 916808946}
         m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
-        m_MethodName: InitRoomPanel
+        m_MethodName: UpdateRoomFeatures
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7198,7 +7210,19 @@ MonoBehaviour:
   m_Group: {fileID: 1991586147}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &232004898
 GameObject:
@@ -12241,7 +12265,19 @@ MonoBehaviour:
   m_Group: {fileID: 1388882325}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &400910270
 GameObject:
@@ -14020,7 +14056,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7, y: 402.43863}
+  m_AnchoredPosition: {x: 7, y: 402.43857}
   m_SizeDelta: {x: -29.5157, y: 606.6704}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &461811717
@@ -16886,13 +16922,14 @@ GameObject:
   - component: {fileID: 557923687}
   - component: {fileID: 557923689}
   - component: {fileID: 557923688}
+  - component: {fileID: 557923690}
   m_Layer: 5
   m_Name: InvitationPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &557923687
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16955,6 +16992,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 557923686}
   m_CullTransparentMesh: 1
+--- !u!114 &557923690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 557923686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d6f0efba5328841a615ac68ac615dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sender: {fileID: 1237823806}
+  fill: {fileID: 845044090}
 --- !u!1001 &566257026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19916,7 +19967,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 659140973}
   m_OnClick:
     m_PersistentCalls:
@@ -21199,7 +21250,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 704188184}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: onSettingAccept
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 196599390}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &704188184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23528,7 +23603,19 @@ MonoBehaviour:
   m_Group: {fileID: 1991586147}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &773597386
 GameObject:
@@ -25626,7 +25713,19 @@ MonoBehaviour:
   m_Group: {fileID: 1388882325}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &825296017
 GameObject:
@@ -27410,6 +27509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: {fileID: 426931738}
+  hostName: {fileID: 1737453460}
   buyIn:
   - {fileID: 124905202}
   - {fileID: 1470074265}
@@ -27428,6 +27528,9 @@ MonoBehaviour:
   invPanel_player: {fileID: 1475564641918370500, guid: 1839f45a95fab7446a1761be72b5b59c, type: 3}
   playBtn: {fileID: 325801774}
   inviteBtn: {fileID: 1024471166}
+  settingBtn: {fileID: 659140972}
+  titleField: {fileID: 1882505713}
+  passwordField: {fileID: 2137673403}
 --- !u!1001 &917165013
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29941,7 +30044,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 990593950}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 557923690}
+        m_TargetAssemblyTypeName: Invitation, Assembly-CSharp
+        m_MethodName: OnAccept
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &990593950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31668,7 +31783,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1043073258}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 557923690}
+        m_TargetAssemblyTypeName: Invitation, Assembly-CSharp
+        m_MethodName: onDeny
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1043073258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43763,7 +43890,19 @@ MonoBehaviour:
   m_Group: {fileID: 1991586147}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1001 &1468319242
 PrefabInstance:
@@ -43995,7 +44134,19 @@ MonoBehaviour:
   m_Group: {fileID: 1388882325}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1001 &1471240090
 PrefabInstance:
@@ -46488,7 +46639,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1562572600}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: onExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1562572600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49466,7 +49629,19 @@ MonoBehaviour:
   m_Group: {fileID: 1388882325}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1001 &1683219642
 PrefabInstance:
@@ -51170,6 +51345,119 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3762840161150646437, guid: 98fefb643f0a62f4ebfd1c2236448b01, type: 3}
   m_PrefabInstance: {fileID: 1737399725}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1737453458
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1874759152}
+    m_Modifications:
+    - target: {fileID: 5904151556786423227, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_Name
+      value: PlayerPanel_H
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 46.301
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+--- !u!224 &1737453459 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6774874671270308986, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+  m_PrefabInstance: {fileID: 1737453458}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1737453460 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3522611353574008878, guid: a2a611cd768881e489ab4648aaa83e3f, type: 3}
+  m_PrefabInstance: {fileID: 1737453458}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1740236191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52076,7 +52364,19 @@ MonoBehaviour:
   m_Group: {fileID: 1388882325}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: OnUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1782133784
 GameObject:
@@ -54943,7 +55243,8 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1737453459}
   m_Father: {fileID: 1396907497}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
