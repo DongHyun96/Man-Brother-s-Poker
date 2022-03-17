@@ -127,6 +127,7 @@ public class RoomPanel : MonoBehaviour
                 {
                     EnableHostFunctions();
                     hostName.text = GameManager.thisPlayer.name;
+                    RemovePlayerPanelPrefabs(GameManager.thisPlayer.name); // Remove thisPlayer in normal playerPanel
                 }
 
                 // Remove from playerPanel
@@ -252,6 +253,7 @@ public class RoomPanel : MonoBehaviour
         }
     }
 
+
     private bool isIntheRoom(Player p)
     {
         foreach(Player player in GameManager.thisPlayerRoom.players)
@@ -262,6 +264,7 @@ public class RoomPanel : MonoBehaviour
         return false;
 
     }
+
 
     private void LeavingRoutine()
     {
@@ -299,17 +302,22 @@ public class RoomPanel : MonoBehaviour
         
     }
 
+
     private void AddPlayerPanelPrefabs(string name)
     {
         GameObject prefab = Instantiate(playerPanel_player, playerPanel.transform);
         prefab.GetComponent<PlayerPanel_P>().Init(name);
         playerPanel_prefabs.Add(prefab);
     }
+
+
     private void RemovePlayerPanelPrefabs(string name)
     {
+        print(name);
         foreach(GameObject p in playerPanel_prefabs)
         {
-            if(p.GetComponent<PlayerPanel_P>().name.Equals(name))
+            print(p.GetComponent<PlayerPanel_P>().name);
+            if(p.GetComponent<PlayerPanel_P>().name.text.Equals(name))
             {
                 playerPanel_prefabs.Remove(p);
                 Destroy(p);
@@ -317,6 +325,7 @@ public class RoomPanel : MonoBehaviour
             }
         }
     }
+
 
     private void AddInvPanelPrefabs(string name)
     {
@@ -329,7 +338,7 @@ public class RoomPanel : MonoBehaviour
     {
         foreach(GameObject p in invPanel_prefabs)
         {
-            if(p.GetComponent<InvPanel_P>().name.Equals(name))
+            if(p.GetComponent<InvPanel_P>().name.text.Equals(name))
             {
                 invPanel_prefabs.Remove(p);
                 Destroy(p);
