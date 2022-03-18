@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,7 +20,16 @@ public class GameManager : MonoBehaviour
     // This player's current room
     public static Room thisPlayerRoom;
 
+    /// Cinemachine cam & lobbyPos, RoomPos
+    public CinemachineVirtualCamera currentCam;
+    public LobbyCamPos lobbyPos;
+    public RoomCamPos roomPos;
+
+    private const int LOBBY_PATH_POS = 2;
+    private const int ROOM_PATH_POS = 5;
+
     /// Changing scene(panel) events
+    public PanelAnimController panelAnimController;
     public UnityEvent onValidSignUp;
     public UnityEvent onRoomToLobby;
     public UnityEvent onPlayingToLobby;
@@ -50,16 +60,13 @@ public class GameManager : MonoBehaviour
                     {                   
                         thisPlayer.invitable = true;
                     }
-                    else if(state == State.ROOM)
+                    else if(state == State.ROOM) // ROOM -> LOBBY
                     {
-                        onRoomToLobby.Invoke();
+                        StartCoroutine(RoomToLobbyRoutine());
                     }
-                    else if(state == State.LOGIN) // SIGNUP -> LOBBY (initialize Room session)
+                    else if(state == State.LOGIN) // SIGNUP -> LOBBY
                     {
-                        onValidSignUp.Invoke();
-                        
-                        RoomMessage message = new RoomMessage(Guid.NewGuid(), RoomMessage.MessageType.INIT, thisPlayer.name);
-                        RoomMsgHandler.SendMessage(message);
+                        StartCoroutine(LogInToLobbyRoutine());
                     }
 
                     break;
@@ -74,8 +81,7 @@ public class GameManager : MonoBehaviour
                     }
                     else // LOBBY -> ROOM
                     {
-                        // Initialize room features here ( room UI )
-                        onLobbyToRoom.Invoke();
+                        StartCoroutine(LobbyToRoomRoutine());
                     }
                     break;
                 case State.PLAYING:
@@ -105,6 +111,69 @@ public class GameManager : MonoBehaviour
             }
         }
         return instance;
+    }
+
+    private IEnumerator LogInToLobbyRoutine()
+    {
+        // camera animation routine
+        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
+        dolly.m_PathPosition = LOBBY_PATH_POS;
+
+        // Panel Anim
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.SIGN);
+
+        while(!lobbyPos.isTriggered)
+        {
+            yield return null;
+        }
+
+        // Loose cinemachine damping little bit
+        dolly.m_ZDamping = 1.5f;
+
+        // Panel init and panel animation routine
+        onValidSignUp.Invoke();
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.LOBBY);
+
+        RoomMessage msg = new RoomMessage(Guid.NewGuid(), RoomMessage.MessageType.INIT, thisPlayer.name);
+        RoomMsgHandler.SendMessage(msg);
+    }
+
+    private IEnumerator LobbyToRoomRoutine()
+    {
+        // Cam animation routine
+        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
+        dolly.m_PathPosition = ROOM_PATH_POS;
+
+        // Panel anim
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.LOBBY);
+
+        while(!roomPos.isTriggered)
+        {
+            yield return null;
+        }
+
+        // Panel init and panel animation routine
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+        onLobbyToRoom.Invoke();
+    }
+
+    private IEnumerator RoomToLobbyRoutine()
+    {
+        // Cam animation routine
+        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
+        dolly.m_PathPosition = LOBBY_PATH_POS;
+
+        // Panel anim
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+
+        while(!lobbyPos.isTriggered)
+        {
+            yield return null;
+        }
+
+        // Panel init and panel animation routine
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.LOBBY);
+        onRoomToLobby.Invoke();
     }
 
 

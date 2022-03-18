@@ -347,5 +347,13 @@ public class RoomPanel : MonoBehaviour
         }
     }
 
+    /*****************************************************************************************************************/
+    /*                                               Inviting panel toggler
+    /*****************************************************************************************************************/
+    public void ToggleInvPanel()
+    {
+        PanelAnimController.GetInstance().UpdatePanel(PanelAnimController.Panel.INVITE);
+    }
+
 }
 

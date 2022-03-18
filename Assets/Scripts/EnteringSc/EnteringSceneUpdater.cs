@@ -7,7 +7,7 @@ using System;
 
 public class EnteringSceneUpdater : MonoBehaviour
 {
-    public static EnteringSceneUpdater instance;
+    private static EnteringSceneUpdater instance;
 
     // Lobby Updaters
     public UnityEvent onLobbyPlayersUpdate;

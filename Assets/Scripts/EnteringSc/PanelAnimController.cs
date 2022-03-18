@@ -6,11 +6,23 @@ using System;
 
 public class PanelAnimController : MonoBehaviour
 {
+    public Animator anim_door;
     public Animator anim_signUp;
     public Animator anim_Lobby;
     public Animator anim_Room;
     public Animator anim_Inviting;
     public Animator anim_Menu;
+
+    public static PanelAnimController instance;
+
+    public static PanelAnimController GetInstance()
+    {
+        if(instance == null)
+        {
+            instance = FindObjectOfType<PanelAnimController>();
+        }
+        return instance;
+    }
 
     public enum Panel{
         SIGN, LOBBY, ROOM, INVITE, MENU
@@ -19,13 +31,14 @@ public class PanelAnimController : MonoBehaviour
     /**
     * Toggle the panel
     */
-    public void UpdatePanel(int panel)
+    public void UpdatePanel(Panel p)
     {
-        Panel p = (Panel)panel;
         switch(p)
         {
             case Panel.SIGN:
+                anim_door.SetTrigger("Open");
                 toggleAnimation(anim_signUp);
+                
                 break;
             case Panel.LOBBY:
                 toggleAnimation(anim_Lobby);
