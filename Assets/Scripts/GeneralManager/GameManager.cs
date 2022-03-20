@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
                     }
                     else if(state == State.ROOM) // ROOM -> ROOM
                     {
-
+                        StartCoroutine(RoomToRoomRoutine());
                     }
                     else // LOBBY -> ROOM
                     {
@@ -176,6 +176,31 @@ public class GameManager : MonoBehaviour
         onRoomToLobby.Invoke();
     }
 
+    private IEnumerator RoomToRoomRoutine()
+    {
+        // Cam animation routine
+        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
+        dolly.m_PathPosition = LOBBY_PATH_POS;
 
+        // Panel anim
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+
+        while(!lobbyPos.isTriggered)
+        {
+            yield return null;
+        }
+
+        // Cam animation again (back to room again)
+        dolly.m_PathPosition = ROOM_PATH_POS;
+        
+        while(!roomPos.isTriggered)
+        {
+            yield return null;
+        }
+
+        // Panel init and return to room panel
+        onLobbyToRoom.Invoke();
+        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+    }
 
 }

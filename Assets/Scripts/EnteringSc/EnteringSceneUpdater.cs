@@ -56,7 +56,7 @@ public class EnteringSceneUpdater : MonoBehaviour
 
     public void UpdatePlayerInRoom(string name, RoomPanel.UpdateType type)
     {
-        onRoomPlayerUpdate(name, type);
+        onRoomPlayerUpdate(name, type); // Subscriber - RoomPanel(UpdatePlayerToPanels())
     }
 
 }

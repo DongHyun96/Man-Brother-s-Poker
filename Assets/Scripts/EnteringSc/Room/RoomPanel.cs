@@ -44,11 +44,15 @@ public class RoomPanel : MonoBehaviour
     private void Awake() {
         EnteringSceneUpdater.GetInstance().onRoomPlayerUpdate += UpdatePlayerToPanels;
     }
-    /*
+
+    /**
     * Only use this when entering the room
     */
     public void InitRoomPanel()
     {
+        // Double leaving routine here to make sure init works perfectly.
+        LeavingRoutine();
+
         // Init id
         id = GameManager.thisPlayerRoom.id;
         
@@ -153,7 +157,7 @@ public class RoomPanel : MonoBehaviour
         }
     }
     /*
-    *  Update room features
+    *  Update room features(Title and toggles)
     */
     public void UpdateRoomFeatures()
     {
@@ -228,6 +232,9 @@ public class RoomPanel : MonoBehaviour
         // Empty the room panel fields and GameManager.thisRoom
         LeavingRoutine();
 
+        // Init GameManager.thisRoom
+        GameManager.thisPlayerRoom = null;
+
         // Change state to LOBBY
         GameManager.GetInstance().state = GameManager.State.LOBBY;
 
@@ -279,9 +286,6 @@ public class RoomPanel : MonoBehaviour
         }
         playerPanel_prefabs.Clear();
         invPanel_prefabs.Clear();
-
-        // Init GameManager.thisRoom
-        GameManager.thisPlayerRoom = null;
 
         // Init fields
         id = Guid.Empty;

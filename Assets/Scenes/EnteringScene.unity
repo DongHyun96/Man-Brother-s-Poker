@@ -2388,10 +2388,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2048279581}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 2048279586}
+        m_TargetAssemblyTypeName: MenuPanel, Assembly-CSharp
+        m_MethodName: OnX
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14257,7 +14257,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7, y: 402.43866}
+  m_AnchoredPosition: {x: 7, y: 402.4386}
   m_SizeDelta: {x: -29.5157, y: 606.6704}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &461811717
@@ -33948,7 +33948,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 885788758}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.33647013
+  m_Size: 0.3356381
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -30,8 +30,14 @@ public class Invitation : MonoBehaviour
         // check if the ENTER is valid
         if(GameManager.rooms[id].players.Count >= 6 || GameManager.rooms[id].isPlaying)
         {
-            this.gameObject.SetActive(false);
+            Reset();
             return;
+        }
+
+        // Check if the player is currently in other room
+        if(GameManager.GetInstance().state == GameManager.State.ROOM)
+        {
+            ExitCurrentRoom();
         }
 
         // Add me to GameManager.rooms and init gameManager.thisRoom
@@ -46,7 +52,7 @@ public class Invitation : MonoBehaviour
         // Change the current state
         GameManager.GetInstance().state = GameManager.State.ROOM;
 
-        // Reset panel
+        // Reset this panel
         Reset();
 
     }
@@ -80,4 +86,16 @@ public class Invitation : MonoBehaviour
         id = Guid.Empty;
         this.gameObject.SetActive(false);
     }
+
+    private void ExitCurrentRoom()
+    {
+        // Send LEAVE message to server
+        RoomMessage msg = new RoomMessage(GameManager.thisPlayerRoom.id, RoomMessage.MessageType.LEAVE, GameManager.thisPlayer.name);
+        RoomMsgHandler.SendMessage(msg);
+
+        // Empty the room panel fields and GameManager.thisRoom
+        GameManager.thisPlayerRoom = null;
+    }
+
+    
 }

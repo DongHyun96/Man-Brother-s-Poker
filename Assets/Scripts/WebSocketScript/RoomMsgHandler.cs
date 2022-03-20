@@ -87,6 +87,7 @@ public class RoomMsgHandler : MonoBehaviour
                     break;
                 case RoomMessage.MessageType.LEAVE:
                     UnityMainThread.wkr.AddJob(() => {
+                        // Update corresponding room in room table
                         GameManager.rooms[message.id] = message.room;
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
