@@ -1,0 +1,54 @@
+Date : 2022-03-22 17:06:55
+Directory : c:\Users\wadan\Desktop\Man-Brother-s-Poker
+Total : 20 files,  1315 codes, 16 comments, 115 blanks, all 1446 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| XML      |          1 |        664 |          7 |          1 |        672 |
+| Log      |         15 |        622 |          0 |        104 |        726 |
+| C#       |          4 |         29 |          9 |         10 |         48 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                          | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                             |         20 |      1,315 |         16 |        115 |      1,446 |
+| Assets                                                                                        |          4 |         29 |          9 |         10 |         48 |
+| Assets\Scripts                                                                                |          4 |         29 |          9 |         10 |         48 |
+| Assets\Scripts\EnteringSc                                                                     |          2 |         11 |          4 |          7 |         22 |
+| Assets\Scripts\EnteringSc\Invitation                                                          |          1 |         10 |          3 |          5 |         18 |
+| Assets\Scripts\EnteringSc\Room                                                                |          1 |          1 |          1 |          2 |          4 |
+| Assets\Scripts\GeneralManager                                                                 |          1 |         18 |          4 |          3 |         25 |
+| Assets\Scripts\WebSocketScript                                                                |          1 |          0 |          1 |          0 |          1 |
+| Logs                                                                                          |         15 |        622 |          0 |        104 |        726 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                      | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assembly-CSharp-firstpass.csproj                   | XML      |        664 |          7 |          1 |        672 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Invitation\Invitation.cs | C#       |         10 |          3 |          5 |         18 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Room\RoomPanel.cs        | C#       |          1 |          1 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GeneralManager\GameManager.cs       | C#       |         18 |          4 |          3 |         25 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\RoomMsgHandler.cs   | C#       |          0 |          1 |          0 |          1 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\AssetImportWorker0-prev.log                   | Log      |        -64 |          0 |         -6 |        -70 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\AssetImportWorker0.log                        | Log      |        650 |          0 |         80 |        730 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-AssetImportWorker0.log         | Log      |         12 |          0 |          6 |         18 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe1.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe10.log  | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe11.log  | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe12.log  | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe2.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe3.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe4.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe5.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe6.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe7.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe8.log   | Log      |          2 |          0 |          2 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Logs\shadercompiler-UnityShaderCompiler.exe9.log   | Log      |          2 |          0 |          2 |          4 |
+| Total                                                                                         |          |      1,315 |         16 |        115 |      1,446 |
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
