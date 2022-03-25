@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private const int ROOM_PATH_POS = 5;
 
     /// Changing scene(panel) events
-    public PanelAnimController panelAnimController;
+    public EntPanelController panelAnimController;
     public UnityEvent onValidSignUp;
     public UnityEvent onRoomToLobby;
     public UnityEvent onPlayingToLobby;
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         dolly.m_PathPosition = LOBBY_PATH_POS;
 
         // Panel Anim
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.SIGN);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.SIGN);
 
         while(!lobbyPos.isTriggered)
         {
@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
 
         // Panel init and panel animation routine
         onValidSignUp.Invoke();
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.LOBBY);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.LOBBY);
 
         RoomMessage msg = new RoomMessage(Guid.NewGuid(), RoomMessage.MessageType.INIT, thisPlayer.name);
         RoomMsgHandler.SendMessage(msg);
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         dolly.m_PathPosition = ROOM_PATH_POS;
 
         // Panel anim
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.LOBBY);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.LOBBY);
 
         while(!roomPos.isTriggered)
         {
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Panel init and panel animation routine
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
         onLobbyToRoom.Invoke();
     }
 
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
         dolly.m_PathPosition = LOBBY_PATH_POS;
 
         // Panel anim
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
 
         while(!lobbyPos.isTriggered)
         {
@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Panel init and panel animation routine
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.LOBBY);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.LOBBY);
         onRoomToLobby.Invoke();
     }
 
@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
         dolly.m_PathPosition = LOBBY_PATH_POS;
 
         // Panel anim
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
 
         while(!lobbyPos.isTriggered)
         {
@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
 
         // Panel init and return to room panel
         onLobbyToRoom.Invoke();
-        panelAnimController.UpdatePanel(PanelAnimController.Panel.ROOM);
+        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
     }
 
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 
-public class PanelAnimController : MonoBehaviour
+
+public class EntPanelController : MonoBehaviour
 {
     public Animator anim_door;
     public Animator anim_signUp;
@@ -13,13 +14,13 @@ public class PanelAnimController : MonoBehaviour
     public Animator anim_Inviting;
     public Animator anim_Menu;
 
-    public static PanelAnimController instance;
+    public static EntPanelController instance;
 
-    public static PanelAnimController GetInstance()
+    public static EntPanelController GetInstance()
     {
         if(instance == null)
         {
-            instance = FindObjectOfType<PanelAnimController>();
+            instance = FindObjectOfType<EntPanelController>();
         }
         return instance;
     }

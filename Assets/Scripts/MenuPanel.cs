@@ -8,7 +8,7 @@ public class MenuPanel : MonoBehaviour
 {
     public void OnX()
     {
-        PanelAnimController.GetInstance().UpdatePanel(PanelAnimController.Panel.MENU);
+        EntPanelController.GetInstance().UpdatePanel(EntPanelController.Panel.MENU);
     }
 
     public void OnOptions()
