@@ -130,11 +130,12 @@ public class RoomPanel : MonoBehaviour
                 if(GameManager.thisPlayerRoom.host.Equals(GameManager.thisPlayer.name))
                 {
                     EnableHostFunctions();
-                    hostName.text = GameManager.thisPlayer.name;
-                    RemovePlayerPanelPrefabs(GameManager.thisPlayer.name); // Remove thisPlayer in normal playerPanel
                 }
 
-                // Remove from playerPanel
+                // Remove new host name from normal playerPanel
+                RemovePlayerPanelPrefabs(GameManager.thisPlayerRoom.host); // Remove thisPlayer in normal playerPanel
+
+                // Remove leave person from playerPanel
                 RemovePlayerPanelPrefabs(name);
 
                 // Add to invPanel

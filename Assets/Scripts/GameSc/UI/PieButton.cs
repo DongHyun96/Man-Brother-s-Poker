@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DynamicButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class PieButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private const float THRESH_HOLD = 0.1f;
     private const float BUTTON_SCALE = 1.07f;
@@ -28,21 +28,21 @@ public class DynamicButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             // Unimplemented yet
             case "PieLeft":
                 // change actionIndicator.text
-                actionIndicator.text = "CHECK";
-                print("1");
+                actionIndicator.text = "CALL 1.5K";
+                print("PieLeft");
                 break;
             case "PieRight":
                 // change actionIndicator.text
-                actionIndicator.text = "BET";
+                actionIndicator.text = "RAISE";
 
-                print("2");
+                print("PieRight");
                 
                 break;
             case "PieButtom":
                 // change actionIndicator.text
                 actionIndicator.text = "FOLD";
 
-                print("3");
+                print("PieButtom");
 
                 break;
         }
