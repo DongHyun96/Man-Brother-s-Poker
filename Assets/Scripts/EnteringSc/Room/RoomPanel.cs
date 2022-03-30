@@ -38,7 +38,7 @@ public class RoomPanel : MonoBehaviour
 
     // For handling player updating
     public enum UpdateType{
-        ENTER_GAME, LEAVE_GAME, ENTER_ROOM, LEAVE_ROOM
+        INV_ADD, INV_REMOVE, ENTER_ROOM, LEAVE_ROOM
     }
 
     private void Awake() {
@@ -82,9 +82,10 @@ public class RoomPanel : MonoBehaviour
         // Init InvitingPanel
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers)
         {
-            if (invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV && pair.Value.invitable && !isIntheRoom(pair.Value))
+            if (invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV)
             {
-                AddInvPanelPrefabs(pair.Value.name);
+                if(pair.Value.invitable && !isIntheRoom(pair.Value))
+                    AddInvPanelPrefabs(pair.Value.name);
             }
             else
             {
@@ -93,9 +94,10 @@ public class RoomPanel : MonoBehaviour
         }
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers)
         {
-            if (invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV && !pair.Value.invitable)
+            if (invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV)
             {
-                AddInvPanelPrefabs(pair.Value.name);
+                if(!pair.Value.invitable)
+                    AddInvPanelPrefabs(pair.Value.name);
             }
             else
             {
@@ -143,18 +145,19 @@ public class RoomPanel : MonoBehaviour
                     AddInvPanelPrefabs(name);
             }
             break;
-            case UpdateType.ENTER_GAME:
+            case UpdateType.INV_ADD:
             {
                 // update invPanel
                 if(invPanel_prefabs.Count < MAXIMUM_NUM_OF_INV)
                     AddInvPanelPrefabs(name);
             }
             break;
-            case UpdateType.LEAVE_GAME:
+            case UpdateType.INV_REMOVE:
             {
                 RemoveInvPanelPrefabs(name);
             }
             break;
+            
         }
     }
     /*
@@ -219,9 +222,12 @@ public class RoomPanel : MonoBehaviour
         RoomMsgHandler.SendMessage(msg);
 
     }
+
     public void OnPlay()
     {
-        // Game play start
+        // Game play start, broadcast gamestart message through server
+        RoomMessage msg = new RoomMessage(id, RoomMessage.MessageType.GAMESTART);
+        RoomMsgHandler.SendMessage(msg);
     }
 
     public void onExit()

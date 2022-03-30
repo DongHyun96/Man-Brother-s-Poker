@@ -19,14 +19,19 @@ public class GameManager : MonoBehaviour
 
     // This player's current room
     public static Room thisPlayerRoom;
+    
+    // This player's game table
+    public static GameTable gameTable;
 
     /// Cinemachine cam & lobbyPos, RoomPos
     public CinemachineVirtualCamera currentCam;
     public LobbyCamPos lobbyPos;
     public RoomCamPos roomPos;
+    public GameCamPos gamePos;
 
     private const int LOBBY_PATH_POS = 2;
     private const int ROOM_PATH_POS = 5;
+    private const int GAME_PATH_POS = 8;
 
     /// Changing scene(panel) events
     public EntPanelController panelAnimController;
@@ -84,7 +89,8 @@ public class GameManager : MonoBehaviour
                         StartCoroutine(LobbyToRoomRoutine());
                     }
                     break;
-                case State.PLAYING:
+                case State.PLAYING: // ROOM -> PLAYING
+                    StartCoroutine(RoomToGameRoutine());
                     break;
             }
             m_state = value;
@@ -201,6 +207,24 @@ public class GameManager : MonoBehaviour
         // Panel init and return to room panel
         onLobbyToRoom.Invoke();
         panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
+    }
+
+    private IEnumerator RoomToGameRoutine()
+    {
+        // Cam animation routine
+        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
+        dolly.m_PathPosition = GAME_PATH_POS;
+
+        // Panel anim
+        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
+
+        while(!gamePos.isTriggered)
+        {
+            yield return null;
+        }
+        
+        // Change scene to gameScene
+        LoadingSceneController.LoadScene("GameScene");
     }
 
 }

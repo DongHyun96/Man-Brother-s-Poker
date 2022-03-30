@@ -12,11 +12,13 @@ public class RoomMessage
 	/* Summary
      * INIT : First initialization when player sign in.
 	 * REGISTER : When player registers room.
-	 * INVITE : When player sends invitation to other player.
-	 * REJECT : When player rejects invitation.
-	 * UPDATE : When updating room's feature.
+	 * ENTER : When player enters the room.
 	 * LEAVE : When some player leaves the room.
-	 * REMOVE : When some player turns off the game completely.
+	 * INVITE : When player sends invitation to other player.
+	 * UPDATE : When updating room's feature.
+	 * REMOVE_ROOM : When the room doesn't exist.
+	 * GET : Get room features
+	 * GAMESTART : When the host starts the game.
 	 */
 	[JsonConverter(typeof(StringEnumConverter))]
 	public enum MessageType{
@@ -35,7 +37,9 @@ public class RoomMessage
 		[EnumMember(Value = "REMOVE_ROOM")]
 		REMOVE_ROOM,
 		[EnumMember(Value = "GET")]
-		GET
+		GET,
+		[EnumMember(Value = "GAMESTART")]
+		GAMESTART
 
 	}
 	public MessageType type;
@@ -51,6 +55,12 @@ public class RoomMessage
 
 	public RoomMessage(MessageType type) 
 	{
+		this.type = type;
+	}
+
+	public RoomMessage(Guid id, MessageType type) 
+	{
+		this.id = id;
 		this.type = type;
 	}
 

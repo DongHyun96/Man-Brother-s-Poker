@@ -58,14 +58,14 @@ public class MainMsgHandler : MonoBehaviour
             {
                 // Valid Sign up received. Add player to the Game
                 case MainMessage.MessageType.SIGNUP:
-
-                    if(GameManager.thisPlayer == null) // Sign up checked by me(this player)
+                    
+                    if(String.IsNullOrEmpty(GameManager.thisPlayer.name)) // Sign up checked by me(this player)
                     {
                         Debug.Log("Valid Sign up");
                         
-                        // Set thisPlayer & change state to LOBBY
+                        // Set thisPlayer's name & change state to LOBBY
                         UnityMainThread.wkr.AddJob(() => {
-                            GameManager.thisPlayer = new Player(message.name);
+                            GameManager.thisPlayer.name = message.name;
 
                             // Init allOthers
                             Dictionary<string, Player> receivedPlayers = message.playerMap;
@@ -80,7 +80,7 @@ public class MainMsgHandler : MonoBehaviour
                     {
                         UnityMainThread.wkr.AddJob(() => {
                             
-                            GameManager.allOthers.Add(message.name, new Player(message.name));
+                            GameManager.allOthers.Add(message.name, new Player(message.name, message.character));
 
                             // Check whether current state is LOBBY and then update players panel
                             if(GameManager.GetInstance().state == GameManager.State.LOBBY)
@@ -89,7 +89,7 @@ public class MainMsgHandler : MonoBehaviour
                             }
                             else if(GameManager.GetInstance().state == GameManager.State.ROOM) // Update inviting panel
                             {
-                                EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.ENTER_GAME);
+                                EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_ADD);
                             }
                         });
                     }
@@ -124,15 +124,31 @@ public class MainMsgHandler : MonoBehaviour
                         else if(GameManager.GetInstance().state == GameManager.State.ROOM)
                         {
                             // Update inviting panel in Room Panel
-                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.LEAVE_GAME);
+                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_REMOVE);
                         }
                     });
                     break;
 
-                case MainMessage.MessageType.UPDATE:
-                    if(!message.name.Equals(GameManager.thisPlayer))
+                case MainMessage.MessageType.UPDATE: // Update player's invitable status
+
+                    if(!message.name.Equals(GameManager.thisPlayer.name))
                     {
-                        GameManager.allOthers[message.name].invitable = true;
+                        UnityMainThread.wkr.AddJob(() => {
+                    
+                            GameManager.allOthers[message.name].invitable = message.invitable;
+
+                            if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+                            {
+                                EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                            }
+                            else if(GameManager.GetInstance().state == GameManager.State.ROOM)
+                            {
+                                if(message.invitable)
+                                    EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_ADD);
+                                else
+                                    EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_REMOVE);
+                            }
+                        });
                     }
                     
                     break;

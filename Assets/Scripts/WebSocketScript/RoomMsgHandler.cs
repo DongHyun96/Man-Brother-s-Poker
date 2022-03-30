@@ -147,6 +147,13 @@ public class RoomMsgHandler : MonoBehaviour
                             EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
                     });
                     break;
+                case RoomMessage.MessageType.GAMESTART: // Host starts the game
+                    // If room id is same as thisPlayer -> Connect game websocket and register the player
+                    UnityMainThread.wkr.AddJob(() => {
+                        GameManager.GetInstance().state = GameManager.State.PLAYING;
+                    });
+                    
+                    break;
                 default:
                     break;
                 

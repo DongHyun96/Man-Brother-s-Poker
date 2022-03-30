@@ -45,7 +45,9 @@ public class MainMessage
 	public string name;
 	public string msg;
 
+	public Player.Character character;
 	public bool invitable;
+	
 
 	public Dictionary<string, Player> playerMap; 
 	public MainMessage() {}
@@ -60,6 +62,12 @@ public class MainMessage
 		this.type = type;
 		this.name = name;
 	}
+	public MainMessage(MessageType type, string name, Player.Character character)
+	{
+		this.type = type;
+		this.name = name;
+		this.character = character;
+	}
 	public MainMessage(MessageType type, string name, string msg)
 	{
 		this.type = type;
@@ -70,4 +78,5 @@ public class MainMessage
 	{
 		
 	}
+
 }

@@ -12,6 +12,15 @@ public class Player
     // Whether player is available to get invitation
     public bool invitable = true;
     
+    // Player's character
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum Character
+    {
+        MALE, MALE_CAP, FEMALE, POLICE, ZOMBIE
+    }
+    public Character character;
+
+
     /********************************************************************************************************
     In game ref
     *********************************************************************************************************/
@@ -31,6 +40,15 @@ public class Player
     public Player(string name)
     {
         this.name = name;
+    }
+    public Player(string name, Character character)
+    {
+        this.name = name;
+        this.character = character;
+    }
+    public Player(Character character)
+    {
+        this.character = character;
     }
     public Player(){}
 

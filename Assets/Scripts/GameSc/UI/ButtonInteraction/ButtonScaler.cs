@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ButtonScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private float BUTTON_SCALE = 1.2f;
+    private const float BUTTON_SCALE = 1.2f;
 
     // Override
     public void OnPointerEnter(PointerEventData data)

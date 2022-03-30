@@ -10,7 +10,6 @@ public class Room
     public Guid id;
     public string host;
     public List<Player> players = new List<Player>();
-    public GameTable gameTable;
 
     // Rooms property
     public string title;

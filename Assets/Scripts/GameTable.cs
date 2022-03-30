@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameTable
 {
+    public Guid id; // Same id with Room id
+
+    public List<Player> players;
+    
     public int iterPos;
 
     public enum Stage{
@@ -12,6 +17,7 @@ public class GameTable
     public enum TableStatus{
         IDLE, CHECK, BET ,ALLIN, FINISHED, FINAL_WINNER
     }
+    
     public Stage stage;
     public TableStatus tableStatus;
 

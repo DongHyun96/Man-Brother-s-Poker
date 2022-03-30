@@ -24,7 +24,8 @@ public class SignUpPanel : MonoBehaviour
             return;
         }
         
-        MainMsgHandler.SendMessage(new MainMessage(MainMessage.MessageType.SIGNUP, inputField.text));
+        MainMessage msg = new MainMessage(MainMessage.MessageType.SIGNUP, inputField.text, GameManager.thisPlayer.character);
+        MainMsgHandler.SendMessage(msg);
         //anim.SetTrigger("Hide");
     }
 

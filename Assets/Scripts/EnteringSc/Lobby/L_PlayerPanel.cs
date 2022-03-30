@@ -7,6 +7,8 @@ public class L_PlayerPanel : MonoBehaviour
     public GameObject thisPlayerObj;
     public GameObject playerObj;
 
+    private const int LIMIT = 20;
+
     public void InitPlayerPanel()
     {
         // Init children
@@ -22,16 +24,20 @@ public class L_PlayerPanel : MonoBehaviour
 
         // Init other players, Add invitable first, and then add non-invitable
         // Count limit - 20
+        
         int count = 0;
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers) 
         {
-            if(count < 20 && pair.Value.invitable)
+            if(count < LIMIT)
             {
-                GameObject player = Instantiate(playerObj, transform);
-                player.GetComponent<PlayerPrefab>().SetName_Dot(pair.Key, pair.Value.invitable);
-
+                if(pair.Value.invitable)
+                {
+                    GameObject player = Instantiate(playerObj, transform);
+                    player.GetComponent<PlayerPrefab>().SetName_Dot(pair.Key, pair.Value.invitable);
+                }
             }
-            else{
+            else
+            {
                 break;
             }
             count++;
@@ -39,11 +45,13 @@ public class L_PlayerPanel : MonoBehaviour
 
         foreach(KeyValuePair<string, Player> pair in GameManager.allOthers) 
         {
-            if(count < 20 && !pair.Value.invitable)
+            if(count < LIMIT)
             {
-                GameObject player = Instantiate(playerObj, transform);
-                player.GetComponent<PlayerPrefab>().SetName_Dot(pair.Key, pair.Value.invitable);
-
+                if(!pair.Value.invitable)
+                {
+                    GameObject player = Instantiate(playerObj, transform);
+                    player.GetComponent<PlayerPrefab>().SetName_Dot(pair.Key, pair.Value.invitable);
+                }
             }
             else{
                 break;
