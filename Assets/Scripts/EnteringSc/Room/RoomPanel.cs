@@ -41,6 +41,9 @@ public class RoomPanel : MonoBehaviour
         INV_ADD, INV_REMOVE, ENTER_ROOM, LEAVE_ROOM
     }
 
+    // Warning text
+    public Text warning;
+
     private void Awake() {
         EnteringSceneUpdater.GetInstance().onRoomPlayerUpdate += UpdatePlayerToPanels;
     }
@@ -225,6 +228,13 @@ public class RoomPanel : MonoBehaviour
 
     public void OnPlay()
     {
+        // Check player's count
+        if(GameManager.thisPlayerRoom.players.Count < 2)
+        {
+            StartCoroutine(Warning());
+            return;
+        }
+
         // Game play start, broadcast gamestart message through server
         RoomMessage msg = new RoomMessage(id, RoomMessage.MessageType.GAMESTART);
         RoomMsgHandler.SendMessage(msg);
@@ -366,5 +376,16 @@ public class RoomPanel : MonoBehaviour
         EntPanelController.GetInstance().UpdatePanel(EntPanelController.Panel.INVITE);
     }
 
+    /*****************************************************************************************************************/
+    /*                                               Warning text corountine
+    /*****************************************************************************************************************/
+    private IEnumerator Warning()
+    {
+        warning.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        warning.gameObject.SetActive(false);
+    }
 }
 

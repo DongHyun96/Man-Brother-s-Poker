@@ -90,7 +90,12 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case State.PLAYING: // ROOM -> PLAYING
-                    StartCoroutine(RoomToGameRoutine());
+
+                    // Init thisPlayertable
+                    gameTable = new GameTable(thisPlayerRoom.id, thisPlayerRoom.players,
+                     thisPlayerRoom.mode, thisPlayerRoom.buyIn);
+                    
+                    StartCoroutine(RoomToGameRoutine()); // Changing scene and cinemachine cam.
                     break;
             }
             m_state = value;

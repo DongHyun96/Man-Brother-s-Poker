@@ -33,17 +33,19 @@ public class RoomButtonPrefab : MonoBehaviour
 
         this.title.text = room.title;
 
-        if(!room.isPlaying && room.players.Count < 6)
+        // Check if the room is available to enter
+        if(room.mode == Room.Mode.HEADS)
         {
-            dot.color = greenDot;
+            dot.color = (!room.isPlaying && room.players.Count < 2) ? greenDot : redDot;
+            this.gameObject.GetComponent<Button>().interactable = (dot.color == redDot) ? false : true;
         }
         else
         {
-            dot.color = redDot;
-            this.gameObject.GetComponent<Button>().interactable = false;
+            dot.color = (!room.isPlaying && room.players.Count < 6) ? greenDot : redDot;
+            this.gameObject.GetComponent<Button>().interactable = (dot.color == redDot) ? false : true;
         }
 
-        num.text = room.players.Count + "/" + "6";
+        num.text = (room.mode == Room.Mode.HEADS) ? room.players.Count + "/" + "2" : room.players.Count + "/" + "6";
 
         switch(room.buyIn)
         {
@@ -99,10 +101,13 @@ public class RoomButtonPrefab : MonoBehaviour
     public void onBtnPressed()
     {
         // check if the ENTER is valid
+        /*
         if (GameManager.rooms[id].players.Count >= 6 || GameManager.rooms[id].isPlaying)
         {
             return;
         }
+        */
+        //if(GameManager.rooms[id])
 
         // Check if the room has required password
         if(!String.IsNullOrEmpty(GameManager.rooms[id].password))

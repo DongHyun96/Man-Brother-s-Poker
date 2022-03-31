@@ -38,7 +38,12 @@ public class GameMsgHandler : MonoBehaviour
             {
                 case GameMessage.MessageType.REGISTER:
                     // Check if the room's players count == Current GameTable players count
-                    
+                    print(message.table.registerCount);
+                    if(message.table.registerCount == GameManager.thisPlayerRoom.players.Count)
+                    {
+                        // Game start
+                        print("Game Start");
+                    }
                     break;
                 
                 default:
@@ -59,8 +64,13 @@ public class GameMsgHandler : MonoBehaviour
 
         websocket.OnMessage += ReceiveMessage;
 
-        // Send REGISTER message here
+        // REGISTER the gameTable and this player to server
+        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameManager.thisPlayer.name, GameManager.gameTable);
+        SendMessage(msg);
+        
     }
+
+    
 
 
 }
