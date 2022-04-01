@@ -9,5 +9,5 @@ public class Card
     }
 
     public Suit suit;
-    public int num;
+    public int num; // 0: two, 1: three ... 12: Ace
 }

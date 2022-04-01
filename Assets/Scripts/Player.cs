@@ -26,8 +26,7 @@ public class Player
     *********************************************************************************************************/
     [JsonConverter(typeof(StringEnumConverter))]
     public enum State{
-        [EnumMember(Value = "IDLE")]
-        IDLE
+        IDLE, SMALL, BIG, CHECK, BET, CALL, RAISE, ALLIN, FOLD
     }
     public State state;
 
