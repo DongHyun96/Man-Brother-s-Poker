@@ -28,10 +28,11 @@ public class Player
     public enum State{
         IDLE, SMALL, BIG, CHECK, BET, CALL, RAISE, ALLIN, FOLD
     }
-    public State state;
+    public State state = State.IDLE;
 
     public int totalChips;
-    public int betChips;
+    public int stageBet;
+    public int totalBet;
 
     public List<Card> cards;
     /********************************************************************************************************/

@@ -15,6 +15,8 @@ public class GameMessage
     public MessageType type;
 
     public string sender;
+    public Player.State action;
+    public int betchips;
 
     public GameTable table;
 

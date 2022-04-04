@@ -8,7 +8,7 @@ using System.Linq;
 public class PlayerCanvas : MonoBehaviour
 {
 
-    public string name;
+    public string name; // To do: Init name first
 
     public GameObject tabPanel;
     public GameObject cards;
