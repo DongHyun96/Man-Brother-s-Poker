@@ -34,7 +34,7 @@ public class Player
     public int stageBet;
     public int totalBet;
 
-    public List<Card> cards;
+    public List<Card> cards = new List<Card>();
     /********************************************************************************************************/
 
     public Player(string name)
@@ -51,5 +51,9 @@ public class Player
         this.character = character;
     }
     public Player(){}
+
+    /********************************************************************************************************
+    *                                              Action Methods                                         
+    *********************************************************************************************************/
 
 }

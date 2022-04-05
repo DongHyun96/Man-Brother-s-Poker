@@ -10,13 +10,11 @@ public class GameMessage
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MessageType{
-        REGISTER
+        REGISTER, TOSS, LEAVE
     }
     public MessageType type;
 
     public string sender;
-    public Player.State action;
-    public int betchips;
 
     public GameTable table;
 

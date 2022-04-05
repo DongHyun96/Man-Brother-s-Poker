@@ -38,6 +38,114 @@ public class PlayerCanvas : MonoBehaviour
     public Animator actionTextAnim;
     public Animator chipTextAnim;
     public Animator timerAnim;
+    
+    // States enum
+    private Player.State m_playerState;
+
+    /*
+    * Update GameTable first and then update this prorperty.
+    */
+    public Player.State playerState{
+        get => m_playerState;
+        set{
+            // Find corresponding player
+            Player player = new Player();
+            foreach(Player p in GameManager.gameTable.players)
+            {
+                if(p.name.Equals(name))
+                {
+                    player = p;
+                    break;
+                }
+            }
+
+            switch(value)
+            {
+                case Player.State.IDLE: // Init panel
+                    // Init contents
+                    UpdateTab(player);
+                    UpdateCard(player.cards);
+
+                    // Init panel anims
+                    if(iconAnim.GetBool("isIn"))
+                    {
+                        ToggleActionIconAndChip();
+                    }
+                    if(timerAnim.GetBool("isIn"))
+                    {
+                        ToggleTimer();
+                    }
+                    break;
+
+                case Player.State.SMALL:
+                    // Init contents
+                    UpdateTab(player);
+                    UpdateActionPanel(Player.State.SMALL, player.stageBet); // sbChip all in 고려
+                    
+                    // Toggle panel animation
+                    ToggleActionIconAndChip();
+                    break;
+                case Player.State.BIG:
+                    UpdateTab(player);
+                    UpdateActionPanel(Player.State.BIG, player.stageBet); // all in 고려
+
+                    // Toggle panel animation
+                    ToggleActionIconAndChip();
+                    break;
+                case Player.State.CHECK:
+                    // Init contents
+                    UpdateActionPanel(Player.State.CHECK);
+                    
+                    // Action routine
+                    StartCoroutine(ActionAnimationRoutine());
+                    break;
+                case Player.State.BET:
+                    // Init contents
+                    UpdateTab(player);
+                    UpdateActionPanel(Player.State.BET, player.stageBet);
+
+                    // Action routine
+                    StartCoroutine(ActionAnimationRoutine());
+                    break;
+                case Player.State.CALL:
+                    UpdateTab(player);
+                    UpdateActionPanel(Player.State.CALL, player.stageBet);
+
+                    StartCoroutine(ActionAnimationRoutine());
+                    break;
+                case Player.State.RAISE:
+                    UpdateTab(player);
+                    UpdateActionPanel(Player.State.RAISE, player.stageBet);
+
+                    StartCoroutine(ActionAnimationRoutine());
+                    break;
+                case Player.State.ALLIN:
+                    UpdateTab(player);
+                    UpdateActionPanel(Player.State.ALLIN, player.stageBet);
+
+                    StartCoroutine(ActionAnimationRoutine());
+                    break;
+                case Player.State.FOLD:
+                    UpdateActionPanel(Player.State.FOLD);
+
+                    StartCoroutine(ActionAnimationRoutine());
+                    break;
+                default:
+                    break;
+            }
+            m_playerState = value;
+        }
+    }
+
+    // Public method for current turn response here
+    public void EnableTurn()
+    {
+        // Enable Timer
+        print($"EnableTurn from playerCanvas: {name}");
+    }
+
+
+
 
     /****************************************************************************************************************
     *                                                Update contents
@@ -73,13 +181,20 @@ public class PlayerCanvas : MonoBehaviour
         }
     }
 
-    public void UpdateCard(List<Card> c)
+    private void UpdateCard(List<Card> c)
     {
+        if(c.Count < 2)
+        {
+            card1.sprite = null;
+            card2.sprite = null;
+            return;
+        }
+
         card1.sprite = CardSprite.GetInstance().GetSprite(c[0]);
         card2.sprite = CardSprite.GetInstance().GetSprite(c[1]);
     }
 
-    public void UpdateActionPanel(Player.State s, int chips)
+    private void UpdateActionPanel(Player.State s, int chips = 0)
     {
         // Update icon
         action_icon.sprite = IconSprite.GetInstance().GetSprite(s);
@@ -105,18 +220,18 @@ public class PlayerCanvas : MonoBehaviour
             case Player.State.FOLD:
                 actionText.text = "Fold";
                 break;
-            default:
+            default: //small, big (no needs to update actionText)
                 break;
         }
 
         // Update Chiptext
-        chipText.text = GetChipString(chips);
+        chipText.text = chips == 0 ? "" : GetChipString(chips);
     }
 
     /****************************************************************************************************************
     *                                         TabPanel animation toggling
     ****************************************************************************************************************/
-    public void ToggleTabPanel()
+    private void ToggleTabPanel()
     {
         tabPanelAnim.SetBool("isIn", !tabPanelAnim.GetBool("isIn"));
     }
@@ -124,28 +239,39 @@ public class PlayerCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                         ActionPanel animation toggling
     ****************************************************************************************************************/
-    public void ToggleActionIcon()
+    private void ToggleActionIconAndChip()
     {
         iconAnim.SetBool("isIn", !iconAnim.GetBool("isIn"));
+        chipTextAnim.SetBool("isIn", !chipTextAnim.GetBool("isIn"));
     }
 
-    public void ToggleActionText()
+    private void ToggleActionText()
     {
         actionTextAnim.SetBool("isIn", !actionTextAnim.GetBool("isIn"));
     }
 
-    public void ToggleChipText()
-    {
-        chipTextAnim.SetBool("isIn", !chipTextAnim.GetBool("isIn"));
-    }
-
-    public void ToggleTimer()
+    private void ToggleTimer()
     {
         timerAnim.SetBool("isIn", !timerAnim.GetBool("isIn"));
     }
+
+    private IEnumerator ActionAnimationRoutine()
+    {
+        if(iconAnim.GetBool("isIn")) // If iconAnim is on already, turn off
+        {
+            ToggleActionIconAndChip();
+        }
+
+        ToggleActionText(); // ToggleActionText first
+
+        yield return new WaitForSeconds(1f); // Wait 1 sec
+
+        ToggleActionIconAndChip(); // ToggleActionIcon
+
+    }
  
     /****************************************************************************************************************
-    *                                                    Private Methods
+    *                                                    Extra
     ****************************************************************************************************************/
     private string GetChipString(int chips)
     {
@@ -187,11 +313,11 @@ public class PlayerCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                                    Keys
     ****************************************************************************************************************/
-    /*
+    
     private void Start() {
-        ToggleActionIcon();
+        //ToggleActionIcon();
     }
-    */
+    
     
     private void Update() {
         if(Input.GetKeyDown(KeyCode.Tab)) // Toggle tab panel

@@ -6,7 +6,7 @@ internal class UnityMainThread : MonoBehaviour
 {
     internal static UnityMainThread wkr;
     Queue<Action> jobs = new Queue<Action>();
-
+    
     void Awake() {
         wkr = this;
         DontDestroyOnLoad(this.gameObject);

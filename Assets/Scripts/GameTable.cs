@@ -7,25 +7,28 @@ public class GameTable
 {
     public Guid id; // Same id with Room id
 
-    public List<Player> players;
+    public List<Player> players = new List<Player>();
     public int registerCount;
     
     public int iterPos;
+    public int UTG; // For the next round start
 
     public enum Stage{
         PREFLOP, FLOP, TURN, RIVER, FIN
     }
     public enum TableStatus{
-        IDLE, CHECK, BET ,ALLIN, FINISHED, FINAL_WINNER
+        //IDLE, CHECK, BET ,ALLIN, FINISHED, FINAL_WINNER
+        IDLE, CHECK, BET, ALLIN
     }
     
     public Room.Mode mode;
     public Stage stage;
     public TableStatus tableStatus;
 
-    public List<Card> deck;
-    public List<Card> communityCards;
+    public List<Card> deck = new List<Card>();
+    public List<Card> communityCards = new List<Card>();
 
+    public int pot;
     public int sbChip;
     
     public GameTable() {}
@@ -35,10 +38,40 @@ public class GameTable
         this.id = id;
         this.players = players;
         this.mode = mode;
-        InitBuyIn_Sb(buyIn);
+        InitBuyIn_And_Sb(buyIn);
     }
 
-    private void InitBuyIn_Sb(Room.BuyIn buyIn)
+    public void Init_Preflop()
+    {
+        // Init players
+        foreach(Player p in players)
+        {
+            p.state = Player.State.IDLE;
+            p.stageBet = 0;
+            p.totalBet = 0;
+
+            p.cards.Clear();
+        }
+
+        // Draw cards to player
+        DrawCard(); // Remove first cards
+        for(int i = 0; i < 2; i++)
+        {
+            foreach(Player p in players)
+            {
+                p.cards.Add(DrawCard());
+            }
+        }
+
+        // Init table fields
+        stage = Stage.PREFLOP;
+        tableStatus = TableStatus.IDLE;
+        communityCards.Clear();
+        pot = 0;
+        
+    }
+
+    private void InitBuyIn_And_Sb(Room.BuyIn buyIn)
     {
         switch(buyIn)
         {
@@ -93,4 +126,97 @@ public class GameTable
                 break;
         }
     }
+    /****************************************************************************************************************
+    *                                                Iterator methods
+    ****************************************************************************************************************/
+    public int GetPrev(int inputPos) // Returns the first previous player with status != FOLD
+    {
+        int tempIter = inputPos;
+        while(tempIter > 0)
+        {
+            tempIter--;
+
+            if(players[tempIter].state != Player.State.FOLD)
+            {
+                return tempIter;
+            }
+        }
+        // tempIter reaches 0
+        tempIter = players.Count;
+
+        while(tempIter != inputPos)
+        {
+            tempIter--;
+            if(players[tempIter].state != Player.State.FOLD)
+            {
+                return tempIter;
+            }
+        }
+
+        return tempIter;
+    }
+
+    public int GetNext(int inputPos)
+    {
+        int tempIter = inputPos;
+        while(tempIter < players.Count - 1)
+        {
+            tempIter++;
+
+            if(players[tempIter].state != Player.State.FOLD)
+            {
+                return tempIter;
+            }
+        }
+        // tempIter reaches top
+        tempIter = -1;
+
+        while(tempIter != inputPos)
+        {
+            tempIter++;
+            if(players[tempIter].state != Player.State.FOLD)
+            {
+                return tempIter;
+            }
+        }
+
+        return tempIter;
+    }
+
+    public void Next()
+    {
+        iterPos = GetNext(iterPos);
+    }
+
+
+
+
+    /****************************************************************************************************************
+    *                                                Deck methods
+    ****************************************************************************************************************/
+    public void InitDeck()
+    {
+        // Init deck
+        deck.Clear();
+
+        for(int i = 0; i < 13; i++) // Add each suit cards
+        {
+            deck.Add(new Card(Card.Suit.CLUB, i));
+            deck.Add(new Card(Card.Suit.DIAMOND, i));
+            deck.Add(new Card(Card.Suit.HEART, i));
+            deck.Add(new Card(Card.Suit.SPADE, i));
+        }
+
+        // Shuffle deck
+        ListShuffler.Shuffle<Card>(deck);
+    }
+
+    public Card DrawCard()
+    {
+        Card card = deck[0];
+        deck.RemoveAt(0);
+        return card;
+    }
+
+    
 }

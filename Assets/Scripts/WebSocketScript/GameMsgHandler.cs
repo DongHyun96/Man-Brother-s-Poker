@@ -37,38 +37,32 @@ public class GameMsgHandler : MonoBehaviour
             switch(message.type)
             {
                 case GameMessage.MessageType.REGISTER:
-                    // When everyone enters the gameScene
                     if(message.table.registerCount == GameManager.thisPlayerRoom.players.Count)
                     {
                         // Refresh iterPos from server (Received random start position from server)
                         GameManager.gameTable.iterPos = message.table.iterPos;
+                        GameManager.gameTable.UTG = message.table.iterPos;
 
-                        // Very first Game start
-                        print("Game Start");
+                        // Recieved shuffled deck and set it to table
+                        GameManager.gameTable.deck = message.table.deck;
+
+                        UnityMainThread.wkr.AddJob(() => 
+                        {
+                            // Init game settings
+                            GameSceneUpdater.GetInstance().InitSettings();
+                            
+                            // Init PREFLOP
+                            GameManager.gameTable.Init_Preflop();
+
+                            // Very first Game start
+                            print("Game Start");
+                            GameSceneUpdater.GetInstance().StartRound();
+                        });
                     }
-                    return;
+                    break;
                 
                 default:
                     print("No Matching message type or type is null");
-                    break;
-            }
-
-            switch(message.action)
-            {
-                case Player.State.CHECK:
-                    break;
-                case Player.State.BET:
-                    break;
-                case Player.State.CALL:
-                    break;
-                case Player.State.RAISE:
-                    break;
-                case Player.State.FOLD:
-                    break;
-                case Player.State.ALLIN:
-                    break;
-                default:
-                    print("No matching action type or type is null");
                     break;
             }
 

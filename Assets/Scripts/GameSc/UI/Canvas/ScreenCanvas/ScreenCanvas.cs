@@ -14,6 +14,7 @@ public class ScreenCanvas : MonoBehaviour
     // BottomLeft components
     public List<Image> playerCards;
     public List<Image> communityCards;
+    public Image foldImage;
     private int playerChips_Num;
     private int pot_Num;
     public Text playerChips;
@@ -37,15 +38,133 @@ public class ScreenCanvas : MonoBehaviour
     // Constants
     private const float WAIT_SEC = 0.001f;
 
-    private void Start() {
-        //UpdateTotalChips(50000);
-        //TogglePieButtonAnim();
+    /*
+    *   State and stage property
+    *   Update GameTable first and then update these prorperty.
+    */
+    private GameTable.Stage m_stage;
+    private Player.State m_state;
+
+    public GameTable.Stage stage{ // Cards UI update here
+        get => m_stage;
+        set{
+            // Find corresponding player
+            Player player = new Player();
+            foreach(Player p in GameManager.gameTable.players)
+            {
+                if(p.name.Equals(GameManager.thisPlayer.name))
+                {
+                    player = p;
+                    break;
+                }
+            }
+
+            switch(value)
+            {
+                case GameTable.Stage.PREFLOP:
+                    // Init playerCards
+                    UpdatePlayerCards(player.cards);
+
+                    // Show playerCards
+                    StartCoroutine(PlayerCardsAnimRoutine());
+                    break;
+                case GameTable.Stage.FLOP:
+                case GameTable.Stage.TURN:
+                case GameTable.Stage.RIVER:
+                    UpdateCommunityCards(GameManager.gameTable.communityCards);
+                    StartCoroutine(CommunityCardsAnimRoutine(value));
+                    break;
+
+                case GameTable.Stage.FIN:
+                    throw new NotImplementedException();
+                    break;
+            }
+            m_stage = value;
+        }
     }
+
+    public Player.State state{ // Chips etc update here.
+        get => m_state;
+        set{
+            // Find corresponding player
+            Player player = new Player();
+            foreach(Player p in GameManager.gameTable.players)
+            {
+                if(p.name.Equals(GameManager.thisPlayer.name))
+                {
+                    player = p;
+                }
+            }
+            switch(value)
+            {
+                case Player.State.IDLE: // Init
+                    UpdateTotalChips(player.totalChips);
+                    UpdatePotChips(0);
+
+                    // Turn off the unecessary GUI if it is on screen
+                    if(pieButtonAnim.GetBool("isIn"))
+                    {
+                        pieButtonAnim.SetBool("isIn", false);
+                    }
+                    if(bettingPanelAnim.GetBool("isIn"))
+                    {
+                        bettingPanelAnim.SetBool("isIn", false);
+                    }
+                    foreach(Animator a in playerCardAnims)
+                    {
+                        if(a.GetBool("isIn"))
+                        {
+                            a.SetBool("isIn", false);
+                        }
+                    }
+                    foreach(Animator a in communityCardAnims)
+                    {
+                        if(a.GetBool("isIn"))
+                        {
+                            a.SetBool("isIn", false);
+                        }
+                    }
+                    if(winnerPanel.gameObject.activeSelf)
+                    {
+                        winnerPanel.gameObject.SetActive(false);
+                    }
+                    if(showDownPanel.gameObject.activeSelf)
+                    {
+                        showDownPanel.gameObject.SetActive(false);
+                    }
+                    foldImage.gameObject.SetActive(false);
+                    break;
+                case Player.State.CHECK:
+                    break;
+                case Player.State.SMALL:
+                case Player.State.BIG:
+                case Player.State.RAISE:
+                case Player.State.ALLIN:
+                    UpdateTotalChips(player.totalChips);
+                    UpdatePotChips(GameManager.gameTable.pot);
+                    break;
+                case Player.State.FOLD:
+                    foldImage.gameObject.SetActive(true);
+                    break;
+            }
+            m_state = value;
+        }
+    }
+    
+
+    // Public method for current turn response
+    public void EnableTurn(PieButton.ActionState state, int callChips = 0)
+    {
+        UpdateActionGUI(state, callChips);
+        TogglePieButtonAnim();
+    }
+
+
 
     /****************************************************************************************************************
     *                                                Update contents
     ****************************************************************************************************************/
-    public void UpdatePlayerCards(List<Card> cards)
+    private void UpdatePlayerCards(List<Card> cards)
     {
         // Update BottomLeft cards
         playerCards[0].sprite = CardSprite.GetInstance().GetSprite(cards[0]);
@@ -59,7 +178,7 @@ public class ScreenCanvas : MonoBehaviour
         showDownPanel.InitShowDown(cards);
     }
 
-    public void UpdateCommunityCards(List<Card> cards)
+    private void UpdateCommunityCards(List<Card> cards)
     {
         for(int i = 0; i < cards.Count; i++)
         {
@@ -71,17 +190,17 @@ public class ScreenCanvas : MonoBehaviour
         }
     }
 
-    public void UpdateTotalChips(int chips)
+    private void UpdateTotalChips(int chips)
     {
         StartCoroutine(UpdateTotalChipsRoutine(chips));
     }
 
-    public void UpdatePotChips(int chips)
+    private void UpdatePotChips(int chips)
     {
         StartCoroutine(UpdatePotChipsRoutine(chips));
     }
 
-    public void UpdateActionGUI(PieButton.ActionState state, int callChips = 0)
+    private void UpdateActionGUI(PieButton.ActionState state, int callChips = 0)
     {
         // Update pieButtons
         foreach(PieButton p in pieButtons)
@@ -93,12 +212,12 @@ public class ScreenCanvas : MonoBehaviour
         bettingPanel.SetMinBet(callChips * 2); // Set minimum bet to double up, Not Fully implemented yet.
     }
 
-    public void UpdateWinnerAnounce()
+    private void UpdateWinnerAnounce()
     {
         winnerPanel.InitWinnerPanel(); // Not Implemented yet.. Needs to implement bestHand & bestHandcalculator
     }
 
-    public void UpdateShowDownPanel(List<Card> cards)
+    private void UpdateShowDownPanel(List<Card> cards)
     {
         showDownPanel.InitShowDown(cards);
     }
@@ -106,28 +225,88 @@ public class ScreenCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                                Animation toggling
     ****************************************************************************************************************/
-    public void TogglePlayerCardsAnim(int idx)
+    private void TogglePlayerCardsAnim(int idx)
     {
         playerCardAnims[idx].SetBool("isIn", !playerCardAnims[idx].GetBool("isIn"));
     }
 
-    public void ToggleCommunityCardsAnim(int idx)
+    private void ToggleCommunityCardsAnim(int idx)
     {
         communityCardAnims[idx].SetBool("isIn", !communityCardAnims[idx].GetBool("isIn"));
     }
 
-    public void TogglePieButtonAnim()
+    private void TogglePieButtonAnim()
     {
         pieButtonAnim.SetBool("isIn", !pieButtonAnim.GetBool("isIn"));
     }
 
-    public void ToggleBettingPanelAnim()
+    private void ToggleBettingPanelAnim()
     {
         bettingPanelAnim.SetBool("isIn", !bettingPanelAnim.GetBool("isIn"));
     }
 
+    private const float CARD_SEC = 1f;
+
+    private IEnumerator PlayerCardsAnimRoutine()
+    {
+        TogglePlayerCardsAnim(0);
+        yield return new WaitForSeconds(CARD_SEC);
+        TogglePlayerCardsAnim(1);
+    }
+    private IEnumerator CommunityCardsAnimRoutine(GameTable.Stage stage)
+    {
+        switch(stage)
+        {
+            case GameTable.Stage.FLOP:
+                for(int i = 0; i < 3; i++)
+                {
+                    ToggleCommunityCardsAnim(i);
+                    yield return new WaitForSeconds(CARD_SEC);
+                }
+                break;
+            case GameTable.Stage.TURN:
+                ToggleCommunityCardsAnim(3);
+                break;
+            case GameTable.Stage.RIVER:
+                ToggleCommunityCardsAnim(4);
+                break;
+        }
+    }
     /****************************************************************************************************************
-    *                                                Private Methods
+    *                                                Action Button methods
+    ****************************************************************************************************************/
+    public void OnpieLeft()
+    {
+
+    }
+
+    public void OnPieRight()
+    {
+
+    }
+
+    public void OnPieButtom()
+    {
+
+    }
+
+    public void OnBettingPanelAllIn()
+    {
+
+    }
+
+    public void OnBettingpanelCancel()
+    {
+
+    }
+
+    public void OnBettingPanelBet()
+    {
+        
+    }
+
+    /****************************************************************************************************************
+    *                                                Extra Methods
     ****************************************************************************************************************/
     private string GetChipString(int chips)
     {
@@ -179,5 +358,5 @@ public class ScreenCanvas : MonoBehaviour
                 yield return new WaitForSeconds(WAIT_SEC);
             }
         }
-    } 
+    }
 }
