@@ -20,9 +20,10 @@ public class GameMessage
 
     public GameMessage() {}
 
-    public GameMessage(Guid id, string sender, GameTable table)
+    public GameMessage(Guid id, MessageType type, string sender, GameTable table)
     {
         this.id = id;
+        this.type = type;
         this.sender = sender;
         this.table = table;
     }

@@ -22,6 +22,13 @@ public class PieButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
     }
 
+    public ActionState State
+    {
+        get => state;
+    }
+
+    private ActionState state;
+
     void Start()
     {
         this.GetComponent<Image>().alphaHitTestMinimumThreshold = THRESH_HOLD;
@@ -64,6 +71,7 @@ public class PieButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void UpdateContents(ActionState state, int callChips = 0)
     {
+        this.state = state;
         switch(state)
         {
             case ActionState.CHECK_BET_FOLD:

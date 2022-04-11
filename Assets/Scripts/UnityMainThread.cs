@@ -13,7 +13,7 @@ internal class UnityMainThread : MonoBehaviour
     }
 
     void Update() {
-        while (jobs.Count > 0) 
+        while (jobs.Count > 0)
             jobs.Dequeue().Invoke();
     }
 

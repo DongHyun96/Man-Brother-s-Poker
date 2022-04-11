@@ -75,7 +75,9 @@ public class ScreenCanvas : MonoBehaviour
                     StartCoroutine(CommunityCardsAnimRoutine(value));
                     break;
 
-                case GameTable.Stage.FIN:
+                case GameTable.Stage.ROUND_FIN:
+                case GameTable.Stage.POT_FIN:
+                case GameTable.Stage.GAME_FIN:
                     throw new NotImplementedException();
                     break;
             }
@@ -99,7 +101,7 @@ public class ScreenCanvas : MonoBehaviour
             {
                 case Player.State.IDLE: // Init
                     UpdateTotalChips(player.totalChips);
-                    UpdatePotChips(0);
+                    UpdatePotChips(GameManager.gameTable.pot);
 
                     // Turn off the unecessary GUI if it is on screen
                     if(pieButtonAnim.GetBool("isIn"))
@@ -275,19 +277,52 @@ public class ScreenCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                                Action Button methods
     ****************************************************************************************************************/
-    public void OnpieLeft()
-    {
+    // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD(Big blind), ALLIN_FOLD
 
+    /* Action routine : Update gameTable -> Send it to server ->
+     Receive updated gameTable from server -> Update gameTable and UI */
+    public void OnpieLeft() // CHECK, CALL, ALLIN
+    {
+        switch(pieButtons[0].State)
+        {
+            case PieButton.ActionState.CHECK_BET_FOLD:
+            case PieButton.ActionState.CHECK_RAISE_FOLD:
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.CHECK);
+                GameMsgHandler.TossTable();
+                TogglePieButtonAnim();
+                break;
+            case PieButton.ActionState.CALL_RAISE_FOLD:
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name,
+                 Player.State.CALL, GameManager.gameTable.roundBetMax);
+                
+                GameMsgHandler.TossTable();
+                TogglePieButtonAnim();
+                break;
+            case PieButton.ActionState.ALLIN_FOLD:
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name,
+                Player.State.ALLIN);
+
+                GameMsgHandler.TossTable();
+                TogglePieButtonAnim();
+                break;
+        }
     }
 
     public void OnPieRight()
     {
-
+        TogglePieButtonAnim();
+        ToggleBettingPanelAnim();
     }
 
-    public void OnPieButtom()
+    public void OnPieButtom() // Fold btn
     {
+        GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.FOLD);
 
+        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.TOSS,
+        GameManager.thisPlayer.name, GameManager.gameTable);
+        GameMsgHandler.SendMessage(msg);
+
+        TogglePieButtonAnim();
     }
 
     public void OnBettingPanelAllIn()
@@ -297,12 +332,13 @@ public class ScreenCanvas : MonoBehaviour
 
     public void OnBettingpanelCancel()
     {
-
+        ToggleBettingPanelAnim();
+        TogglePieButtonAnim();
     }
 
     public void OnBettingPanelBet()
     {
-        
+
     }
 
     /****************************************************************************************************************

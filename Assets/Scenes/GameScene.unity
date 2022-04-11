@@ -8159,7 +8159,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 486221036}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042381944}
+        m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
+        m_MethodName: OnBettingPanelAllIn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &486221036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9683,7 +9695,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 569709281}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042381944}
+        m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
+        m_MethodName: OnpieLeft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &569709281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13583,7 +13607,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 792967781}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042381944}
+        m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
+        m_MethodName: OnPieRight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &792967781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14681,7 +14717,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 905213782}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042381944}
+        m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
+        m_MethodName: OnBettingPanelBet
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &905213782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22019,7 +22067,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1465153415}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042381944}
+        m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
+        m_MethodName: OnBettingpanelCancel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1465153415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24071,7 +24131,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1552418722}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042381944}
+        m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
+        m_MethodName: OnPieButtom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1552418722
 MonoBehaviour:
   m_ObjectHideFlags: 0

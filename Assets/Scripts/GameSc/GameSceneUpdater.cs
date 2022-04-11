@@ -41,8 +41,54 @@ public class GameSceneUpdater : MonoBehaviour
 
 
     // Facade methods to update the canvas and anim
-    public void UpdateGameScene()
+    public void UpdateGameScene(Player p)
     {
+        GameTable table = GameManager.gameTable;
+
+        /* Update target playerCanvas */
+        PlayerCanvas targetCanvas = GetCanvasFromName(p.name);
+        targetCanvas.playerState = p.state; // Update sender's canvas
+        UpdateTabs(); // Update rankings
+
+        /* Update screenCanvas */
+        screenCanvas.state = p.state;
+
+        /* Check iterator turn */
+        if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
+        {
+            // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
+            switch(table.tableStatus)
+            {
+                case GameTable.TableStatus.CHECK:
+                    screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD);
+                    break;
+                case GameTable.TableStatus.BET:
+                    int big = table.GetPrev(table.UTG);
+
+                    // Big blind PREFLOP case
+                    if(table.stage == GameTable.Stage.PREFLOP && table.players[big].Equals(table.GetCurrentPlayer()))
+                    {
+                        if(table.roundBetMax == table.GetCurrentPlayer().roundBet)
+                        {
+                            // All players didn't raised
+                            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
+                        }
+                    }
+                    else
+                    {
+                        PieButton.ActionState a = table.GetCurrentPlayer().totalChips <= table.roundBetMax ?
+                        PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
+                        screenCanvas.EnableTurn(a, table.roundBetMax);
+                    }
+
+                    break;
+                //case GameTable.TableStatus.ALLIN:
+
+            }
+        }
+        
+        GetCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
+        
 
     }
 
@@ -59,11 +105,6 @@ public class GameSceneUpdater : MonoBehaviour
         // Set up playerCanvas
         foreach(PlayerCanvas canvas in playerCanvas)
         {   
-            if(canvas.name.Equals(table.players[current_UTG].name)) // UTG (First Actor)
-            {
-                canvas.playerState = Player.State.IDLE;
-                canvas.EnableTurn();
-            }
 
             if(canvas.name.Equals(table.players[smallPos].name)) // Small Blind
             {
@@ -77,15 +118,15 @@ public class GameSceneUpdater : MonoBehaviour
             {
                 canvas.playerState = Player.State.IDLE;
             }
+
+
+            if(canvas.name.Equals(table.players[current_UTG].name)) // UTG(first actor)
+            {
+                canvas.EnableTurn();
+            } 
         }
 
         // Set up ScreenCanvas
-        if(GameManager.thisPlayer.name.Equals(table.players[current_UTG].name)) // UTG (First Actor)
-        {
-            screenCanvas.state = Player.State.IDLE;
-            screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2); // Consider All in here
-        }
-
         if(GameManager.thisPlayer.name.Equals(table.players[smallPos].name)) // Small Blind
         {
             screenCanvas.state = Player.State.SMALL;
@@ -98,8 +139,37 @@ public class GameSceneUpdater : MonoBehaviour
         {
             screenCanvas.state = Player.State.IDLE;
         }
-        screenCanvas.stage = GameTable.Stage.PREFLOP;
-        
+
+        if(GameManager.thisPlayer.name.Equals(table.players[current_UTG].name)) // UTG (First Actor)
+        {
+            screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2); // Consider All in here
+        }
+
+        screenCanvas.stage = GameTable.Stage.PREFLOP;    
+    }
+
+    /****************************************************************************************************************
+    *                                                Extra methods
+    ****************************************************************************************************************/
+    private PlayerCanvas GetCanvasFromName(string name)
+    {
+        foreach(PlayerCanvas c in playerCanvas)
+        {
+            if(name.Equals(c.name))
+            {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    private void UpdateTabs()
+    {
+        foreach(Player p in GameManager.gameTable.players)
+        {
+            PlayerCanvas c = GetCanvasFromName(p.name);
+            c.UpdateTab(p);
+        }
     }
 
 }

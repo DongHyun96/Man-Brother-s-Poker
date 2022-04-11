@@ -78,55 +78,30 @@ public class PlayerCanvas : MonoBehaviour
                     break;
 
                 case Player.State.SMALL:
-                    // Init contents
-                    UpdateTab(player);
-                    UpdateActionPanel(Player.State.SMALL, player.stageBet); // sbChip all in 고려
-                    
-                    // Toggle panel animation
-                    ToggleActionIconAndChip();
-                    break;
                 case Player.State.BIG:
+                    // Init contents
                     UpdateTab(player);
-                    UpdateActionPanel(Player.State.BIG, player.stageBet); // all in 고려
-
+                    UpdateActionPanel(value, player.roundBet); // sbChip all in 고려
+                    
                     // Toggle panel animation
                     ToggleActionIconAndChip();
                     break;
+
                 case Player.State.CHECK:
+                case Player.State.FOLD:
                     // Init contents
-                    UpdateActionPanel(Player.State.CHECK);
+                    UpdateActionPanel(value);
                     
                     // Action routine
                     StartCoroutine(ActionAnimationRoutine());
                     break;
+
                 case Player.State.BET:
-                    // Init contents
-                    UpdateTab(player);
-                    UpdateActionPanel(Player.State.BET, player.stageBet);
-
-                    // Action routine
-                    StartCoroutine(ActionAnimationRoutine());
-                    break;
                 case Player.State.CALL:
-                    UpdateTab(player);
-                    UpdateActionPanel(Player.State.CALL, player.stageBet);
-
-                    StartCoroutine(ActionAnimationRoutine());
-                    break;
                 case Player.State.RAISE:
-                    UpdateTab(player);
-                    UpdateActionPanel(Player.State.RAISE, player.stageBet);
-
-                    StartCoroutine(ActionAnimationRoutine());
-                    break;
                 case Player.State.ALLIN:
                     UpdateTab(player);
-                    UpdateActionPanel(Player.State.ALLIN, player.stageBet);
-
-                    StartCoroutine(ActionAnimationRoutine());
-                    break;
-                case Player.State.FOLD:
-                    UpdateActionPanel(Player.State.FOLD);
+                    UpdateActionPanel(value, player.roundBet);
 
                     StartCoroutine(ActionAnimationRoutine());
                     break;

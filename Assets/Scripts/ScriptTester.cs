@@ -8,8 +8,9 @@ using System.Linq;
 public class ScriptTester : MonoBehaviour
 {
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
+        /*
         MainMessage message = new MainMessage();
         //message.guid = Guid.NewGuid();
 
@@ -33,12 +34,15 @@ public class ScriptTester : MonoBehaviour
            print($"{p.name}: {p.totalChips}");
        }
 
+    */
+    /* int something = 3;
+    something += false ? 15 : 2;
+    print(something); */
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+#if TEST
+    print("testing");
+#else
+    print("Real symbol");
+#endif
     }
 }

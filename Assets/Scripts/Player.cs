@@ -31,7 +31,7 @@ public class Player
     public State state = State.IDLE;
 
     public int totalChips;
-    public int stageBet;
+    public int roundBet;
     public int totalBet;
 
     public List<Card> cards = new List<Card>();
@@ -52,8 +52,66 @@ public class Player
     }
     public Player(){}
 
+
     /********************************************************************************************************
-    *                                              Action Methods                                         
+    *                                               Action methods
     *********************************************************************************************************/
+    public void Check()
+    {
+        state = State.CHECK;
+    }
+
+
+    public void Bet(int chips)
+    {
+        if(totalChips <= chips)
+        {
+            AllIn();
+            return;
+        }
+        state = State.BET;
+        roundBet = chips;
+        totalBet += chips;
+        totalChips -= chips;
+    }
+
+
+    public void Call(int chips)
+    {
+        if(totalChips <= chips)
+        {
+            AllIn();
+            return;
+        }
+        state = State.CALL;
+        roundBet = chips;
+        totalBet += chips;
+        totalChips -= chips;
+    }
+
+
+    public void Raise(int chips)
+    {
+        if(totalChips <= chips)
+        {
+            AllIn();
+            return;
+        }
+        state = State.RAISE;
+        roundBet = chips;
+        totalBet += chips;
+        totalChips -= chips;
+    }   
+    public void AllIn()
+    {
+        state = State.ALLIN;
+        roundBet = totalChips;
+        totalBet += totalChips;
+        totalChips = 0;
+    }
+    public void Fold()
+    {
+        state = State.FOLD;
+    }
 
 }
