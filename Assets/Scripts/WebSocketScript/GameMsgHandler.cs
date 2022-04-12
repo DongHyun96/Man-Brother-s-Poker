@@ -23,7 +23,7 @@ public class GameMsgHandler : MonoBehaviour
     public static void SendMessage(GameMessage message)
     {
         Debug.Log("Sending game message: " + JsonConvert.SerializeObject(message));
-        websocket.Send(JsonConvert.SerializeObject(message)); // Convert to Json(string) form and send
+        websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented)); // Convert to Json(string) form and send
     }
 
     public static void TossTable()
@@ -33,15 +33,15 @@ public class GameMsgHandler : MonoBehaviour
         GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.TOSS,
         GameManager.thisPlayer.name, GameManager.gameTable);
 
-        websocket.Send(JsonConvert.SerializeObject(message));
+        websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented));
     }
 
     private static void ReceiveMessage(object s, MessageEventArgs e)
     {
         try
         {
-            GameMessage message = JsonConvert.DeserializeObject<GameMessage>(e.Data);
-
+            GameMessage message = JsonConvert.DeserializeObject<GameMessage>(e.Data); // FATAL ERROR HERE
+           
             print("Game Message received --> " + message.type);
 
             switch(message.type)
@@ -54,10 +54,9 @@ public class GameMsgHandler : MonoBehaviour
                     }
 #endif
                     if(message.table.registerCount == GameManager.thisPlayerRoom.players.Count)
-                    {
+                    {   
                         UnityMainThread.wkr.AddJob(() => 
                         {
-                            print("WOW");
                             // Refresh iterPos from server (Received random start position from server)
                             GameManager.gameTable.iterPos = message.table.iterPos;
             
@@ -80,8 +79,10 @@ public class GameMsgHandler : MonoBehaviour
                     break;
                 case GameMessage.MessageType.TOSS:
                     UnityMainThread.wkr.AddJob(() => {
-                        print("Current iterPos: " + message.table.iterPos);
+
                         GameManager.gameTable = message.table; // Update gameTable
+
+                        print("Current iterPos: " + message.table.iterPos);
                         Player targetPlayer = GameManager.gameTable.GetPlayerByName(message.sender);
                         GameSceneUpdater.GetInstance().UpdateGameScene(targetPlayer); //Update UI
                     });

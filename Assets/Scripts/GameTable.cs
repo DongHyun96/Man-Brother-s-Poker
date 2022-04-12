@@ -37,26 +37,25 @@ public class GameTable
     
     public Room.Mode mode;
 
+    [JsonProperty("stage")]
     private Stage m_stage;
+    [JsonProperty("tableStatus")]
     private TableStatus m_tableStatus;
 
     /*
     * Update table contents through these property.
     */
-    //[JsonConverter(typeof(StringEnumConverter))]
+    [JsonIgnore]
     public Stage stage
     {
         get => m_stage;
-
+        
         set
         {
-            Debug.Log(tableStatus);
             if(tableStatus != TableStatus.IDLE)
             {
                 return;
             }
-
-            Debug.Log("ENTERING STAGE SETTER");
             switch(value)
             {
                 case Stage.PREFLOP:
@@ -79,16 +78,11 @@ public class GameTable
         }
     }
     
-    //[JsonConverter(typeof(StringEnumConverter))]
+    [JsonIgnore]
     public TableStatus tableStatus
     {
         get => m_tableStatus;
-
-        set
-        {
-            //switch()
-            m_tableStatus = value;
-        }
+        set => m_tableStatus = value;
     }
 
 
@@ -189,6 +183,7 @@ public class GameTable
         TakeAction(players[GetPrev(GetPrev(UTG))].name, Player.State.BET, sbChip);
         TakeAction(players[GetPrev(UTG)].name, Player.State.RAISE, sbChip * 2);
 
+        
         // Draw cards to player
         DrawCard(); // Remove first cards
         for(int i = 0; i < 2; i++)
@@ -198,6 +193,8 @@ public class GameTable
                 p.cards.Add(DrawCard());
             }
         }
+
+
     }
     /****************************************************************************************************************
     *                                                Iterator methods

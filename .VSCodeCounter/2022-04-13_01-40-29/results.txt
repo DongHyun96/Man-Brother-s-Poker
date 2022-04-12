@@ -1,0 +1,94 @@
+Date : 2022-04-13 01:40:29
+Directory : c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts
+Total : 53 files,  3573 codes, 547 comments, 888 blanks, all 5008 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         53 |      3,573 |        547 |        888 |      5,008 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                     | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                        |         53 |      3,573 |        547 |        888 |      5,008 |
+| Editor                                                                                                   |          1 |         17 |          0 |          3 |         20 |
+| EnteringSc                                                                                               |         15 |        815 |         95 |        214 |      1,124 |
+| EnteringSc\CamPos                                                                                        |          3 |         45 |          0 |         12 |         57 |
+| EnteringSc\Invitation                                                                                    |          1 |         72 |          9 |         21 |        102 |
+| EnteringSc\Lobby                                                                                         |          4 |        187 |         11 |         42 |        240 |
+| EnteringSc\PasswordPanel                                                                                 |          1 |         44 |          5 |         13 |         62 |
+| EnteringSc\Room                                                                                          |          1 |        269 |         51 |         72 |        392 |
+| GameSc                                                                                                   |         16 |      1,050 |        137 |        249 |      1,436 |
+| GameSc\UI                                                                                                |         13 |        891 |        111 |        201 |      1,203 |
+| GameSc\UI\ButtonInteraction                                                                              |          1 |         16 |          2 |          5 |         23 |
+| GameSc\UI\Canvas                                                                                         |          8 |        749 |        108 |        172 |      1,029 |
+| GameSc\UI\Canvas\ScreenCanvas                                                                            |          7 |        534 |         63 |        122 |        719 |
+| GameSc\UI\Sprite                                                                                         |          2 |         84 |          0 |         14 |         98 |
+| GeneralManager                                                                                           |          2 |        406 |        174 |        116 |        696 |
+| LoadingSc                                                                                                |          1 |         43 |          0 |         12 |         55 |
+| TitleSc                                                                                                  |          2 |         65 |          7 |         21 |         93 |
+| WebSocketScript                                                                                          |          7 |        550 |         43 |        139 |        732 |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                 | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Card.cs                                        | C#       |         20 |          0 |          4 |         24 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Editor\EditorScript.cs                         | C#       |         17 |          0 |          3 |         20 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\CamPos\GameCamPos.cs                | C#       |         15 |          0 |          4 |         19 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\CamPos\LobbyCamPos.cs               | C#       |         15 |          0 |          4 |         19 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\CamPos\RoomCamPos.cs                | C#       |         15 |          0 |          4 |         19 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\CharacterSelect.cs                  | C#       |         51 |          7 |         16 |         74 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\EntPanelController.cs               | C#       |         63 |          4 |         10 |         77 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\EnteringSceneUpdater.cs             | C#       |         44 |          6 |         13 |         63 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Invitation\Invitation.cs            | C#       |         72 |          9 |         21 |        102 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Lobby\L_CreatingPanel.cs            | C#       |         70 |          4 |         17 |         91 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Lobby\L_PanelChat.cs                | C#       |         39 |          1 |          7 |         47 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Lobby\L_PlayerPanel.cs              | C#       |         49 |          4 |         15 |         68 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Lobby\L_RoomsPanel.cs               | C#       |         29 |          2 |          3 |         34 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\PasswordPanel\PasswordPanel.cs      | C#       |         44 |          5 |         13 |         62 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\Room\RoomPanel.cs                   | C#       |        269 |         51 |         72 |        392 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\SignUpPanel.cs                      | C#       |         24 |          1 |          8 |         33 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\SpaceController.cs                  | C#       |         16 |          1 |          7 |         24 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\CamController.cs                        | C#       |         26 |          1 |         11 |         38 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\GamePanelController.cs                  | C#       |         12 |          2 |          5 |         19 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\GameSceneUpdater.cs                     | C#       |        121 |         23 |         32 |        176 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\ButtonInteraction\ButtonScaler.cs    | C#       |         16 |          2 |          5 |         23 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\PlayerCanvas.cs               | C#       |        215 |         45 |         50 |        310 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\BettingPanel.cs  | C#       |         31 |          3 |         12 |         46 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\PieButton.cs     | C#       |         92 |         12 |         26 |        130 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ScreenCanvas.cs  | C#       |        308 |         40 |         51 |        399 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ShowDownBtn.cs   | C#       |         30 |          4 |         12 |         46 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ShowDownPanel.cs | C#       |         18 |          3 |          5 |         26 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\UpperButtons.cs  | C#       |         34 |          0 |          8 |         42 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\WinnerPanel.cs   | C#       |         21 |          1 |          8 |         30 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\GameMenu.cs                          | C#       |         29 |          1 |          6 |         36 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\GuiCamFacing.cs                      | C#       |         13 |          0 |          4 |         17 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Sprite\CardSprite.cs                 | C#       |         37 |          0 |          7 |         44 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Sprite\IconSprite.cs                 | C#       |         47 |          0 |          7 |         54 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameTable.cs                                   | C#       |        338 |         50 |         69 |        457 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GeneralManager\AspectRatioController.cs        | C#       |        247 |        146 |         67 |        460 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GeneralManager\GameManager.cs                  | C#       |        159 |         28 |         49 |        236 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\ListShuffler.cs                                | C#       |         18 |          0 |          5 |         23 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\LoadingSc\LoadingSceneController.cs            | C#       |         43 |          0 |         12 |         55 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\MenuPanel.cs                                   | C#       |         21 |          0 |          9 |         30 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Player.cs                                      | C#       |         91 |          9 |         18 |        118 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\RadialFill.cs                                  | C#       |         49 |          1 |         12 |         62 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Room.cs                                        | C#       |         52 |          1 |          9 |         62 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\ScriptTester.cs                                | C#       |         19 |         30 |          4 |         53 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\TitleSc\Flicker.cs                             | C#       |         32 |          1 |          9 |         42 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\TitleSc\TitleScene.cs                          | C#       |         33 |          6 |         12 |         51 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\UnityMainThread.cs                             | C#       |         19 |          0 |          4 |         23 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\GameMessage.cs                 | C#       |         24 |          0 |          8 |         32 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\GameMsgHandler.cs              | C#       |        102 |          7 |         31 |        140 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\MainMessage.cs                 | C#       |         56 |          7 |         20 |         83 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\MainMsgHandler.cs              | C#       |        132 |         10 |         41 |        183 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\RoomMessage.cs                 | C#       |         90 |         11 |         11 |        112 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\RoomMsgHandler.cs              | C#       |        139 |          8 |         26 |        173 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\UrlBase.cs                     | C#       |          7 |          0 |          2 |          9 |
+| Total                                                                                                    |          |      3,573 |        547 |        888 |      5,008 |
++----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

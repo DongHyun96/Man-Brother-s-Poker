@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 public class Card
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Suit{
         CLUB, DIAMOND, HEART, SPADE
     }

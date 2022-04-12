@@ -39,8 +39,14 @@ public class ScriptTester : MonoBehaviour
     something += false ? 15 : 2;
     print(something); */
 
+    GameTable table = new GameTable();
+    table.stage = GameTable.Stage.FLOP;
+    
+    GameTable newTable = table;
+    
+
 #if TEST
-    print("testing");
+    //print("testing");
 #else
     print("Real symbol");
 #endif
