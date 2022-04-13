@@ -84,9 +84,12 @@ public class Player
             return;
         }
         state = State.CALL;
+        
+        totalBet += chips - roundBet;
+        totalChips -= chips - roundBet;
         roundBet = chips;
-        totalBet += chips;
-        totalChips -= chips;
+
+        
     }
 
 
@@ -98,9 +101,11 @@ public class Player
             return;
         }
         state = State.RAISE;
+ 
+        totalBet += chips - roundBet;
+        totalChips -= chips - roundBet;
         roundBet = chips;
-        totalBet += chips;
-        totalChips -= chips;
+
     }   
     public void AllIn()
     {

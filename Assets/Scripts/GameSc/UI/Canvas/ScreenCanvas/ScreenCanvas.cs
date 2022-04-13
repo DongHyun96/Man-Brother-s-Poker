@@ -89,18 +89,13 @@ public class ScreenCanvas : MonoBehaviour
         get => m_state;
         set{
             // Find corresponding player
-            Player player = new Player();
-            foreach(Player p in GameManager.gameTable.players)
-            {
-                if(p.name.Equals(GameManager.thisPlayer.name))
-                {
-                    player = p;
-                }
-            }
+            Player thisPlayer = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
+            print($"Value = {value}");
+
             switch(value)
             {
                 case Player.State.IDLE: // Init
-                    UpdateTotalChips(player.totalChips);
+                    UpdateTotalChips(thisPlayer.totalChips);
                     UpdatePotChips(GameManager.gameTable.pot);
 
                     // Turn off the unecessary GUI if it is on screen
@@ -138,15 +133,14 @@ public class ScreenCanvas : MonoBehaviour
                     break;
                 case Player.State.CHECK:
                     break;
-                case Player.State.SMALL:
-                case Player.State.BIG:
-                case Player.State.RAISE:
-                case Player.State.ALLIN:
-                    UpdateTotalChips(player.totalChips);
-                    UpdatePotChips(GameManager.gameTable.pot);
+                case Player.State.FOLD: // only gets value so.. it updates everyone
+                    bool temp = thisPlayer.state == Player.State.FOLD ? true : false;
+                    foldImage.gameObject.SetActive(temp);
                     break;
-                case Player.State.FOLD:
-                    foldImage.gameObject.SetActive(true);
+
+                default: // SMALL, BIG, BET, CALL, RAISE, ALLIN
+                    UpdateTotalChips(thisPlayer.totalChips);
+                    UpdatePotChips(GameManager.gameTable.pot);
                     break;
             }
             m_state = value;

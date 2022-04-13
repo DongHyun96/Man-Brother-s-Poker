@@ -240,7 +240,8 @@ public class PlayerCanvas : MonoBehaviour
         ToggleActionText(); // ToggleActionText first
 
         yield return new WaitForSeconds(1f); // Wait 1 sec
-
+        
+        ToggleActionText();
         ToggleActionIconAndChip(); // ToggleActionIcon
 
     }

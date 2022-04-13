@@ -164,6 +164,7 @@ public class GameTable
 
     private void Init_Preflop()
     {
+        Debug.Log("Entering preflop");
         // Init players
         foreach(Player p in players)
         {
@@ -180,9 +181,16 @@ public class GameTable
         pot = 0;
 
         // Small, big betting
-        TakeAction(players[GetPrev(GetPrev(UTG))].name, Player.State.BET, sbChip);
-        TakeAction(players[GetPrev(UTG)].name, Player.State.RAISE, sbChip * 2);
+        Player small = players[GetPrev(GetPrev(UTG))];
+        Player big = players[GetPrev(UTG)];
 
+        small.Bet(sbChip);
+        tableStatus = TableStatus.BET;
+        pot += small.roundBet;
+
+        pot += (big.totalChips <= sbChip * 2) ? big.totalChips - big.roundBet : sbChip * 2 - big.roundBet;
+        big.Raise(sbChip * 2);
+        roundBetMax = big.roundBet;
         
         // Draw cards to player
         DrawCard(); // Remove first cards
@@ -400,6 +408,13 @@ public class GameTable
             case TableStatus.IDLE:
                 return false;
             case TableStatus.CHECK:
+
+                // PREFLOP case exception(Big blind check)
+                if(stage == Stage.PREFLOP && iterPos == GetPrev(UTG))
+                {
+                    return true;
+                }
+                
                 foreach(Player p in players)
                 {
                     if(p.state != Player.State.FOLD && p.state != Player.State.CHECK)
@@ -409,6 +424,13 @@ public class GameTable
                 }
                 return true; // When everyone checked except fold
             case TableStatus.BET:
+
+                // PREFLOP case exception (After small blind action)
+                if(stage == Stage.PREFLOP && roundBetMax == sbChip * 2 && iterPos == GetPrev(GetPrev(UTG)))
+                {
+                    return false;
+                }
+
                 int bet = -1;
                 
                 foreach(Player p in players)
