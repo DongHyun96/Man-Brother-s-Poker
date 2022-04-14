@@ -146,7 +146,7 @@ public class GameTable
                 {
                     p.totalChips = 50000;
                 }
-                sbChip  = 250;
+                sbChip = 250;
                 break;
 
             case Room.BuyIn.HUNDRED:

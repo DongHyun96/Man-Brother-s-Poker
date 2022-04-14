@@ -205,7 +205,8 @@ public class ScreenCanvas : MonoBehaviour
         }
 
         // Update BettingPanel
-        bettingPanel.SetMinBet(callChips * 2); // Set minimum bet to double up, Not Fully implemented yet.
+        bettingPanel.InitContents(callChips * 2); // Set floor and ceiling bet in bettingPanel
+        //bettingPanel.SetMinBet(callChips * 2); // Set minimum bet to double up, Not Fully implemented yet.
     }
 
     private void UpdateWinnerAnounce()
@@ -321,18 +322,26 @@ public class ScreenCanvas : MonoBehaviour
 
     public void OnBettingPanelAllIn()
     {
+        GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
 
+        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.TOSS,
+        GameManager.thisPlayer.name, GameManager.gameTable);
+
+        // Init and quit
+
+        ToggleBettingPanelAnim();
     }
 
     public void OnBettingpanelCancel()
     {
+        // Init and quit
         ToggleBettingPanelAnim();
         TogglePieButtonAnim();
     }
 
     public void OnBettingPanelBet()
     {
-
+        // Init and quit
     }
 
     /****************************************************************************************************************

@@ -78,7 +78,7 @@ public class Player
 
     public void Call(int chips)
     {
-        if(totalChips <= chips)
+        if(totalChips + roundBet <= chips)
         {
             AllIn();
             return;
@@ -95,7 +95,7 @@ public class Player
 
     public void Raise(int chips)
     {
-        if(totalChips <= chips)
+        if(totalChips + roundBet <= chips)
         {
             AllIn();
             return;

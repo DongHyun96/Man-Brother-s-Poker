@@ -35,18 +35,12 @@ public class ScriptTester : MonoBehaviour
        }
 
     */
-    /* int something = 3;
-    something += false ? 15 : 2;
-    print(something); */
-
-    GameTable table = new GameTable();
-    table.stage = GameTable.Stage.FLOP;
     
-    GameTable newTable = table;
+    print(236.IntRound(-1));
     
 
 #if TEST
-    //print("testing");
+    print("testing");
 #else
     print("Real symbol");
 #endif

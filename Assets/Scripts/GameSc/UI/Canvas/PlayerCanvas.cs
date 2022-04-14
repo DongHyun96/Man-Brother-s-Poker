@@ -299,12 +299,6 @@ public class PlayerCanvas : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Tab)) // Toggle tab panel
         {
             ToggleTabPanel();
-
-            // Toggle cards
-
-            // Toggle ActionPanel animation
-            // Needs to figure this out...
-            // throw new NotImplementedException();
         }
     }
 }
