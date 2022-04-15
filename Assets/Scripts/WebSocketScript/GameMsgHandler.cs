@@ -59,8 +59,9 @@ public class GameMsgHandler : MonoBehaviour
                         {
                             // Refresh iterPos from server (Received random start position from server)
                             GameManager.gameTable.iterPos = message.table.iterPos;
-            
-                            GameManager.gameTable.UTG = message.table.iterPos;
+                            
+                            int BB = GameManager.gameTable.GetPrev(message.table.iterPos);
+                            GameManager.gameTable.SB_Pos = GameManager.gameTable.GetPrev(BB);
 
                             // Received shuffled deck and set it to table
                             GameManager.gameTable.deck = message.table.deck;

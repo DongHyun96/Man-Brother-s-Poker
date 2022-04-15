@@ -13,7 +13,7 @@ public class GameTable
     public int registerCount;
     
     public int iterPos;
-    public int UTG; // For the next round start
+    public int SB_Pos; // For the next round start
 
     /*
     * ROUND_FIN : when round is finished(proflop, flop...)
@@ -31,7 +31,7 @@ public class GameTable
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum TableStatus{
-        //IDLE, CHECK, BET ,ALLIN, FINISHED, FINAL_WINNER
+        // IDLE, CHECK, BET ,ALLIN, FINISHED, FINAL_WINNER
         IDLE, CHECK, BET, ALLIN
     }
     
@@ -52,20 +52,23 @@ public class GameTable
         
         set
         {
-            if(tableStatus != TableStatus.IDLE)
+            /* if(tableStatus != TableStatus.IDLE)
             {
                 return;
-            }
+            } */
             switch(value)
             {
                 case Stage.PREFLOP:
                     Init_Preflop();
                     break;
                 case Stage.FLOP:
+                    Init_Flop();
                     break;
                 case Stage.TURN:
+                    Init_Turn();
                     break;
                 case Stage.RIVER:
+                    Init_River();
                     break;
                 case Stage.ROUND_FIN:
                     break;
@@ -181,8 +184,8 @@ public class GameTable
         pot = 0;
 
         // Small, big betting
-        Player small = players[GetPrev(GetPrev(UTG))];
-        Player big = players[GetPrev(UTG)];
+        Player small = players[SB_Pos];
+        Player big = players[GetNext(SB_Pos)];
 
         small.Bet(sbChip);
         tableStatus = TableStatus.BET;
@@ -201,7 +204,37 @@ public class GameTable
                 p.cards.Add(DrawCard());
             }
         }
+    }
 
+    private void Init_Flop()
+    {
+        Debug.Log("Entering Flop");
+
+        /* Init players */
+        foreach(Player p in players)
+        {
+            if(p.state != Player.State.ALLIN && p.state != Player.State.FOLD)
+            {
+                p.state = Player.State.IDLE;
+            }
+            p.roundBet = 0;
+        }
+
+        /* Init table fields */
+        tableStatus = TableStatus.IDLE;
+        iterPos = (players[SB_Pos].state != Player.State.FOLD && players[SB_Pos].state != Player.State.ALLIN)
+         ? SB_Pos : GetNext(SB_Pos);
+
+        // continue here
+    }
+
+    private void Init_Turn()
+    {
+
+    }
+
+    private void Init_River()
+    {
 
     }
     /****************************************************************************************************************
@@ -375,8 +408,8 @@ public class GameTable
             int allInCnt = 0;
             foreach(Player p in players)
             {
-                foldCnt = p.state == Player.State.FOLD ? foldCnt + 1 : foldCnt;
-                allInCnt = p.state == Player.State.ALLIN ? allInCnt + 1 : allInCnt;
+                foldCnt += p.state == Player.State.FOLD ? 1 : 0;
+                allInCnt += p.state == Player.State.ALLIN ? 1 : 0;
             }
 
             if(players.Count - foldCnt - allInCnt <= 1)
@@ -410,7 +443,7 @@ public class GameTable
             case TableStatus.CHECK:
 
                 // PREFLOP case exception(Big blind check)
-                if(stage == Stage.PREFLOP && iterPos == GetPrev(UTG))
+                if(stage == Stage.PREFLOP && iterPos == GetNext(SB_Pos))
                 {
                     return true;
                 }
@@ -426,7 +459,7 @@ public class GameTable
             case TableStatus.BET:
 
                 // PREFLOP case exception (After small blind action)
-                if(stage == Stage.PREFLOP && roundBetMax == sbChip * 2 && iterPos == GetPrev(GetPrev(UTG)))
+                if(stage == Stage.PREFLOP && roundBetMax == sbChip * 2 && iterPos == SB_Pos)
                 {
                     return false;
                 }
@@ -466,6 +499,25 @@ public class GameTable
             }
         }
         return null;
+    }
+
+    public void UpdateToNextRound()
+    {
+        switch(communityCards.Count)
+        {
+            case 0:
+                stage = Stage.FLOP;
+                break;
+            case 3:
+                stage = Stage.TURN;
+                break;
+            case 4:
+                stage = Stage.RIVER;
+                break;
+            default:
+                stage = Stage.PREFLOP;
+                break;
+        }
     }
 
     

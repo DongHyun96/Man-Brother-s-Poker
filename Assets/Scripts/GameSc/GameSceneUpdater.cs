@@ -53,6 +53,26 @@ public class GameSceneUpdater : MonoBehaviour
         /* Update screenCanvas */
         screenCanvas.state = p.state;
 
+        /* Check if the stage is finished*/
+        switch(table.stage)
+        {
+            case GameTable.Stage.ROUND_FIN:
+                // Round fin animation routine needed
+                print("Round fin animation here and wait...");
+                
+                // Update GameTable's stage round
+                table.UpdateToNextRound();
+
+                // Update Updater and continue game
+                break;
+            case GameTable.Stage.UNCONTESTED:
+                break;
+            case GameTable.Stage.POT_FIN:
+                break;
+            case GameTable.Stage.GAME_FIN:
+                break;
+        }
+
         /* Check iterator turn */
         if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
         {
@@ -63,7 +83,7 @@ public class GameSceneUpdater : MonoBehaviour
                     screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD);
                     break;
                 case GameTable.TableStatus.BET:
-                    int big = table.GetPrev(table.UTG);
+                    int big = table.GetNext(table.SB_Pos);
 
                     // Big blind PREFLOP case
                     if(table.stage == GameTable.Stage.PREFLOP && table.players[big].Equals(table.GetCurrentPlayer()))
@@ -72,21 +92,23 @@ public class GameSceneUpdater : MonoBehaviour
                         {
                             // All players didn't raised
                             screenCanvas.EnableTurn(PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
+                            break;
                         }
                     }
-                    else
-                    {
-                        PieButton.ActionState a = table.GetCurrentPlayer().totalChips <= table.roundBetMax ?
-                        PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
-                        screenCanvas.EnableTurn(a, table.roundBetMax);
-                    }
+                    PieButton.ActionState a = table.GetCurrentPlayer().totalChips <= table.roundBetMax ?
+                    PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
+                    screenCanvas.EnableTurn(a, table.roundBetMax);
+
 
                     break;
-                //case GameTable.TableStatus.ALLIN:
+                case GameTable.TableStatus.ALLIN:
+                    break;
+                    
 
             }
         }
         
+        /* Enable iterator turn on iterTurn player's canvas */
         GetCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
         
 
@@ -95,9 +117,10 @@ public class GameSceneUpdater : MonoBehaviour
     public void StartRound() // GameTable and player all set! Init the Game scene
     {
         GameTable table = GameManager.gameTable;
-        int current_UTG = table.UTG;
-        int bigPos = table.GetPrev(current_UTG);
-        int smallPos = table.GetPrev(bigPos);
+        
+        int smallPos = table.SB_Pos;
+        int bigPos = table.GetNext(smallPos);
+        int current_UTG = table.GetNext(bigPos);
 
         //print(table.players[smallPos].name);
         //print(playerCanvas[smallPos])

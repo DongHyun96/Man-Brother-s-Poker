@@ -305,6 +305,15 @@ public class ScreenCanvas : MonoBehaviour
 
     public void OnPieRight()
     {
+        if(pieButtons[0].State == PieButton.ActionState.ALLIN_FOLD) // When player should have to all in or fold
+        {
+            GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
+
+            GameMsgHandler.TossTable();
+            TogglePieButtonAnim();
+            return;
+        }
+
         TogglePieButtonAnim();
         ToggleBettingPanelAnim();
     }
@@ -313,35 +322,44 @@ public class ScreenCanvas : MonoBehaviour
     {
         GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.FOLD);
 
-        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.TOSS,
-        GameManager.thisPlayer.name, GameManager.gameTable);
-        GameMsgHandler.SendMessage(msg);
+        GameMsgHandler.TossTable();
 
         TogglePieButtonAnim();
     }
 
+    
     public void OnBettingPanelAllIn()
     {
         GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
 
-        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.TOSS,
-        GameManager.thisPlayer.name, GameManager.gameTable);
-
-        // Init and quit
+        GameMsgHandler.TossTable();
 
         ToggleBettingPanelAnim();
     }
 
     public void OnBettingpanelCancel()
     {
-        // Init and quit
         ToggleBettingPanelAnim();
         TogglePieButtonAnim();
     }
 
     public void OnBettingPanelBet()
     {
-        // Init and quit
+        switch(pieButtons[0].State)
+        {
+            case PieButton.ActionState.CHECK_BET_FOLD: // Bet
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.BET,
+                bettingPanel.betChips);
+                break;
+            case PieButton.ActionState.CALL_RAISE_FOLD: // Raise
+            case PieButton.ActionState.CHECK_RAISE_FOLD:
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.RAISE,
+                bettingPanel.betChips);
+                break;
+        }
+        
+        GameMsgHandler.TossTable();
+        ToggleBettingPanelAnim();
     }
 
     /****************************************************************************************************************

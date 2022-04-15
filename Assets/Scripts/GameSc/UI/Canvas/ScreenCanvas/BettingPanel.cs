@@ -137,6 +137,7 @@ public class BettingPanel : MonoBehaviour
     {
         return ExtensionMethods.Remap(chips, min, max, slider.minValue, slider.maxValue);
     }
+    
     private int GetChipsFromSliderValue(float value)
     {
         return (int)ExtensionMethods.Remap(value, slider.minValue, slider.maxValue, min, max);
@@ -186,12 +187,12 @@ public class BettingPanel : MonoBehaviour
 
     private void Start() {
         /* Just for testing */
-        GameManager.thisPlayer = new Player("Dongman");
+      /*   GameManager.thisPlayer = new Player("Dongman");
         List<Player> players = new List<Player>();
         players.Add(GameManager.thisPlayer);
         GameManager.gameTable = new GameTable(Guid.NewGuid(), players, Room.Mode.CHICKEN, Room.BuyIn.HUNDRED);
         GameManager.thisPlayer.totalChips = 100000;
-        InitContents(0);
+        InitContents(0); */
     }
     
 }
