@@ -15032,7 +15032,7 @@ GameObject:
   - component: {fileID: 920311824}
   - component: {fileID: 920311825}
   m_Layer: 0
-  m_Name: WinnerAnounce
+  m_Name: WinnerAnnounce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31638,7 +31638,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upperPanel: {fileID: 51880283}
   bottomLeft: {fileID: 1944398347}
-  winnerAnounce: {fileID: 920311823}
+  winnerAnnounce: {fileID: 0}
   chooseShowDown: {fileID: 599490211}
   playerCards:
   - {fileID: 2144701123}

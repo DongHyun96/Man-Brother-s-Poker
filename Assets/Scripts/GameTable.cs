@@ -210,6 +210,39 @@ public class GameTable
     {
         Debug.Log("Entering Flop");
 
+        FlopTurnRiverRoutine();
+
+        /* Draw Cards */
+        DrawCard(); // Remove first card
+        for(int i = 0; i < 3; i++)
+        {
+            communityCards.Add(DrawCard());
+        }
+        
+    }
+
+    private void Init_Turn()
+    {
+        Debug.Log("Entering Turn");
+        FlopTurnRiverRoutine();
+
+        /* Draw Card */
+        DrawCard();
+        communityCards.Add(DrawCard()); 
+    }
+
+    private void Init_River()
+    {
+        Debug.Log("Entering River");
+        FlopTurnRiverRoutine();
+
+        /* Draw Card */
+        DrawCard();
+        communityCards.Add(DrawCard());
+    }
+
+    private void FlopTurnRiverRoutine()
+    {
         /* Init players */
         foreach(Player p in players)
         {
@@ -222,21 +255,12 @@ public class GameTable
 
         /* Init table fields */
         tableStatus = TableStatus.IDLE;
+
+        /* Set iterPos */
         iterPos = (players[SB_Pos].state != Player.State.FOLD && players[SB_Pos].state != Player.State.ALLIN)
          ? SB_Pos : GetNext(SB_Pos);
-
-        // continue here
-    }
-
-    private void Init_Turn()
-    {
-
-    }
-
-    private void Init_River()
-    {
-
-    }
+        roundBetMax = 0;
+    } 
     /****************************************************************************************************************
     *                                                Iterator methods
     ****************************************************************************************************************/
@@ -320,7 +344,7 @@ public class GameTable
         }
 
         // Shuffle deck
-        ListShuffler.Shuffle<Card>(deck);
+        CardListUtil.Shuffle<Card>(deck);
     }
 
     private Card DrawCard()
@@ -399,6 +423,9 @@ public class GameTable
                 }
                 break;
         }
+
+        // Check if the table pot is over (POT_FIN / UNCONTESTED)
+
 
         // check if the table round is over
         if(IsRoundOver())

@@ -36,8 +36,44 @@ public class ScriptTester : MonoBehaviour
 
     */
     
-    print(236.IntRound(-1));
+    //print(236.IntRound(-1));
     
+    List<Card> comCards = new List<Card>();
+    List<Card> playerCards = new List<Card>();
+    System.Random rnd = new System.Random();
+
+/*     for(int i = 0; i < 5; i++)
+    {
+        comCards.Add(new Card((Card.Suit)rnd.Next(0, 4), rnd.Next(0, 13)));
+        comCards.Add(new Card(Card.Suit.CLUB, 2));
+        comCards.Add(new Card(Card.Suit.CLUB, 7));
+        comCards.Add(new Card(Card.Suit.CLUB, 4));
+        comCards.Add(new Card(Card.Suit.CLUB, 5));
+        comCards.Add(new Card(Card.Suit.CLUB, 6));
+
+    }
+    for(int i = 0; i < 2; i++)
+    {
+        playerCards.Add(new Card((Card.Suit)rnd.Next(0, 4), rnd.Next(0, 13)));
+        playerCards.Add(new Card(Card.Suit.HEART, 5));
+        playerCards.Add(new Card(Card.Suit.DIAMOND, 6));
+    } */
+    comCards.Add(new Card(Card.Suit.CLUB, 7));
+    comCards.Add(new Card(Card.Suit.CLUB, 6));
+    comCards.Add(new Card(Card.Suit.SPADE, 7));
+    comCards.Add(new Card(Card.Suit.DIAMOND, 6));
+    comCards.Add(new Card(Card.Suit.HEART, 7));
+
+    playerCards.Add(new Card(Card.Suit.HEART, 10));
+    playerCards.Add(new Card(Card.Suit.DIAMOND, 11));
+
+    BestHand hand = new BestHand(playerCards, comCards);
+    print(hand.bestHand);
+    foreach(Card c in hand.bestHandCombi)
+    {
+        print(c);
+    }
+    //BestHandCalculator.calculateBestHand(cards);  
 
 #if TEST
     print("testing");

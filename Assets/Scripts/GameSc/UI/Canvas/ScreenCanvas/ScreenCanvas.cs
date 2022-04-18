@@ -8,7 +8,7 @@ public class ScreenCanvas : MonoBehaviour
 {
     public GameObject upperPanel;
     public GameObject bottomLeft;
-    public GameObject winnerAnounce;
+    public GameObject winnerAnnounce;
     public GameObject chooseShowDown;
 
     // BottomLeft components
@@ -107,7 +107,7 @@ public class ScreenCanvas : MonoBehaviour
                     {
                         bettingPanelAnim.SetBool("isIn", false);
                     }
-                    foreach(Animator a in playerCardAnims)
+                    /* foreach(Animator a in playerCardAnims)
                     {
                         if(a.GetBool("isIn"))
                         {
@@ -129,7 +129,7 @@ public class ScreenCanvas : MonoBehaviour
                     {
                         showDownPanel.gameObject.SetActive(false);
                     }
-                    foldImage.gameObject.SetActive(false);
+                    foldImage.gameObject.SetActive(false); */
                     break;
                 case Player.State.CHECK:
                     break;

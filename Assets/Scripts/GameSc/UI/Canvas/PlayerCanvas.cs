@@ -49,14 +49,11 @@ public class PlayerCanvas : MonoBehaviour
         get => m_playerState;
         set{
             // Find corresponding player
-            Player player = new Player();
-            foreach(Player p in GameManager.gameTable.players)
+            Player player = GameManager.gameTable.GetPlayerByName(name);
+            
+            if(player == null)
             {
-                if(p.name.Equals(name))
-                {
-                    player = p;
-                    break;
-                }
+                return;
             }
 
             switch(value)

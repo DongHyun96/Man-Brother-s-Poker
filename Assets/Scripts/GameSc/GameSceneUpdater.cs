@@ -60,11 +60,12 @@ public class GameSceneUpdater : MonoBehaviour
                 // Round fin animation routine needed
                 print("Round fin animation here and wait...");
                 
-                // Update GameTable's stage round
+                // Update GameTable to next round
                 table.UpdateToNextRound();
 
-                // Update Updater and continue game
-                break;
+                // Update All canvas
+                StartRound();
+                return;
             case GameTable.Stage.UNCONTESTED:
                 break;
             case GameTable.Stage.POT_FIN:
@@ -114,7 +115,7 @@ public class GameSceneUpdater : MonoBehaviour
 
     }
 
-    public void StartRound() // GameTable and player all set! Init the Game scene
+    public void StartGame() // GameTable and player all set! Init the Game scene
     {
         GameTable table = GameManager.gameTable;
         
@@ -169,6 +170,32 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         screenCanvas.stage = GameTable.Stage.PREFLOP;    
+    }
+
+    public void StartRound()
+    {
+        GameTable table = GameManager.gameTable;
+
+        /* Set up playerCanvas */
+        foreach(PlayerCanvas canvas in playerCanvas)
+        {
+            canvas.playerState = Player.State.IDLE;
+
+            if(canvas.name.Equals(table.GetCurrentPlayer().name))
+            {
+                canvas.EnableTurn();
+            }
+        }
+
+        /* Set up ScreenCanvas */
+        screenCanvas.state = Player.State.IDLE;
+
+        if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
+        {
+            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD, 0);
+        }
+
+        screenCanvas.stage = table.stage;
     }
 
     /****************************************************************************************************************

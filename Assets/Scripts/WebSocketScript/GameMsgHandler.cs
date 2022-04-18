@@ -74,7 +74,7 @@ public class GameMsgHandler : MonoBehaviour
 
                             // Very first Game start
                             print("Game Start");
-                            GameSceneUpdater.GetInstance().StartRound();
+                            GameSceneUpdater.GetInstance().StartGame();
                         });
                     }
                     break;

@@ -20,4 +20,9 @@ public class Card
         this.suit = suit;
         this.num = num;
     }
+
+    public override string ToString()
+    {
+        return $"Suit = {suit}, num = {num}";
+    }
 }
