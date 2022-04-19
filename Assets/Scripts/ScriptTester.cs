@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Diagnostics;
 
 public class ScriptTester : MonoBehaviour
 {
@@ -58,22 +59,31 @@ public class ScriptTester : MonoBehaviour
         playerCards.Add(new Card(Card.Suit.HEART, 5));
         playerCards.Add(new Card(Card.Suit.DIAMOND, 6));
     } */
-    comCards.Add(new Card(Card.Suit.CLUB, 7));
-    comCards.Add(new Card(Card.Suit.CLUB, 6));
-    comCards.Add(new Card(Card.Suit.SPADE, 7));
+    comCards.Add(new Card(Card.Suit.SPADE, 0));
     comCards.Add(new Card(Card.Suit.DIAMOND, 6));
-    comCards.Add(new Card(Card.Suit.HEART, 7));
+    comCards.Add(new Card(Card.Suit.HEART, 12));
+    comCards.Add(new Card(Card.Suit.CLUB, 3));
+    comCards.Add(new Card(Card.Suit.HEART, 11));
 
-    playerCards.Add(new Card(Card.Suit.HEART, 10));
-    playerCards.Add(new Card(Card.Suit.DIAMOND, 11));
+    playerCards.Add(new Card(Card.Suit.DIAMOND, 2));
+    playerCards.Add(new Card(Card.Suit.SPADE, 7));
+
+    Stopwatch stopwatch = new Stopwatch(); //객체 선언
+    stopwatch.Start(); // 시간측정 시작
 
     BestHand hand = new BestHand(playerCards, comCards);
+
+
     print(hand.bestHand);
     foreach(Card c in hand.bestHandCombi)
     {
         print(c);
     }
-    //BestHandCalculator.calculateBestHand(cards);  
+
+    stopwatch.Stop();
+    print("Time spent: " + stopwatch.ElapsedMilliseconds + "ms");
+    //BestHandCalculator.calculateBestHand(cards); 
+
 
 #if TEST
     print("testing");

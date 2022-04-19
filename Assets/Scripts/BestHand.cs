@@ -21,6 +21,7 @@ public class BestHand
         CalculateBestHand(cards);
 
     }
+    public BestHand() {}
 
     private void CalculateBestHand(List<Card> cards)
     {
@@ -107,7 +108,7 @@ public class BestHand
                 /* FOUR_OF_A_KIND */
                 List<Card> temp = new List<Card>();
 
-                // Add four of a kind card first
+                // Add four of a kind cards first
                 foreach(Card c in cards)
                 {
                     if(c.num == key)
@@ -125,7 +126,7 @@ public class BestHand
         }
 
         /* Check Full house / three of a kind / twoPair / pair */
-        bool check_three = true;
+        bool check_triple = true;
         bool check_twoPair = true;
         bool check_pair = true;
 
@@ -145,11 +146,14 @@ public class BestHand
                 }
             }
 
+            var tripleContainer = map.FirstOrDefault(x => x.Value == 3);
+            var pairContainer = map.FirstOrDefault(x => x.Value == 2);
+            
             if(map.Count == 2) // map --> {(someNum, 3), (someNum, 2)}
             {
-                /* Full house */
-                int twoPairNum = map.FirstOrDefault(x => x.Value == 2).Key;
-                int tripleNum = map.FirstOrDefault(x => x.Value == 3).Key;
+                /* FULL_HOUSE */
+                int tripleNum = tripleContainer.Key;
+                int pairNum = pairContainer.Key;
 
                 List<Card> temp = new List<Card>();
                 // Set up three of a kind first and then two pair
@@ -162,7 +166,7 @@ public class BestHand
                 }
                 foreach(Card c in combi)
                 {
-                    if(c.num == twoPairNum)
+                    if(c.num == pairNum)
                     {
                         temp.Add(c);
                     }
@@ -170,7 +174,108 @@ public class BestHand
                 SetFieldValues(Hand.FULLHOUSE, temp);
                 return;
             }
-        } 
+
+            if(tripleContainer.Value != 0 && check_triple)
+            {
+                /* THREE_OF_A_KIND */
+
+                int tripleNum = tripleContainer.Key;
+                List<Card> temp = new List<Card>();
+                List<Card> other = new List<Card>();
+                // Insert three of a kind first
+                foreach(Card c in combi)
+                {
+                    if(c.num == tripleNum)
+                    {
+                        temp.Add(c);
+                    }
+                    else
+                    {
+                        other.Add(c);
+                    }
+                }
+                temp.AddRange(other);
+                
+                SetFieldValues(Hand.THREE_OF_A_KIND, temp);
+                check_triple = false;
+                check_twoPair = false;
+                check_pair = false;
+                continue;
+            }
+
+            if(map.Count == 3 && check_twoPair)
+            {
+                /* TWO_PAIR */
+
+                List<Card> temp = new List<Card>();
+                Card left = new Card();
+
+                // Insert two pair first
+                foreach(var kvPair in map)
+                {
+                    if(kvPair.Value == 2)
+                    {
+                        foreach(Card c in combi)
+                        {
+                            if(c.num == kvPair.Key)
+                            {
+                                temp.Add(c);
+                            }
+                        }
+                    }
+                    else // Other card left
+                    {
+                        foreach(Card c in combi)
+                        {
+                            if(c.num == kvPair.Key)
+                            {
+                                left = c;
+                            }
+                        }
+                    }
+                }
+                temp.Add(left);
+                SetFieldValues(Hand.TWOPAIR, temp);
+                check_twoPair = false;
+                check_pair = false;
+                continue;
+            }
+
+            if(map.Count == 4 && check_pair)
+            {
+                /* PAIR */
+                
+                List<Card> temp = new List<Card>();
+                List<Card> other = new List<Card>();
+
+                // Insert pair first
+                foreach(Card c in combi)
+                {
+                    if(c.num == pairContainer.Key)
+                    {
+                        temp.Add(c);
+                    }
+                    else
+                    {
+                        other.Add(c);
+                    }
+                }
+                temp.AddRange(other);
+
+                SetFieldValues(Hand.PAIR, temp);
+                check_pair = false;
+            }
+        }
+
+        /* Breakout point */
+        if(bestHand != Hand.HIGHCARD)
+        {
+            return;
+        }
+
+        /* High Card */
+        SetFieldValues(Hand.HIGHCARD, cardCombinations[0]);
+
     }
 
 	private bool IsStraight(Card[] cards) 
@@ -218,6 +323,8 @@ public class BestHand
         
     }
 
+
+
     private void SetFieldValues(Hand hand, Card[] cards)
     {
         this.bestHand = hand;
@@ -229,5 +336,35 @@ public class BestHand
         this.bestHand = hand;
         this.bestHandCombi = cards;
     }
+
+    /* This will set proper orders of best hand combinations for  */
+/*     private List<Card> GetOrderOfCombi(Hand hand, Dictionary<int, int> map, List<Card> cards)
+    {
+        List<Card> temp = new List<Card>();
+        switch(hand)
+        {
+            case Hand.FOUR_OF_A_KIND:
+                // Add four of a kind cards first
+                foreach(Card c in cards)
+                {
+                    if(c.num == key)
+                    {
+                        temp.Add(c);
+                    }
+                }
+                break;
+            case Hand.FULLHOUSE:
+                break;
+            case Hand.THREE_OF_A_KIND:
+                break;
+            case Hand.TWOPAIR:
+                break;
+            case Hand.PAIR:
+                break;
+            default:
+                return cards;
+        }
+        return null;
+    } */
 
 }

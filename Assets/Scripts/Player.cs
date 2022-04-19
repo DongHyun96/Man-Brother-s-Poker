@@ -35,6 +35,8 @@ public class Player
     public int totalBet;
 
     public List<Card> cards = new List<Card>();
+    public BestHand bestHand;
+    
     /********************************************************************************************************/
 
     public Player(string name)

@@ -294,8 +294,7 @@ public class ScreenCanvas : MonoBehaviour
                 TogglePieButtonAnim();
                 break;
             case PieButton.ActionState.ALLIN_FOLD:
-                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name,
-                Player.State.ALLIN);
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
 
                 GameMsgHandler.TossTable();
                 TogglePieButtonAnim();

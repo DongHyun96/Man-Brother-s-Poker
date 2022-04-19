@@ -1,22 +1,22 @@
 # Summary
 
-Date : 2022-04-05 17:05:53
+Date : 2022-04-19 11:12:56
 
 Directory c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts
 
-Total : 53 files,  3148 codes, 451 comments, 801 blanks, all 4400 lines
+Total : 55 files,  3790 codes, 536 comments, 948 blanks, all 5274 lines
 
-summary / [details](details.md) / [diff summary](diff.md) / [diff details](diff-details.md)
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| C# | 53 | 3,148 | 451 | 801 | 4,400 |
+| C# | 55 | 3,790 | 536 | 948 | 5,274 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 53 | 3,148 | 451 | 801 | 4,400 |
+| . | 55 | 3,790 | 536 | 948 | 5,274 |
 | Editor | 1 | 17 | 0 | 3 | 20 |
 | EnteringSc | 15 | 815 | 95 | 214 | 1,124 |
 | EnteringSc\CamPos | 3 | 45 | 0 | 12 | 57 |
@@ -24,15 +24,16 @@ summary / [details](details.md) / [diff summary](diff.md) / [diff details](diff-
 | EnteringSc\Lobby | 4 | 187 | 11 | 42 | 240 |
 | EnteringSc\PasswordPanel | 1 | 44 | 5 | 13 | 62 |
 | EnteringSc\Room | 1 | 269 | 51 | 72 | 392 |
-| GameSc | 16 | 937 | 120 | 226 | 1,283 |
-| GameSc\UI | 13 | 879 | 111 | 203 | 1,193 |
+| GameSc | 16 | 1,168 | 193 | 291 | 1,652 |
+| GameSc\UI | 13 | 977 | 161 | 231 | 1,369 |
 | GameSc\UI\ButtonInteraction | 1 | 16 | 2 | 5 | 23 |
-| GameSc\UI\Canvas | 8 | 737 | 108 | 174 | 1,019 |
-| GameSc\UI\Canvas\ScreenCanvas | 7 | 505 | 60 | 120 | 685 |
+| GameSc\UI\Canvas | 8 | 835 | 158 | 202 | 1,195 |
+| GameSc\UI\Canvas\ScreenCanvas | 7 | 623 | 117 | 153 | 893 |
 | GameSc\UI\Sprite | 2 | 84 | 0 | 14 | 98 |
-| GeneralManager | 2 | 406 | 174 | 116 | 696 |
+| GeneralManager | 1 | 159 | 28 | 49 | 236 |
 | LoadingSc | 1 | 43 | 0 | 12 | 55 |
 | TitleSc | 2 | 65 | 7 | 21 | 93 |
-| WebSocketScript | 7 | 523 | 40 | 128 | 691 |
+| Util | 3 | 101 | 1 | 24 | 126 |
+| WebSocketScript | 7 | 551 | 43 | 139 | 733 |
 
-summary / [details](details.md) / [diff summary](diff.md) / [diff details](diff-details.md)
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

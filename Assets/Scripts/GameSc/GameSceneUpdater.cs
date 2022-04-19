@@ -46,7 +46,7 @@ public class GameSceneUpdater : MonoBehaviour
         GameTable table = GameManager.gameTable;
 
         /* Update target playerCanvas */
-        PlayerCanvas targetCanvas = GetCanvasFromName(p.name);
+        PlayerCanvas targetCanvas = GetPlayerCanvasFromName(p.name);
         targetCanvas.playerState = p.state; // Update sender's canvas
         UpdateTabs(); // Update rankings
 
@@ -67,8 +67,13 @@ public class GameSceneUpdater : MonoBehaviour
                 StartRound();
                 return;
             case GameTable.Stage.UNCONTESTED:
+                // Pot fin anim needed
+                print("Before showing uncontested panel, show some table animation here waitForSec");
                 break;
             case GameTable.Stage.POT_FIN:
+                // Pot fin anim needed
+                print("Pot fin animation here and wait...");
+
                 break;
             case GameTable.Stage.GAME_FIN:
                 break;
@@ -110,7 +115,7 @@ public class GameSceneUpdater : MonoBehaviour
         }
         
         /* Enable iterator turn on iterTurn player's canvas */
-        GetCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
+        GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
         
 
     }
@@ -201,7 +206,7 @@ public class GameSceneUpdater : MonoBehaviour
     /****************************************************************************************************************
     *                                                Extra methods
     ****************************************************************************************************************/
-    private PlayerCanvas GetCanvasFromName(string name)
+    private PlayerCanvas GetPlayerCanvasFromName(string name)
     {
         foreach(PlayerCanvas c in playerCanvas)
         {
@@ -217,7 +222,7 @@ public class GameSceneUpdater : MonoBehaviour
     {
         foreach(Player p in GameManager.gameTable.players)
         {
-            PlayerCanvas c = GetCanvasFromName(p.name);
+            PlayerCanvas c = GetPlayerCanvasFromName(p.name);
             c.UpdateTab(p);
         }
     }

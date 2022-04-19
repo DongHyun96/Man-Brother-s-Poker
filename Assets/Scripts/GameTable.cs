@@ -70,11 +70,16 @@ public class GameTable
                 case Stage.RIVER:
                     Init_River();
                     break;
+                case Stage.UNCONTESTED:
+                    Init_Uncontested();
+                    break;
                 case Stage.ROUND_FIN:
                     break;
                 case Stage.POT_FIN:
+                    Init_PotFin();
                     break;
                 case Stage.GAME_FIN:
+                    Init_GameFin();
                     break;
             }
             m_stage = value;
@@ -95,7 +100,9 @@ public class GameTable
     public int pot;
     public int sbChip;
     public int roundBetMax;
-    
+
+    /* public Dictionary<int, Player> winnerMap = new Dictionary<int, Player>(); */
+
     public GameTable() {}
 
     public GameTable(Guid id, List<Player> players, Room.Mode mode, Room.BuyIn buyIn)
@@ -260,11 +267,26 @@ public class GameTable
         iterPos = (players[SB_Pos].state != Player.State.FOLD && players[SB_Pos].state != Player.State.ALLIN)
          ? SB_Pos : GetNext(SB_Pos);
         roundBetMax = 0;
-    } 
+    }
+
+    private void Init_Uncontested()
+    {
+        // One pot winner
+        throw new NotImplementedException();
+    }
+
+    private void Init_PotFin()
+    {
+        throw new NotImplementedException();
+    }
+    private void Init_GameFin()
+    {
+        throw new NotImplementedException();
+    }
     /****************************************************************************************************************
     *                                                Iterator methods
     ****************************************************************************************************************/
-    public int GetPrev(int inputPos) // Returns the first previous player with status != FOLD
+    public int GetPrev(int inputPos) // Returns the first previous player with status != FOLD, ALLIN
     {
         int tempIter = inputPos;
         while(tempIter > 0)
@@ -409,27 +431,26 @@ public class GameTable
                 break;
             case Player.State.FOLD:
                 player.Fold();
-
-                // Check uncontested
-                int cnt = 0;
-                foreach(Player p in players)
-                {
-                    cnt += p.state == Player.State.FOLD ? 1 : 0;
-                }
-                if(cnt == players.Count - 1)
-                {
-                    stage = Stage.UNCONTESTED;
-                    return;
-                }
                 break;
         }
-
-        // Check if the table pot is over (POT_FIN / UNCONTESTED)
-
 
         // check if the table round is over
         if(IsRoundOver())
         {
+            // Check if it is uncontested
+            if(IsUncontested())
+            {
+                stage = Stage.UNCONTESTED;
+                return;
+            }
+
+            // Check if the pot is over
+            if(IsPotOver())
+            {
+                stage = Stage.POT_FIN;
+                return;
+            }
+
             // Check if the table status is ALLIN
             int foldCnt = 0;
             int allInCnt = 0;
@@ -513,6 +534,33 @@ public class GameTable
         }
     }
 
+    private bool IsUncontested()
+    {
+        int cnt = 0;
+
+        foreach(Player p in players)
+        {
+            cnt += p.state == Player.State.FOLD ? 1 : 0;
+        }
+
+        if(cnt == players.Count - 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /* Premise - IsRoundOver checked already */
+    private bool IsPotOver()
+    {
+        if(stage == Stage.RIVER)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     /****************************************************************************************************************
     *                                                     Extra
     ****************************************************************************************************************/
@@ -528,23 +576,12 @@ public class GameTable
         return null;
     }
 
+    // 0 3 4 5
     public void UpdateToNextRound()
     {
-        switch(communityCards.Count)
-        {
-            case 0:
-                stage = Stage.FLOP;
-                break;
-            case 3:
-                stage = Stage.TURN;
-                break;
-            case 4:
-                stage = Stage.RIVER;
-                break;
-            default:
-                stage = Stage.PREFLOP;
-                break;
-        }
+        stage = communityCards.Count == 0 ? Stage.FLOP :
+        (communityCards.Count == 3) ? Stage.TURN :
+        (communityCards.Count == 4) ? Stage.RIVER : Stage.POT_FIN;
     }
 
     
