@@ -32,6 +32,9 @@ public class ScreenCanvas : MonoBehaviour
     // WinnerAnounce Component
     public WinnerPanel winnerPanel;
 
+    // SidePot Component
+    public SidePotPanel sidePotPanel;
+
     // ChooseShowDown Component
     public ShowDownPanel showDownPanel;
 
@@ -212,6 +215,11 @@ public class ScreenCanvas : MonoBehaviour
     private void UpdateWinnerAnounce()
     {
         winnerPanel.InitWinnerPanel(); // Not Implemented yet.. Needs to implement bestHand & bestHandcalculator
+    }
+
+    private void UpdateSidePotPanel(List<Player> players)
+    {
+        sidePotPanel.InitSidePot(players);
     }
 
     private void UpdateShowDownPanel(List<Card> cards)

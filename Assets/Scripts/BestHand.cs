@@ -7,7 +7,7 @@ using System;
 
 public class BestHand
 {
-    public Hand bestHand;
+    public Hand hand;
     public List<Card> bestHandCombi = new List<Card>();
 
     public BestHand(List<Card> playerCards, List<Card> communityCards)
@@ -82,7 +82,7 @@ public class BestHand
 
         /* Breakout point - If a stright or flush is made, Four of a kind or a full house
         won't be made so break out at this point. */
-        if(bestHand != Hand.HIGHCARD)
+        if(hand != Hand.HIGHCARD)
         {
             return;
         } 
@@ -268,7 +268,7 @@ public class BestHand
         }
 
         /* Breakout point */
-        if(bestHand != Hand.HIGHCARD)
+        if(hand != Hand.HIGHCARD)
         {
             return;
         }
@@ -327,13 +327,13 @@ public class BestHand
 
     private void SetFieldValues(Hand hand, Card[] cards)
     {
-        this.bestHand = hand;
+        this.hand = hand;
         this.bestHandCombi = new List<Card>();
         this.bestHandCombi.AddRange(cards);
     }
     private void SetFieldValues(Hand hand, List<Card> cards)
     {
-        this.bestHand = hand;
+        this.hand = hand;
         this.bestHandCombi = cards;
     }
 

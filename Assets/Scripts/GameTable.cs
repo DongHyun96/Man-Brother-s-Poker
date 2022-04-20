@@ -101,7 +101,9 @@ public class GameTable
     public int sbChip;
     public int roundBetMax;
 
-    /* public Dictionary<int, Player> winnerMap = new Dictionary<int, Player>(); */
+    /* public Dictionary<int, Player> potWinnerMap = new Dictionary<int, Player>(); */
+    /* public List<List<Player>> potRankContainer = new List<List<Player>>(); */
+    
 
     public GameTable() {}
 
