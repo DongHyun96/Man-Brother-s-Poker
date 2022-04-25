@@ -5,20 +5,25 @@ using UnityEngine;
 public class PotWinnerManager
 {
 
-    /* (potMoney, pot involvedPlayers) --> BUTTOM / (MainPot, players), (sidepot1, players), ... /TOP*/
-    public Stack<KeyValuePair<int, List<Player>>> pots = new Stack<KeyValuePair<int, List<Player>>>();
+    /* (potMoney, pot involvedPlayers) --> BUTTOM / (MainPot, players), (sidepot1, players), ... /TOP */
+    public List<KeyValuePair<int, List<Player>>> pots = new List<KeyValuePair<int, List<Player>>>();
 
-    /* Pot winners --> (LastSidePot, winners) ... (MainPot, winners)*/
+    /* Contains each Pot winners --> (LastSidePot, winners) ... (MainPot, winners) */
     public Stack<KeyValuePair<int, List<Player>>> potWinnerStack = new Stack<KeyValuePair<int, List<Player>>>();
 
+    /* Show down order */
+    public List<Player> showDown = new List<Player>();
+
+    public PotWinnerManager() {}
 
     public PotWinnerManager(List<Player> players)
     {
+        HandleBackStraightException(players); // Change back straight ace number to -1(Lowest)
+
         CalculatePots(players);
+
         CalculateWinners(pots);
     }
-
-    public PotWinnerManager() {}
 
     /* Set up the potMaps */
     private void CalculatePots(List<Player> players)
@@ -41,8 +46,8 @@ public class PotWinnerManager
             List<Player> involved = new List<Player>();
             involved.AddRange(players.GetRange(i, players.Count - i));
 
-            /* pots.Add(new KeyValuePair<int, List<Player>>(potMoney, involved)); */
-            pots.Push(new KeyValuePair<int, List<Player>>(potMoney, involved));
+            pots.Add(new KeyValuePair<int, List<Player>>(potMoney, involved));
+            // pots.Push(new KeyValuePair<int, List<Player>>(potMoney, involved));
 
             /* Take out the current pot bet from players' totalBet */
             for(int j = i; j < players.Count; j++)
@@ -52,61 +57,75 @@ public class PotWinnerManager
         }
     }
 
-    /* Set up winners */
-    private void CalculateWinners(Stack<KeyValuePair<int, List<Player>>> potStack)
+    /* Set up winners and showDown players */
+    private void CalculateWinners(List<KeyValuePair<int, List<Player>>> pots)
     {
-        while(potStack.Count != 0)
+        for(int i = pots.Count - 1; i >= 0; i--)
         {
-            KeyValuePair<int, List<Player>> kvPair = potStack.Pop();
+            KeyValuePair<int, List<Player>> kvPair = pots[i];
 
             BestHand currentBest = new BestHand();
             List<Player> winners = new List<Player>();
+
+            /* Delete players who folded or lost previous side pot */
+            kvPair.Value.RemoveAll(x => x.state == Player.State.FOLD);
 
             /* Check current pot winners */
             foreach(Player p in kvPair.Value)
             {
                 if(currentBest.bestHandCombi.Count == 0)
                 {
+                    /* Init */
                     currentBest = p.bestHand;
                     winners.Add(p);
+                    TryAddToShowDown(p);
                     continue;
                 }
 
                 if(p.bestHand.hand > currentBest.hand)
                 {
                     /* New winner */
+                    currentBest = p.bestHand;
                     winners.Clear();
                     winners.Add(p);
+                    TryAddToShowDown(p);
                     continue;
                 }
+
+                /* Same Hand ranking */
                 if(p.bestHand.hand == currentBest.hand)
                 {
                     bool isSplit = true;
 
                     /* Check through all the cards in bestHandCombi */
-                    for(int i = 0; i < 5; i++)
+                    for(int j = 0; j < 5; j++)
                     {
-                        int currentWinner_CardNum = winners[0].bestHand.bestHandCombi[i].num;
-                        int challenger_CardNum = p.bestHand.bestHandCombi[i].num;
+                        int currentWinner_CardNum = winners[0].bestHand.bestHandCombi[j].num;
+                        int challenger_CardNum = p.bestHand.bestHandCombi[j].num;
 
                         if(currentWinner_CardNum < challenger_CardNum)
                         {
                             /* New winner */
+                            currentBest = p.bestHand;
                             winners.Clear();
                             winners.Add(p);
+                            TryAddToShowDown(p);
                             isSplit = false;
                             break;
                         }
                         if(currentWinner_CardNum > challenger_CardNum)
                         {
+                            /* Challenger lost */
                             isSplit = false;
                             break;
                         }
+                        
                     }
 
                     /* Split */
                     if(isSplit)
                     {
+                        TryAddToShowDown(p);
                         winners.Add(p);
                     }
                 }
@@ -117,7 +136,6 @@ public class PotWinnerManager
         }
     }
 
-    
 
     private List<Player> GetSortedPlayersByTotalBet(List<Player> players)
     {
@@ -128,6 +146,56 @@ public class PotWinnerManager
 
         return players;
     }
+
+
+    /* Handling back straight exception.
+    Change Ace number to -1  */
+    private void HandleBackStraightException(List<Player> players)
+    {
+        foreach(Player p in players)
+        {
+            if(p.bestHand.hand != Hand.STRAIGHT_FLUSH && p.bestHand.hand != Hand.STRAIGHT)
+            {
+                continue;
+            }
+
+            /* Back straight case */
+            // Ace 5 4 3 2 --> Ace(12) to 1(-1)
+            if(p.bestHand.bestHandCombi[0].num == 12 && p.bestHand.bestHandCombi[1].num == 3)
+            {
+                int idx = 0;
+                for(int newNum = 3; newNum >= -1; newNum--)
+                {
+                    p.bestHand.bestHandCombi[idx].num = newNum;
+                    idx++;
+                }           
+            }
+        }
+    }
+
+    private void TryAddToShowDown(Player p)
+    {
+        if(showDown.Contains(p))
+        {
+            return;
+        }
+        showDown.Add(p);
+    }
+
+    public void PayEachPotWinners()
+    {
+        while(potWinnerStack.Count != 0)
+        {
+            KeyValuePair<int, List<Player>> pot = potWinnerStack.Pop();
+
+            foreach(Player p in pot.Value)
+            {
+                p.totalChips += pot.Key / pot.Value.Count;
+            }
+        }
+    }
+
+
 
 
 }

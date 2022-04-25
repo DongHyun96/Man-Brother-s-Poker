@@ -23,17 +23,26 @@ public class GameMsgHandler : MonoBehaviour
     public static void SendMessage(GameMessage message)
     {
         Debug.Log("Sending game message: " + JsonConvert.SerializeObject(message));
-        websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented)); // Convert to Json(string) form and send
+        //websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented)); // Convert to Json(string) form and send
+        websocket.Send(JsonConvert.SerializeObject(message)); // Convert to Json(string) form and send
+
     }
 
     public static void TossTable()
     {
-        Debug.Log("Tossing gameTable");
-
+        Debug.Log("Tossing gameTable --> " + GameManager.gameTable.stage);
+    
         GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.TOSS,
         GameManager.thisPlayer.name, GameManager.gameTable);
 
-        websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented));
+        try{
+        //websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented));
+            websocket.Send(JsonConvert.SerializeObject(message));
+        }catch(Exception e)
+        {
+            print(e.ToString());
+        }
+        //websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented));
     }
 
     private static void ReceiveMessage(object s, MessageEventArgs e)
@@ -82,8 +91,6 @@ public class GameMsgHandler : MonoBehaviour
                     UnityMainThread.wkr.AddJob(() => {
 
                         GameManager.gameTable = message.table; // Update gameTable
-
-                        print("Current iterPos: " + message.table.iterPos);
                         Player targetPlayer = GameManager.gameTable.GetPlayerByName(message.sender);
                         GameSceneUpdater.GetInstance().UpdateGameScene(targetPlayer); //Update UI
                     });

@@ -50,32 +50,27 @@ public class GameSceneUpdater : MonoBehaviour
         targetCanvas.playerState = p.state; // Update sender's canvas
         UpdateTabs(); // Update rankings
 
-        /* Update screenCanvas */
-        screenCanvas.state = p.state;
+
+        // screenCanvas.state = p.state;
 
         /* Check if the stage is finished*/
         switch(table.stage)
         {
             case GameTable.Stage.ROUND_FIN:
                 // Round fin animation routine needed
-                print("Round fin animation here and wait...");
-                
-                // Update GameTable to next round
-                table.UpdateToNextRound();
-
-                // Update All canvas
-                StartRound();
+                StartCoroutine(RoundFinRoutine());
                 return;
             case GameTable.Stage.UNCONTESTED:
-                // Pot fin anim needed
-                print("Before showing uncontested panel, show some table animation here waitForSec");
-                break;
+                return;
             case GameTable.Stage.POT_FIN:
-                // Pot fin anim needed
-                print("Pot fin animation here and wait...");
-
-                break;
+                StartCoroutine(PotFinRoutine());
+                return;
             case GameTable.Stage.GAME_FIN:
+                return;
+            
+            default:
+                /* Update screenCanvas */
+                screenCanvas.state = p.state;
                 break;
         }
 
@@ -119,7 +114,9 @@ public class GameSceneUpdater : MonoBehaviour
         
 
     }
-
+    /****************************************************************************************************************
+    *                                                Starting methods
+    ****************************************************************************************************************/
     public void StartGame() // GameTable and player all set! Init the Game scene
     {
         GameTable table = GameManager.gameTable;
@@ -181,16 +178,8 @@ public class GameSceneUpdater : MonoBehaviour
     {
         GameTable table = GameManager.gameTable;
 
-        /* Set up playerCanvas */
-        foreach(PlayerCanvas canvas in playerCanvas)
-        {
-            canvas.playerState = Player.State.IDLE;
-
-            if(canvas.name.Equals(table.GetCurrentPlayer().name))
-            {
-                canvas.EnableTurn();
-            }
-        }
+        /* Set up playerCanvas table turn */
+        GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn();
 
         /* Set up ScreenCanvas */
         screenCanvas.state = Player.State.IDLE;
@@ -201,6 +190,54 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         screenCanvas.stage = table.stage;
+    }
+
+    /****************************************************************************************************************
+    *                                                Coroutine
+    ****************************************************************************************************************/
+    public IEnumerator RoundFinRoutine()
+    {
+        yield return new WaitForSeconds(2.0f);
+
+        // Init playerCanvas ActionGUI
+        foreach(PlayerCanvas canvas in playerCanvas)
+        {
+            canvas.playerState = Player.State.IDLE;
+        }
+
+        // Show Round fin table animation here
+        yield return new WaitForSeconds(2.0f);
+
+        // Update GameTable to next round
+        GameManager.gameTable.UpdateToNextRound();
+
+        // Update all canvas
+        StartRound();
+    }
+
+    public IEnumerator PotFinRoutine()
+    {
+        yield return new WaitForSeconds(2.0f);
+        
+        // Init playerCanvas ActionGUI
+        foreach(PlayerCanvas canvas in playerCanvas)
+        {
+            canvas.playerState = Player.State.IDLE;
+        }
+
+        /* Round fin table anim */
+        yield return new WaitForSeconds(2.0f);
+
+        /* ShowDown anim */
+        foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
+        {
+            PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
+            
+            yield return new WaitForSeconds(1.5f);
+        }
+
+        /* Showing winner routine */
+                
     }
 
     /****************************************************************************************************************

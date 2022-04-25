@@ -30,6 +30,9 @@ public class BettingPanel : MonoBehaviour
     {
         Player thisP = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
 
+        // Restrict minChips to sbChip
+        minChips = minChips < GameManager.gameTable.sbChip ? GameManager.gameTable.sbChip : minChips;
+
         // Setting floor and ceil
         floor = minChips;
         ceil = thisP.totalChips + thisP.roundBet;

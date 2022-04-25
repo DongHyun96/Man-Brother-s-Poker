@@ -79,7 +79,9 @@ public class ScreenCanvas : MonoBehaviour
                     break;
 
                 case GameTable.Stage.ROUND_FIN:
+                    break;
                 case GameTable.Stage.POT_FIN:
+                    break;
                 case GameTable.Stage.GAME_FIN:
                     throw new NotImplementedException();
                     break;

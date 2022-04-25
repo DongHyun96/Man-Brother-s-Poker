@@ -49,7 +49,7 @@ public class BestHand
 
             if(isStraight && isFlush)
             {
-                if(combi[0].num == 12) 
+                if(combi[0].num == 12 && combi[1].num == 11) 
                 {
                     /* ROYAL */
                     SetFieldValues(Hand.ROYAL_FLUSH, combi);
@@ -57,6 +57,16 @@ public class BestHand
                 }
                 /* STRAIGHT FLUSH */
                 SetFieldValues(Hand.STRAIGHT_FLUSH, combi);
+
+                /* Exception point(Back straight flush) */
+                if(IsBackStraight(combi))
+                {
+                    /* Check more straight flush combi */
+                    check_flush =false;
+                    check_straight = false;
+                    continue;
+                }
+
                 return;
             }
             
@@ -75,6 +85,13 @@ public class BestHand
                 /* STRAIGHT */
                 SetFieldValues(Hand.STRAIGHT, combi);
 
+                /* Exception point(Back straight) */
+                if(IsBackStraight(combi))
+                {
+                    /* Check more straight and above hands for upcoming combi */
+                    continue;
+                }
+                
                 /* Check lower numbers of straight flush or flush on upcoming loop */
                 check_straight = false;
             }
@@ -286,12 +303,14 @@ public class BestHand
         {
             if(current == -1)
             {
+                /* Init */
                 current = cards[i].num;
                 continue;
             }
 
             if(current - 1 == cards[i].num)
             {
+                /* Keep checking */
                 current = cards[i].num;
                 continue;
             }
@@ -306,6 +325,23 @@ public class BestHand
         }
         return true;
 	}
+
+    private bool IsBackStraight(Card[] cards)
+    {
+        if(cards[0].num != 12)
+        {
+            return false;
+        }
+
+        for(int i = 1; i <= 4; i++)
+        {
+            if(cards[i].num != 4 - i)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private bool IsFlush(Card[] cards)
     {
@@ -336,35 +372,5 @@ public class BestHand
         this.hand = hand;
         this.bestHandCombi = cards;
     }
-
-    /* This will set proper orders of best hand combinations for  */
-/*     private List<Card> GetOrderOfCombi(Hand hand, Dictionary<int, int> map, List<Card> cards)
-    {
-        List<Card> temp = new List<Card>();
-        switch(hand)
-        {
-            case Hand.FOUR_OF_A_KIND:
-                // Add four of a kind cards first
-                foreach(Card c in cards)
-                {
-                    if(c.num == key)
-                    {
-                        temp.Add(c);
-                    }
-                }
-                break;
-            case Hand.FULLHOUSE:
-                break;
-            case Hand.THREE_OF_A_KIND:
-                break;
-            case Hand.TWOPAIR:
-                break;
-            case Hand.PAIR:
-                break;
-            default:
-                return cards;
-        }
-        return null;
-    } */
 
 }

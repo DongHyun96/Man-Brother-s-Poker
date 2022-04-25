@@ -24,6 +24,7 @@ public class CardSprite : MonoBehaviour
     }
     public Sprite GetSprite(Card c)
     {
+
         switch(c.suit)
         {
             case Card.Suit.CLUB:

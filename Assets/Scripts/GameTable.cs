@@ -90,7 +90,18 @@ public class GameTable
     public TableStatus tableStatus
     {
         get => m_tableStatus;
-        set => m_tableStatus = value;
+        set
+        {
+            if(value == TableStatus.ALLIN)
+            {
+                /* Get ShowDown order */
+
+                /* Draw cards to community card till the end */
+
+                /* 정산 */
+            }
+            m_tableStatus = value;
+        }
     }
 
 
@@ -101,9 +112,7 @@ public class GameTable
     public int sbChip;
     public int roundBetMax;
 
-    /* public Dictionary<int, Player> potWinnerMap = new Dictionary<int, Player>(); */
-    /* public List<List<Player>> potRankContainer = new List<List<Player>>(); */
-    
+    public PotWinnerManager potWinnerManager;
 
     public GameTable() {}
 
@@ -274,12 +283,31 @@ public class GameTable
     private void Init_Uncontested()
     {
         // One pot winner
-        throw new NotImplementedException();
+        foreach(Player p in players)
+        {
+            if(p.state != Player.State.FOLD)
+            {
+                p.totalChips += pot;
+                return;
+            }
+        }
     }
 
     private void Init_PotFin()
     {
-        throw new NotImplementedException();
+        /* Get Players' best hand */
+        foreach(Player p in players)
+        {
+            p.bestHand = new BestHand(p.cards, communityCards);
+        }
+
+        /* Calculate PotWinner */
+        potWinnerManager = new PotWinnerManager(players);
+        /* potWinnerManager.PayEachPotWinners(); */
+
+        
+        
+
     }
     private void Init_GameFin()
     {
@@ -449,6 +477,7 @@ public class GameTable
             // Check if the pot is over
             if(IsPotOver())
             {
+                Debug.Log("POT FIN ENTERED!");
                 stage = Stage.POT_FIN;
                 return;
             }

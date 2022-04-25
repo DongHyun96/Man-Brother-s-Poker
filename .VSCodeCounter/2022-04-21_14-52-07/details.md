@@ -1,17 +1,18 @@
 # Details
 
-Date : 2022-04-11 12:12:08
+Date : 2022-04-21 14:52:07
 
 Directory c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts
 
-Total : 53 files,  3426 codes, 530 comments, 858 blanks, all 4814 lines
+Total : 58 files,  4126 codes, 555 comments, 1033 blanks, all 5714 lines
 
-[summary](results.md) / details / [diff summary](diff.md) / [diff details](diff-details.md)
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Files
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
-| [Assets/Scripts/Card.cs](/Assets/Scripts/Card.cs) | C# | 17 | 0 | 4 | 21 |
+| [Assets/Scripts/BestHand.cs](/Assets/Scripts/BestHand.cs) | C# | 259 | 30 | 53 | 342 |
+| [Assets/Scripts/Card.cs](/Assets/Scripts/Card.cs) | C# | 24 | 0 | 5 | 29 |
 | [Assets/Scripts/Editor/EditorScript.cs](/Assets/Scripts/Editor/EditorScript.cs) | C# | 17 | 0 | 3 | 20 |
 | [Assets/Scripts/EnteringSc/CamPos/GameCamPos.cs](/Assets/Scripts/EnteringSc/CamPos/GameCamPos.cs) | C# | 15 | 0 | 4 | 19 |
 | [Assets/Scripts/EnteringSc/CamPos/LobbyCamPos.cs](/Assets/Scripts/EnteringSc/CamPos/LobbyCamPos.cs) | C# | 15 | 0 | 4 | 19 |
@@ -30,39 +31,43 @@ Total : 53 files,  3426 codes, 530 comments, 858 blanks, all 4814 lines
 | [Assets/Scripts/EnteringSc/SpaceController.cs](/Assets/Scripts/EnteringSc/SpaceController.cs) | C# | 16 | 1 | 7 | 24 |
 | [Assets/Scripts/GameSc/CamController.cs](/Assets/Scripts/GameSc/CamController.cs) | C# | 26 | 1 | 11 | 38 |
 | [Assets/Scripts/GameSc/GamePanelController.cs](/Assets/Scripts/GameSc/GamePanelController.cs) | C# | 12 | 2 | 5 | 19 |
-| [Assets/Scripts/GameSc/GameSceneUpdater.cs](/Assets/Scripts/GameSc/GameSceneUpdater.cs) | C# | 71 | 13 | 25 | 109 |
+| [Assets/Scripts/GameSc/GameSceneUpdater.cs](/Assets/Scripts/GameSc/GameSceneUpdater.cs) | C# | 155 | 31 | 45 | 231 |
 | [Assets/Scripts/GameSc/UI/ButtonInteraction/ButtonScaler.cs](/Assets/Scripts/GameSc/UI/ButtonInteraction/ButtonScaler.cs) | C# | 16 | 2 | 5 | 23 |
-| [Assets/Scripts/GameSc/UI/Canvas/PlayerCanvas.cs](/Assets/Scripts/GameSc/UI/Canvas/PlayerCanvas.cs) | C# | 215 | 45 | 50 | 310 |
-| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/BettingPanel.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/BettingPanel.cs) | C# | 31 | 3 | 12 | 46 |
-| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/PieButton.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/PieButton.cs) | C# | 86 | 12 | 24 | 122 |
-| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ScreenCanvas.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ScreenCanvas.cs) | C# | 278 | 37 | 50 | 365 |
+| [Assets/Scripts/GameSc/UI/Canvas/PlayerCanvas.cs](/Assets/Scripts/GameSc/UI/Canvas/PlayerCanvas.cs) | C# | 212 | 41 | 49 | 302 |
+| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/BettingPanel.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/BettingPanel.cs) | C# | 129 | 33 | 37 | 199 |
+| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/PieButton.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/PieButton.cs) | C# | 92 | 12 | 26 | 130 |
+| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ScreenCanvas.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ScreenCanvas.cs) | C# | 303 | 65 | 59 | 427 |
 | [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ShowDownBtn.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ShowDownBtn.cs) | C# | 30 | 4 | 12 | 46 |
 | [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ShowDownPanel.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/ShowDownPanel.cs) | C# | 18 | 3 | 5 | 26 |
+| [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/SidePotPanel.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/SidePotPanel.cs) | C# | 19 | 0 | 3 | 22 |
 | [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/UpperButtons.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/UpperButtons.cs) | C# | 34 | 0 | 8 | 42 |
 | [Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/WinnerPanel.cs](/Assets/Scripts/GameSc/UI/Canvas/ScreenCanvas/WinnerPanel.cs) | C# | 21 | 1 | 8 | 30 |
 | [Assets/Scripts/GameSc/UI/GameMenu.cs](/Assets/Scripts/GameSc/UI/GameMenu.cs) | C# | 29 | 1 | 6 | 36 |
 | [Assets/Scripts/GameSc/UI/GuiCamFacing.cs](/Assets/Scripts/GameSc/UI/GuiCamFacing.cs) | C# | 13 | 0 | 4 | 17 |
-| [Assets/Scripts/GameSc/UI/Sprite/CardSprite.cs](/Assets/Scripts/GameSc/UI/Sprite/CardSprite.cs) | C# | 37 | 0 | 7 | 44 |
+| [Assets/Scripts/GameSc/UI/Sprite/CardSprite.cs](/Assets/Scripts/GameSc/UI/Sprite/CardSprite.cs) | C# | 37 | 0 | 8 | 45 |
 | [Assets/Scripts/GameSc/UI/Sprite/IconSprite.cs](/Assets/Scripts/GameSc/UI/Sprite/IconSprite.cs) | C# | 47 | 0 | 7 | 54 |
-| [Assets/Scripts/GameTable.cs](/Assets/Scripts/GameTable.cs) | C# | 323 | 51 | 60 | 434 |
-| [Assets/Scripts/GeneralManager/AspectRatioController.cs](/Assets/Scripts/GeneralManager/AspectRatioController.cs) | C# | 247 | 146 | 67 | 460 |
+| [Assets/Scripts/GameTable.cs](/Assets/Scripts/GameTable.cs) | C# | 433 | 68 | 90 | 591 |
 | [Assets/Scripts/GeneralManager/GameManager.cs](/Assets/Scripts/GeneralManager/GameManager.cs) | C# | 159 | 28 | 49 | 236 |
-| [Assets/Scripts/ListShuffler.cs](/Assets/Scripts/ListShuffler.cs) | C# | 18 | 0 | 5 | 23 |
+| [Assets/Scripts/Hand.cs](/Assets/Scripts/Hand.cs) | C# | 12 | 0 | 1 | 13 |
 | [Assets/Scripts/LoadingSc/LoadingSceneController.cs](/Assets/Scripts/LoadingSc/LoadingSceneController.cs) | C# | 43 | 0 | 12 | 55 |
 | [Assets/Scripts/MenuPanel.cs](/Assets/Scripts/MenuPanel.cs) | C# | 21 | 0 | 9 | 30 |
-| [Assets/Scripts/Player.cs](/Assets/Scripts/Player.cs) | C# | 91 | 9 | 18 | 118 |
+| [Assets/Scripts/Player.cs](/Assets/Scripts/Player.cs) | C# | 92 | 9 | 24 | 125 |
+| [Assets/Scripts/PotWinnerManager.cs](/Assets/Scripts/PotWinnerManager.cs) | C# | 116 | 22 | 33 | 171 |
 | [Assets/Scripts/RadialFill.cs](/Assets/Scripts/RadialFill.cs) | C# | 49 | 1 | 12 | 62 |
 | [Assets/Scripts/Room.cs](/Assets/Scripts/Room.cs) | C# | 52 | 1 | 9 | 62 |
-| [Assets/Scripts/ScriptTester.cs](/Assets/Scripts/ScriptTester.cs) | C# | 15 | 26 | 2 | 43 |
+| [Assets/Scripts/Test/ScriptTester.cs](/Assets/Scripts/Test/ScriptTester.cs) | C# | 115 | 54 | 35 | 204 |
+| [Assets/Scripts/Test/SubPlaceHolder.cs](/Assets/Scripts/Test/SubPlaceHolder.cs) | C# | 9 | 0 | 2 | 11 |
 | [Assets/Scripts/TitleSc/Flicker.cs](/Assets/Scripts/TitleSc/Flicker.cs) | C# | 32 | 1 | 9 | 42 |
 | [Assets/Scripts/TitleSc/TitleScene.cs](/Assets/Scripts/TitleSc/TitleScene.cs) | C# | 33 | 6 | 12 | 51 |
-| [Assets/Scripts/UnityMainThread.cs](/Assets/Scripts/UnityMainThread.cs) | C# | 19 | 0 | 4 | 23 |
-| [Assets/Scripts/WebSocketScript/GameMessage.cs](/Assets/Scripts/WebSocketScript/GameMessage.cs) | C# | 23 | 0 | 8 | 31 |
-| [Assets/Scripts/WebSocketScript/GameMsgHandler.cs](/Assets/Scripts/WebSocketScript/GameMsgHandler.cs) | C# | 64 | 6 | 22 | 92 |
+| [Assets/Scripts/Util/CardListUtil.cs](/Assets/Scripts/Util/CardListUtil.cs) | C# | 62 | 1 | 15 | 78 |
+| [Assets/Scripts/Util/ExtensionMethods.cs](/Assets/Scripts/Util/ExtensionMethods.cs) | C# | 20 | 0 | 5 | 25 |
+| [Assets/Scripts/Util/UnityMainThread.cs](/Assets/Scripts/Util/UnityMainThread.cs) | C# | 19 | 0 | 4 | 23 |
+| [Assets/Scripts/WebSocketScript/GameMessage.cs](/Assets/Scripts/WebSocketScript/GameMessage.cs) | C# | 24 | 0 | 8 | 32 |
+| [Assets/Scripts/WebSocketScript/GameMsgHandler.cs](/Assets/Scripts/WebSocketScript/GameMsgHandler.cs) | C# | 103 | 7 | 31 | 141 |
 | [Assets/Scripts/WebSocketScript/MainMessage.cs](/Assets/Scripts/WebSocketScript/MainMessage.cs) | C# | 56 | 7 | 20 | 83 |
 | [Assets/Scripts/WebSocketScript/MainMsgHandler.cs](/Assets/Scripts/WebSocketScript/MainMsgHandler.cs) | C# | 132 | 10 | 41 | 183 |
 | [Assets/Scripts/WebSocketScript/RoomMessage.cs](/Assets/Scripts/WebSocketScript/RoomMessage.cs) | C# | 90 | 11 | 11 | 112 |
 | [Assets/Scripts/WebSocketScript/RoomMsgHandler.cs](/Assets/Scripts/WebSocketScript/RoomMsgHandler.cs) | C# | 139 | 8 | 26 | 173 |
 | [Assets/Scripts/WebSocketScript/UrlBase.cs](/Assets/Scripts/WebSocketScript/UrlBase.cs) | C# | 7 | 0 | 2 | 9 |
 
-[summary](results.md) / details / [diff summary](diff.md) / [diff details](diff-details.md)
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
