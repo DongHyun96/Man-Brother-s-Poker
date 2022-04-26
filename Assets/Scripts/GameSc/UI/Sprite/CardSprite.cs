@@ -11,7 +11,8 @@ public class CardSprite : MonoBehaviour
     public List<Sprite> diamonds;
     public List<Sprite> hearts;
     public List<Sprite> spades;
-
+    public Sprite back;
+    
     private static CardSprite instance;
 
     public static CardSprite GetInstance()

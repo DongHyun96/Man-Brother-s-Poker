@@ -461,6 +461,12 @@ public class GameTable
                 break;
             case Player.State.FOLD:
                 player.Fold();
+                // Check if it is uncontested
+                if(IsUncontested())
+                {
+                    stage = Stage.UNCONTESTED;
+                    return;
+                }
                 break;
         }
 
@@ -615,5 +621,4 @@ public class GameTable
         (communityCards.Count == 4) ? Stage.RIVER : Stage.POT_FIN;
     }
 
-    
 }

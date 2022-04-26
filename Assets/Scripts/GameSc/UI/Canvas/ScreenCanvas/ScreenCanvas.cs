@@ -80,7 +80,24 @@ public class ScreenCanvas : MonoBehaviour
 
                 case GameTable.Stage.ROUND_FIN:
                     break;
+                case GameTable.Stage.UNCONTESTED:
                 case GameTable.Stage.POT_FIN:
+
+                    /* Init winner panel and show */
+                    winnerPanel.InitWinnerPanel();
+                    winnerPanel.ShowPanel();
+
+                    /* Hide upper buttons and buttom left */
+                    upperPanel.SetActive(false);
+                    bottomLeft.SetActive(false);
+
+                    /* Settle chips to winners */
+                    GameManager.gameTable.potWinnerManager.PayEachPotWinners();
+                    
+                    /* Update totalChips and pot chips */
+                    UpdateTotalChips(player.totalChips);
+                    UpdatePotChips(0);
+
                     break;
                 case GameTable.Stage.GAME_FIN:
                     throw new NotImplementedException();
@@ -216,7 +233,7 @@ public class ScreenCanvas : MonoBehaviour
 
     private void UpdateWinnerAnounce()
     {
-        winnerPanel.InitWinnerPanel(); // Not Implemented yet.. Needs to implement bestHand & bestHandcalculator
+        winnerPanel.InitWinnerPanel();
     }
 
     private void UpdateSidePotPanel(List<Player> players)

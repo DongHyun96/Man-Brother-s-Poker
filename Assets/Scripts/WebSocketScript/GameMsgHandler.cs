@@ -95,6 +95,11 @@ public class GameMsgHandler : MonoBehaviour
                         GameSceneUpdater.GetInstance().UpdateGameScene(targetPlayer); //Update UI
                     });
                     break;
+                case GameMessage.MessageType.SHOWDOWN:
+                    UnityMainThread.wkr.AddJob(() => {
+                        /* Show down cards */
+                    });
+                    break;
                 case GameMessage.MessageType.LEAVE:
                     break;
                 default:

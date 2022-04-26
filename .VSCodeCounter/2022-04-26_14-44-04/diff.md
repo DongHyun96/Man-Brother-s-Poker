@@ -1,27 +1,28 @@
 # Diff Summary
 
-Date : 2022-04-14 20:32:13
+Date : 2022-04-26 14:44:04
 
 Directory c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts
 
-Total : 12 files,  -129 codes, -140 comments, -34 blanks, all -303 lines
+Total : 11 files,  277 codes, 56 comments, 60 blanks, all 393 lines
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| C# | 12 | -129 | -140 | -34 | -303 |
+| C# | 11 | 277 | 56 | 60 | 393 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 12 | -129 | -140 | -34 | -303 |
-| GameSc | 3 | 87 | 7 | 21 | 115 |
-| GameSc\UI | 3 | 87 | 7 | 21 | 115 |
-| GameSc\UI\Canvas | 3 | 87 | 7 | 21 | 115 |
-| GameSc\UI\Canvas\ScreenCanvas | 2 | 86 | 11 | 23 | 120 |
-| GeneralManager | 1 | -247 | -146 | -67 | -460 |
-| Util | 3 | 57 | 0 | 14 | 71 |
+| . | 11 | 277 | 56 | 60 | 393 |
+| GameSc | 6 | 188 | 30 | 39 | 257 |
+| GameSc\UI | 5 | 156 | 16 | 26 | 198 |
+| GameSc\UI\Canvas | 4 | 155 | 16 | 26 | 197 |
+| GameSc\UI\Canvas\ScreenCanvas | 3 | 151 | 13 | 27 | 191 |
+| GameSc\UI\Sprite | 1 | 1 | 0 | 0 | 1 |
+| Test | 1 | 12 | 13 | 4 | 29 |
+| WebSocketScript | 1 | 4 | 3 | 0 | 7 |
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)

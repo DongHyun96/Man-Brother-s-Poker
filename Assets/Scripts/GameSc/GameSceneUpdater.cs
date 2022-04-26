@@ -58,9 +58,11 @@ public class GameSceneUpdater : MonoBehaviour
         {
             case GameTable.Stage.ROUND_FIN:
                 // Round fin animation routine needed
+                screenCanvas.state = p.state;
                 StartCoroutine(RoundFinRoutine());
                 return;
             case GameTable.Stage.UNCONTESTED:
+                StartCoroutine(UncontestedRoutine());
                 return;
             case GameTable.Stage.POT_FIN:
                 StartCoroutine(PotFinRoutine());
@@ -80,6 +82,7 @@ public class GameSceneUpdater : MonoBehaviour
             // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
             switch(table.tableStatus)
             {
+                case GameTable.TableStatus.IDLE:
                 case GameTable.TableStatus.CHECK:
                     screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD);
                     break;
@@ -205,7 +208,7 @@ public class GameSceneUpdater : MonoBehaviour
             canvas.playerState = Player.State.IDLE;
         }
 
-        // Show Round fin table animation here
+        // Show Round fin table animation here (Collecting chips to pot etc.)
         yield return new WaitForSeconds(2.0f);
 
         // Update GameTable to next round
@@ -219,25 +222,54 @@ public class GameSceneUpdater : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
         
+        // Init playerCanvas ActionGUI 
+        foreach(PlayerCanvas canvas in playerCanvas)
+        {
+            canvas.playerState = Player.State.IDLE;
+        }
+
+        /* Round fin table anim (Collecting chips to pot etc.) */
+        yield return new WaitForSeconds(2.0f);
+
+        /* ShowDown */
+        foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
+        {
+            PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
+            pCanvas.ToggleCards(true);
+            yield return new WaitForSeconds(1.5f);
+        }
+        
+        /* Cam works and Showing winner routine / Update totalChips and potchips */
+        screenCanvas.stage = GameTable.Stage.POT_FIN;
+        
+        yield return new WaitForSeconds(2.0f);
+        
+        
+        /* Update player tabs */
+        UpdateTabs();
+        
+        /* ShowDown choose panel */
+        
+        
+        
+    }
+
+    public IEnumerator UncontestedRoutine()
+    {
+        yield return new WaitForSeconds(2.0f);
+
         // Init playerCanvas ActionGUI
         foreach(PlayerCanvas canvas in playerCanvas)
         {
             canvas.playerState = Player.State.IDLE;
         }
 
-        /* Round fin table anim */
+        /* (Collecting chips to pot etc.) */
         yield return new WaitForSeconds(2.0f);
 
-        /* ShowDown anim */
-        foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
-        {
-            PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
-            
-            yield return new WaitForSeconds(1.5f);
-        }
-
-        /* Showing winner routine */
-                
+        /* Cam works and showing winner routine */
+        screenCanvas.stage = GameTable.Stage.UNCONTESTED;
+        
     }
 
     /****************************************************************************************************************

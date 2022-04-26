@@ -22,4 +22,51 @@ public class ShowDownPanel : MonoBehaviour
         // Init right
         right.sprite = CardSprite.GetInstance().GetSprite(cards[1]);
     }
+
+    public void OnUpper()
+    {
+        List<bool> showDownBool = new List<bool>();
+        showDownBool.Add(true);
+        showDownBool.Add(true);
+
+        ButtonRoutine(showDownBool);
+    }
+
+    public void OnLeft()
+    {
+        List<bool> showDownBool = new List<bool>();
+        showDownBool.Add(true);
+        showDownBool.Add(false);
+
+        ButtonRoutine(showDownBool);
+    }
+
+    public void OnRight()
+    {
+        List<bool> showDownBool = new List<bool>();
+        showDownBool.Add(false);
+        showDownBool.Add(true);
+
+        ButtonRoutine(showDownBool);
+    }
+
+    public void OnButtom()
+    {
+        List<bool> showDownBool = new List<bool>();
+        showDownBool.Add(false);
+        showDownBool.Add(false);
+
+        ButtonRoutine(showDownBool);
+    }
+
+    private void ButtonRoutine(List<bool> showDownBool)
+    {
+        /* Send SHOWDOWN message to server */
+        GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.SHOWDOWN,
+        GameManager.thisPlayer.name, showDownBool);
+        GameMsgHandler.SendMessage(message);
+        
+        /* Disable showdownPanel */
+        gameObject.SetActive(false);
+    }
 }
