@@ -11,7 +11,7 @@ public class PlayerCanvas : MonoBehaviour
     public string name; // To do: Init name first
 
     public GameObject tabPanel;
-    public GameObject cards;
+
     public GameObject actionPanel;
 
     // TabPanel components
@@ -202,9 +202,25 @@ public class PlayerCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                               Cards toggling
     ****************************************************************************************************************/
-    public void ToggleCards(bool isShow)
+    public void OpenCards(bool isFirstOpen, bool isSecondOpen)
     {
-        cards.SetActive(isShow);
+        card1.gameObject.SetActive(true);
+        card2.gameObject.SetActive(true);
+
+        Color defaultColor = new Color(41 / 255f, 41 / 255f, 41 / 255f);
+        Sprite back = CardSprite.GetInstance().back;
+
+        card1.color = isFirstOpen ? Color.white : defaultColor;
+        card2.color = isSecondOpen ? Color.white : defaultColor;
+        
+        card1.sprite = isFirstOpen ? card1.sprite : back;
+        card2.sprite = isSecondOpen ? card2.sprite : back;
+    }
+
+    public void CloseCards()
+    {
+        card1.gameObject.SetActive(false);
+        card2.gameObject.SetActive(false);
     }
     /****************************************************************************************************************
     *                                         TabPanel animation toggling

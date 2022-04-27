@@ -596,8 +596,43 @@ public class GameTable
         }
         return false;
     }
+    /****************************************************************************************************************
+    *                                                Pot related methods
+    ****************************************************************************************************************/
+    public bool IsInShowDown(string name)
+    {
+        if(potWinnerManager == null)
+        {
+            return false;
+        }
 
+        foreach(Player p in potWinnerManager.showDown)
+        {
+            if(name.Equals(p.name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public void PayEachPotWinners()
+    {
+        if(potWinnerManager == null)
+        {
+            return;
+        }
+
+        while(potWinnerManager.potWinnerStack.Count != 0)
+        {
+            KeyValuePair<int ,List<Player>> pot = potWinnerManager.potWinnerStack.Pop();
+
+            foreach(Player p in pot.Value)
+            {
+                GetPlayerByName(p.name).totalChips += pot.Key / pot.Value.Count;
+            }
+        }
+    }
     /****************************************************************************************************************
     *                                                     Extra
     ****************************************************************************************************************/

@@ -41,6 +41,12 @@ public class WinnerPanel : MonoBehaviour
         }
     }
 
+    public void HidePanel()
+    {
+        gameObject.SetActive(false);
+        sidePotPanel.gameObject.SetActive(false);
+    }
+
     // Best hand needed
     public void InitWinnerPanel()
     {

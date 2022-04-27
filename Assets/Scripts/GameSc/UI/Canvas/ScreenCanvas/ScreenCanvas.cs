@@ -52,16 +52,12 @@ public class ScreenCanvas : MonoBehaviour
         get => m_stage;
         set{
             // Find corresponding player
-            Player player = new Player();
-            foreach(Player p in GameManager.gameTable.players)
-            {
-                if(p.name.Equals(GameManager.thisPlayer.name))
-                {
-                    player = p;
-                    break;
-                }
-            }
+            Player player = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
 
+            if(player == null)
+            {
+                return;
+            }
             switch(value)
             {
                 case GameTable.Stage.PREFLOP:
@@ -91,12 +87,15 @@ public class ScreenCanvas : MonoBehaviour
                     upperPanel.SetActive(false);
                     bottomLeft.SetActive(false);
 
-                    /* Settle chips to winners */
-                    GameManager.gameTable.potWinnerManager.PayEachPotWinners();
+                    /* Give winning chips to winners */
+                    GameManager.gameTable.PayEachPotWinners();
                     
                     /* Update totalChips and pot chips */
                     UpdateTotalChips(player.totalChips);
                     UpdatePotChips(0);
+
+                    /* Update showDown Panel cards */
+                    UpdateShowDownPanel(player.cards);
 
                     break;
                 case GameTable.Stage.GAME_FIN:

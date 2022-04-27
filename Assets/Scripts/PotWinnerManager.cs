@@ -31,6 +31,30 @@ public class PotWinnerManager
         /* Sort players by totalBet */
         players = GetSortedPlayersByTotalBet(players);
 
+        /* Check if the side pot is valid */
+        bool IsSidePotValid = false;
+
+        foreach(Player p in players)
+        {
+            if(p.state == Player.State.ALLIN)
+            {
+                IsSidePotValid = true;
+                break;
+            }
+        }
+        if(!IsSidePotValid)
+        {
+            /* One main pot */
+            int potMoney = 0;
+            foreach(Player p in players)
+            {
+                potMoney += p.totalBet;
+            }
+            KeyValuePair<int, List<Player>> mainPotPair = new KeyValuePair<int, List<Player>>(potMoney, players);
+            pots.Add(mainPotPair);
+            return;
+        }
+
         /* Get PotMap */
         for(int i = 0; i < players.Count; i++)
         {
@@ -181,21 +205,5 @@ public class PotWinnerManager
         }
         showDown.Add(p);
     }
-
-    public void PayEachPotWinners()
-    {
-        while(potWinnerStack.Count != 0)
-        {
-            KeyValuePair<int, List<Player>> pot = potWinnerStack.Pop();
-
-            foreach(Player p in pot.Value)
-            {
-                p.totalChips += pot.Key / pot.Value.Count;
-            }
-        }
-    }
-
-
-
 
 }

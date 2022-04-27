@@ -114,9 +114,24 @@ public class GameSceneUpdater : MonoBehaviour
         
         /* Enable iterator turn on iterTurn player's canvas */
         GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
-        
-
     }
+
+    public void ShowDownCardsByPlayer(string name, List<bool> showDownBool)
+    {
+        PlayerCanvas canvas = GetPlayerCanvasFromName(name);
+
+        /* Show down cards */
+        canvas.OpenCards(showDownBool[0], showDownBool[1]);
+
+        /* Some animation needed */
+
+        /* Check if the show down is over */
+        if(IsShowDownOver())
+        {
+            print("ShowDown over, prepare next pot");
+        }
+    }
+
     /****************************************************************************************************************
     *                                                Starting methods
     ****************************************************************************************************************/
@@ -231,27 +246,36 @@ public class GameSceneUpdater : MonoBehaviour
         /* Round fin table anim (Collecting chips to pot etc.) */
         yield return new WaitForSeconds(2.0f);
 
-        /* ShowDown */
+        /* ShowDown / Animation needed */
         foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
         {
             PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
-            pCanvas.ToggleCards(true);
+            pCanvas.OpenCards(true, true);
             yield return new WaitForSeconds(1.5f);
         }
         
         /* Cam works and Showing winner routine / Update totalChips and potchips */
         screenCanvas.stage = GameTable.Stage.POT_FIN;
         
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(5.0f);
         
+        /* Set cam to original position  */
+        /* Close winningPanel and Show upper buttons, Buttom left */
+        screenCanvas.winnerPanel.HidePanel();
+        screenCanvas.upperPanel.SetActive(true);
+        screenCanvas.bottomLeft.SetActive(true);
         
         /* Update player tabs */
         UpdateTabs();
         
         /* ShowDown choose panel */
-        
-        
-        
+        if(!GameManager.gameTable.IsInShowDown(GameManager.thisPlayer.name))
+        {
+            if(GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name).state != Player.State.FOLD)
+            {
+                screenCanvas.chooseShowDown.SetActive(true);
+            }
+        }   
     }
 
     public IEnumerator UncontestedRoutine()
@@ -294,6 +318,24 @@ public class GameSceneUpdater : MonoBehaviour
             PlayerCanvas c = GetPlayerCanvasFromName(p.name);
             c.UpdateTab(p);
         }
+    }
+
+    private bool IsShowDownOver()
+    {
+        int cnt = 0;
+
+        foreach(PlayerCanvas canvas in playerCanvas)
+        {
+            cnt += canvas.card1.gameObject.activeSelf ? 1 : 0;
+        }
+
+        int showDownCnt = 0;
+        foreach(Player p in GameManager.gameTable.players)
+        {
+            showDownCnt += p.state != Player.State.FOLD ? 1 : 0;
+        }
+        
+        return showDownCnt == cnt ? true : false;
     }
 
 }

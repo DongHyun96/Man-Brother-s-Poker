@@ -98,6 +98,7 @@ public class GameMsgHandler : MonoBehaviour
                 case GameMessage.MessageType.SHOWDOWN:
                     UnityMainThread.wkr.AddJob(() => {
                         /* Show down cards */
+                        GameSceneUpdater.GetInstance().ShowDownCardsByPlayer(message.sender, message.cardShowDown);
                     });
                     break;
                 case GameMessage.MessageType.LEAVE:
