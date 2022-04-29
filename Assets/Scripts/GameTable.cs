@@ -104,8 +104,9 @@ public class GameTable
         }
     }
 
-
+    [JsonIgnore]
     public List<Card> deck = new List<Card>();
+
     public List<Card> communityCards = new List<Card>();
 
     public int pot;
@@ -186,6 +187,7 @@ public class GameTable
     private void Init_Preflop()
     {
         Debug.Log("Entering preflop");
+        
         // Init players
         foreach(Player p in players)
         {
@@ -195,6 +197,10 @@ public class GameTable
 
             p.cards.Clear();
         }
+
+        // init new SB_Pos and iterPos(UTG) / Have to consider player's broken or not
+        SB_Pos = GetNext(SB_Pos);
+        iterPos = GetNext(GetNext(SB_Pos));
 
         // Init table fields
         tableStatus = TableStatus.IDLE;
@@ -303,11 +309,9 @@ public class GameTable
 
         /* Calculate PotWinner */
         potWinnerManager = new PotWinnerManager(players);
+        
+
         /* potWinnerManager.PayEachPotWinners(); */
-
-        
-        
-
     }
     private void Init_GameFin()
     {
@@ -382,23 +386,6 @@ public class GameTable
     /****************************************************************************************************************
     *                                                Deck methods
     ****************************************************************************************************************/
-    private void InitDeck()
-    {
-        // Init deck
-        deck.Clear();
-
-        for(int i = 0; i < 13; i++) // Add each suit cards
-        {
-            deck.Add(new Card(Card.Suit.CLUB, i));
-            deck.Add(new Card(Card.Suit.DIAMOND, i));
-            deck.Add(new Card(Card.Suit.HEART, i));
-            deck.Add(new Card(Card.Suit.SPADE, i));
-        }
-
-        // Shuffle deck
-        CardListUtil.Shuffle<Card>(deck);
-    }
-
     private Card DrawCard()
     {
         Card card = deck[0];
@@ -526,7 +513,7 @@ public class GameTable
             case TableStatus.IDLE:
                 return false;
             case TableStatus.CHECK:
-
+                
                 // PREFLOP case exception(Big blind check)
                 if(stage == Stage.PREFLOP && iterPos == GetNext(SB_Pos))
                 {
@@ -618,6 +605,18 @@ public class GameTable
 
     public void PayEachPotWinners()
     {
+        /* Uncontested */
+        if(stage == Stage.UNCONTESTED)
+        {
+            foreach(Player p in players)
+            {
+                if(p.state != Player.State.FOLD)
+                {
+                    p.totalChips += pot;
+                }
+            }
+        }
+        /* All round fin */
         if(potWinnerManager == null)
         {
             return;
@@ -625,11 +624,11 @@ public class GameTable
 
         while(potWinnerManager.potWinnerStack.Count != 0)
         {
-            KeyValuePair<int ,List<Player>> pot = potWinnerManager.potWinnerStack.Pop();
+            KeyValuePair<int ,List<Player>> potPair = potWinnerManager.potWinnerStack.Pop();
 
-            foreach(Player p in pot.Value)
+            foreach(Player p in potPair.Value)
             {
-                GetPlayerByName(p.name).totalChips += pot.Key / pot.Value.Count;
+                GetPlayerByName(p.name).totalChips += potPair.Key / potPair.Value.Count;
             }
         }
     }

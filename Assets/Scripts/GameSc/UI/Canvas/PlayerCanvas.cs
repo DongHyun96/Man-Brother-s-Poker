@@ -72,6 +72,7 @@ public class PlayerCanvas : MonoBehaviour
                     {
                         ToggleTimer();
                     }
+                    CloseCards();
                     break;
 
                 case Player.State.SMALL:
@@ -79,6 +80,7 @@ public class PlayerCanvas : MonoBehaviour
                     // Init contents
                     UpdateTab(player);
                     UpdateActionPanel(value, player.roundBet); // sbChip all in 고려
+                    CloseCards();
                     
                     // Toggle panel animation
                     ToggleActionIconAndChip();

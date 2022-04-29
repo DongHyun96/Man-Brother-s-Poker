@@ -19,22 +19,23 @@ public class PotWinnerManager
     public PotWinnerManager(List<Player> players)
     {
         HandleBackStraightException(players); // Change back straight ace number to -1(Lowest)
-
+        
         CalculatePots(players);
-
+        
         CalculateWinners(pots);
+
     }
 
     /* Set up the potMaps */
     private void CalculatePots(List<Player> players)
     {
         /* Sort players by totalBet */
-        players = GetSortedPlayersByTotalBet(players);
+        List<Player> sortedPlayers = GetSortedPlayersByTotalBet(players);
 
         /* Check if the side pot is valid */
         bool IsSidePotValid = false;
 
-        foreach(Player p in players)
+        foreach(Player p in sortedPlayers)
         {
             if(p.state == Player.State.ALLIN)
             {
@@ -46,37 +47,37 @@ public class PotWinnerManager
         {
             /* One main pot */
             int potMoney = 0;
-            foreach(Player p in players)
+            foreach(Player p in sortedPlayers)
             {
                 potMoney += p.totalBet;
             }
-            KeyValuePair<int, List<Player>> mainPotPair = new KeyValuePair<int, List<Player>>(potMoney, players);
+            KeyValuePair<int, List<Player>> mainPotPair = new KeyValuePair<int, List<Player>>(potMoney, sortedPlayers);
             pots.Add(mainPotPair);
             return;
         }
 
         /* Get PotMap */
-        for(int i = 0; i < players.Count; i++)
+        for(int i = 0; i < sortedPlayers.Count; i++)
         {
-            if(players[i].totalBet == 0)
+            if(sortedPlayers[i].totalBet == 0)
             {
                 continue;
             }
 
             /* Get potMoney and involved players */
-            int currentPotBet = players[i].totalBet;
-            int potMoney = currentPotBet * (players.Count - i);
+            int currentPotBet = sortedPlayers[i].totalBet;
+            int potMoney = currentPotBet * (sortedPlayers.Count - i);
 
             List<Player> involved = new List<Player>();
-            involved.AddRange(players.GetRange(i, players.Count - i));
+            involved.AddRange(sortedPlayers.GetRange(i, sortedPlayers.Count - i));
 
             pots.Add(new KeyValuePair<int, List<Player>>(potMoney, involved));
             // pots.Push(new KeyValuePair<int, List<Player>>(potMoney, involved));
 
             /* Take out the current pot bet from players' totalBet */
-            for(int j = i; j < players.Count; j++)
+            for(int j = i; j < sortedPlayers.Count; j++)
             {
-                players[j].totalBet -= currentPotBet;
+                sortedPlayers[j].totalBet -= currentPotBet;
             }
         }
     }
@@ -163,12 +164,15 @@ public class PotWinnerManager
 
     private List<Player> GetSortedPlayersByTotalBet(List<Player> players)
     {
-        players.Sort(
+        List<Player> result = new List<Player>();
+
+        result.AddRange(players);
+        result.Sort(
             (x, y) =>
                 x == null ? (y == null ? 0 : -1) : (y == null ? 1 : x.totalBet.CompareTo(y.totalBet))
         );
 
-        return players;
+        return result;
     }
 
 

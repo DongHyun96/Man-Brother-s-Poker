@@ -85,8 +85,9 @@ public class WinnerPanel : MonoBehaviour
 
         /* POT_FIN */
         PotWinnerManager potManager = GameManager.gameTable.potWinnerManager;
+        
         KeyValuePair<int, List<Player>> mainPot = potManager.potWinnerStack.Peek();
-
+        
         // Init playerCards to mainPot first player
         InitPlayerCards(mainPot.Value[0].cards);
 

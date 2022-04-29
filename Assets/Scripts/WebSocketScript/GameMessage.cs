@@ -10,7 +10,7 @@ public class GameMessage
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MessageType{
-        REGISTER, TOSS, SHOWDOWN, LEAVE
+        REGISTER, DECK, TOSS, SHOWDOWN, LEAVE
     }
     public MessageType type;
 
@@ -19,6 +19,8 @@ public class GameMessage
     public GameTable table;
 
     public List<bool> cardShowDown = new List<bool>(); // [isOpenFirstCard, isOpenSecondCard]
+
+    public List<Card> deck = new List<Card>();
 
     public GameMessage() {}
 
@@ -37,5 +39,12 @@ public class GameMessage
         this.sender = sender;
         this.cardShowDown = cardShowDown;
     }
+
+/*     public GameMessage(Guid id, MessageType type, List<Card> deck)
+    {
+        this.id = id;
+        this.type = type;
+        this.deck = deck;
+    } */
 
 }

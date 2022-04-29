@@ -176,6 +176,36 @@ public class ScreenCanvas : MonoBehaviour
         TogglePieButtonAnim();
     }
 
+    public void InitCanvas()
+    {
+        // Turn off the unecessary GUI if it is on screen
+        if(pieButtonAnim.GetBool("isIn"))
+        {
+            pieButtonAnim.SetBool("isIn", false);
+        }
+        if(bettingPanelAnim.GetBool("isIn"))
+        {
+            bettingPanelAnim.SetBool("isIn", false);
+        }
+        /* foreach(Animator a in playerCardAnims)
+        {
+            a.SetBool("isIn", false);
+        }
+        foreach(Animator a in communityCardAnims)
+        {
+            a.SetBool("isIn", false);
+        } */
+        if(winnerPanel.gameObject.activeSelf)
+        {
+            winnerPanel.gameObject.SetActive(false);
+        }
+        if(showDownPanel.gameObject.activeSelf)
+        {
+            showDownPanel.gameObject.SetActive(false);
+        }
+        foldImage.gameObject.SetActive(false);
+    }
+
 
 
     /****************************************************************************************************************
@@ -272,6 +302,22 @@ public class ScreenCanvas : MonoBehaviour
 
     private IEnumerator PlayerCardsAnimRoutine()
     {
+        /* Check if the previous pot card still holds the place */
+        if(playerCardAnims[0].GetBool("isIn"))
+        {
+            /* Reset all the cards (Out)*/
+            TogglePlayerCardsAnim(0);
+            yield return new WaitForSeconds(0.2f);
+            TogglePlayerCardsAnim(1);
+            yield return new WaitForSeconds(0.2f);
+
+            for(int i = 0; i < 5; i++)
+            {
+                ToggleCommunityCardsAnim(i);
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+
         TogglePlayerCardsAnim(0);
         yield return new WaitForSeconds(CARD_SEC);
         TogglePlayerCardsAnim(1);

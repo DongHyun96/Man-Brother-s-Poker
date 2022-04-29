@@ -55,6 +55,13 @@ public class GameMsgHandler : MonoBehaviour
 
             switch(message.type)
             {
+                case GameMessage.MessageType.DECK:
+                    UnityMainThread.wkr.AddJob(() => 
+                    {
+                        /* Init deck here */
+                        GameManager.gameTable.deck = message.deck;
+                    });
+                    break;
                 case GameMessage.MessageType.REGISTER:
 #if TEST
                     if(GameManager.thisPlayer.name.Equals("InitialName"))
@@ -69,11 +76,8 @@ public class GameMsgHandler : MonoBehaviour
                             // Refresh iterPos from server (Received random start position from server)
                             GameManager.gameTable.iterPos = message.table.iterPos;
                             
-                            int BB = GameManager.gameTable.GetPrev(message.table.iterPos);
-                            GameManager.gameTable.SB_Pos = GameManager.gameTable.GetPrev(BB);
-
-                            // Received shuffled deck and set it to table
-                            GameManager.gameTable.deck = message.table.deck;
+                            // Set SB_pos
+                            GameManager.gameTable.SB_Pos = message.table.SB_Pos;
 
                             // Init game settings
                             GameSceneUpdater.GetInstance().InitSettings();
@@ -90,7 +94,10 @@ public class GameMsgHandler : MonoBehaviour
                 case GameMessage.MessageType.TOSS:
                     UnityMainThread.wkr.AddJob(() => {
 
+                        List<Card> deck = GameManager.gameTable.deck;
                         GameManager.gameTable = message.table; // Update gameTable
+                        GameManager.gameTable.deck = deck; // Set deck again
+
                         Player targetPlayer = GameManager.gameTable.GetPlayerByName(message.sender);
                         GameSceneUpdater.GetInstance().UpdateGameScene(targetPlayer); //Update UI
                     });

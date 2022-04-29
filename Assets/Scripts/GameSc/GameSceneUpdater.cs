@@ -128,7 +128,9 @@ public class GameSceneUpdater : MonoBehaviour
         /* Check if the show down is over */
         if(IsShowDownOver())
         {
-            print("ShowDown over, prepare next pot");
+            /* Prepare Next pot */
+            GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
+            StartGame();
         }
     }
 
@@ -141,7 +143,7 @@ public class GameSceneUpdater : MonoBehaviour
         
         int smallPos = table.SB_Pos;
         int bigPos = table.GetNext(smallPos);
-        int current_UTG = table.GetNext(bigPos);
+        int current_UTG = table.iterPos;
 
         //print(table.players[smallPos].name);
         //print(playerCanvas[smallPos])
@@ -170,6 +172,9 @@ public class GameSceneUpdater : MonoBehaviour
             } 
         }
 
+        // Init ScreenCanvas first
+        screenCanvas.InitCanvas();
+
         // Set up ScreenCanvas
         if(GameManager.thisPlayer.name.Equals(table.players[smallPos].name)) // Small Blind
         {
@@ -189,7 +194,7 @@ public class GameSceneUpdater : MonoBehaviour
             screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2); // Consider All in here
         }
 
-        screenCanvas.stage = GameTable.Stage.PREFLOP;    
+        screenCanvas.stage = GameTable.Stage.PREFLOP;  
     }
 
     public void StartRound()
@@ -275,7 +280,14 @@ public class GameSceneUpdater : MonoBehaviour
             {
                 screenCanvas.chooseShowDown.SetActive(true);
             }
-        }   
+        }
+
+        /* If all cards are shown, Go to next pot game */
+        if(IsShowDownOver())
+        {
+            GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
+            StartGame();
+        }
     }
 
     public IEnumerator UncontestedRoutine()
@@ -293,7 +305,22 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Cam works and showing winner routine */
         screenCanvas.stage = GameTable.Stage.UNCONTESTED;
+        yield return new WaitForSeconds(5.0f);
+
+        /* Set cam to original position */
+        /* Close winning panel and Showupper buttons, button left */
+        screenCanvas.winnerPanel.HidePanel();
+        screenCanvas.upperPanel.SetActive(true);
+        screenCanvas.bottomLeft.SetActive(true);
+
+        /* Update player tab */
+        UpdateTabs();
+
+        /* Prepare Next stage */
+        print("Prepare next pot");
         
+        GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
+        StartGame();
     }
 
     /****************************************************************************************************************
