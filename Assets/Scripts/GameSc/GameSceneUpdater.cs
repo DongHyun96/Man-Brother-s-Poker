@@ -7,7 +7,7 @@ using System;
 * Controls characters animation
 */
 public class GameSceneUpdater : MonoBehaviour
-{
+{   
     public static GameSceneUpdater instance;
 
     public List<PlayerCanvas> playerCanvas;
@@ -15,6 +15,8 @@ public class GameSceneUpdater : MonoBehaviour
     public ScreenCanvas screenCanvas;
 
     // Character animators
+
+    // Table animators
 
     public static GameSceneUpdater GetInstance()
     {
@@ -51,14 +53,14 @@ public class GameSceneUpdater : MonoBehaviour
         UpdateTabs(); // Update rankings
 
 
-        // screenCanvas.state = p.state;
+        screenCanvas.state = p.state;
 
         /* Check if the stage is finished*/
         switch(table.stage)
         {
             case GameTable.Stage.ROUND_FIN:
                 // Round fin animation routine needed
-                screenCanvas.state = p.state;
+                //screenCanvas.state = p.state;
                 StartCoroutine(RoundFinRoutine());
                 return;
             case GameTable.Stage.UNCONTESTED:
@@ -72,7 +74,7 @@ public class GameSceneUpdater : MonoBehaviour
             
             default:
                 /* Update screenCanvas */
-                screenCanvas.state = p.state;
+                //screenCanvas.state = p.state;
                 break;
         }
 
@@ -124,13 +126,18 @@ public class GameSceneUpdater : MonoBehaviour
         canvas.OpenCards(showDownBool[0], showDownBool[1]);
 
         /* Some animation needed */
-
+        
         /* Check if the show down is over */
         if(IsShowDownOver())
         {
-            /* Prepare Next pot */
-            GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
-            StartGame();
+            /* Wait for the last player shows the card */
+            /* Prepare next pot */
+            LazyAction.GetWkr().Act(
+            ()=>{
+                GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
+                StartGame();
+            }, 3.0f);
+        
         }
     }
 
@@ -248,6 +255,9 @@ public class GameSceneUpdater : MonoBehaviour
             canvas.playerState = Player.State.IDLE;
         }
 
+        // Init ScreenCanvas
+        //screenCanvas.state = Player.State.IDLE;
+
         /* Round fin table anim (Collecting chips to pot etc.) */
         yield return new WaitForSeconds(2.0f);
 
@@ -268,10 +278,22 @@ public class GameSceneUpdater : MonoBehaviour
         /* Close winningPanel and Show upper buttons, Buttom left */
         screenCanvas.winnerPanel.HidePanel();
         screenCanvas.upperPanel.SetActive(true);
-        screenCanvas.bottomLeft.SetActive(true);
+        // screenCanvas.bottomLeft.SetActive(true);
+        screenCanvas.bottomLeft.transform.localScale = Vector3.one;
         
         /* Update player tabs */
         UpdateTabs();
+        
+        /* If all cards are shown, Go to next pot game */
+        if(IsShowDownOver())
+        {
+            LazyAction.GetWkr().Act(
+            ()=>{
+                GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
+                StartGame();
+            }, 3.0f);
+            yield break;
+        }
         
         /* ShowDown choose panel */
         if(!GameManager.gameTable.IsInShowDown(GameManager.thisPlayer.name))
@@ -281,13 +303,7 @@ public class GameSceneUpdater : MonoBehaviour
                 screenCanvas.chooseShowDown.SetActive(true);
             }
         }
-
-        /* If all cards are shown, Go to next pot game */
-        if(IsShowDownOver())
-        {
-            GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
-            StartGame();
-        }
+        
     }
 
     public IEnumerator UncontestedRoutine()
@@ -311,7 +327,9 @@ public class GameSceneUpdater : MonoBehaviour
         /* Close winning panel and Showupper buttons, button left */
         screenCanvas.winnerPanel.HidePanel();
         screenCanvas.upperPanel.SetActive(true);
-        screenCanvas.bottomLeft.SetActive(true);
+        // screenCanvas.bottomLeft.SetActive(true);
+        screenCanvas.bottomLeft.transform.localScale = Vector3.one;
+
 
         /* Update player tab */
         UpdateTabs();

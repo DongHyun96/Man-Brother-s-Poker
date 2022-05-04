@@ -85,7 +85,8 @@ public class ScreenCanvas : MonoBehaviour
 
                     /* Hide upper buttons and buttom left */
                     upperPanel.SetActive(false);
-                    bottomLeft.SetActive(false);
+                    bottomLeft.transform.localScale = Vector3.zero; // For animator problem
+                    // bottomLeft.SetActive(false);
 
                     /* Give winning chips to winners */
                     GameManager.gameTable.PayEachPotWinners();
@@ -187,14 +188,10 @@ public class ScreenCanvas : MonoBehaviour
         {
             bettingPanelAnim.SetBool("isIn", false);
         }
-        /* foreach(Animator a in playerCardAnims)
-        {
-            a.SetBool("isIn", false);
-        }
-        foreach(Animator a in communityCardAnims)
-        {
-            a.SetBool("isIn", false);
-        } */
+        
+        /* Init cards routine */
+        // StartCoroutine(CardsInitRoutine());
+
         if(winnerPanel.gameObject.activeSelf)
         {
             winnerPanel.gameObject.SetActive(false);
@@ -278,14 +275,14 @@ public class ScreenCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                                Animation toggling
     ****************************************************************************************************************/
-    private void TogglePlayerCardsAnim(int idx)
+    private void TogglePlayerCardsAnim(int idx, bool isIn)
     {
-        playerCardAnims[idx].SetBool("isIn", !playerCardAnims[idx].GetBool("isIn"));
+        playerCardAnims[idx].SetBool("isIn", isIn);
     }
 
-    private void ToggleCommunityCardsAnim(int idx)
+    private void ToggleCommunityCardsAnim(int idx, bool isIn)
     {
-        communityCardAnims[idx].SetBool("isIn", !communityCardAnims[idx].GetBool("isIn"));
+        communityCardAnims[idx].SetBool("isIn", isIn);
     }
 
     private void TogglePieButtonAnim()
@@ -300,27 +297,36 @@ public class ScreenCanvas : MonoBehaviour
 
     private const float CARD_SEC = 1f;
 
+    /* This Coroutine will be used only in Pre-flop */
     private IEnumerator PlayerCardsAnimRoutine()
     {
-        /* Check if the previous pot card still holds the place */
-        if(playerCardAnims[0].GetBool("isIn"))
+
+        /* Check if the previous pot card holds the place */
+        if(playerCardAnims[0].GetCurrentAnimatorStateInfo(0).IsName("In"))
         {
-            /* Reset all the cards (Out)*/
-            TogglePlayerCardsAnim(0);
-            yield return new WaitForSeconds(0.2f);
-            TogglePlayerCardsAnim(1);
-            yield return new WaitForSeconds(0.2f);
+            /* Reset all the cards */
+            TogglePlayerCardsAnim(0, false);
+            yield return new WaitForSeconds(0.1f);
+            TogglePlayerCardsAnim(1, false);
 
             for(int i = 0; i < 5; i++)
             {
-                ToggleCommunityCardsAnim(i);
-                yield return new WaitForSeconds(0.2f);
+                if(communityCardAnims[i].GetCurrentAnimatorStateInfo(0).IsName("In"))
+                {
+                    ToggleCommunityCardsAnim(i, false);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                else{
+                    break;
+                }
             }
         }
 
-        TogglePlayerCardsAnim(0);
+        TogglePlayerCardsAnim(0, true);
+
         yield return new WaitForSeconds(CARD_SEC);
-        TogglePlayerCardsAnim(1);
+        
+        TogglePlayerCardsAnim(1, true);
     }
     private IEnumerator CommunityCardsAnimRoutine(GameTable.Stage stage)
     {
@@ -329,18 +335,19 @@ public class ScreenCanvas : MonoBehaviour
             case GameTable.Stage.FLOP:
                 for(int i = 0; i < 3; i++)
                 {
-                    ToggleCommunityCardsAnim(i);
+                    ToggleCommunityCardsAnim(i, true);
                     yield return new WaitForSeconds(CARD_SEC);
                 }
                 break;
             case GameTable.Stage.TURN:
-                ToggleCommunityCardsAnim(3);
+                ToggleCommunityCardsAnim(3, true);
                 break;
             case GameTable.Stage.RIVER:
-                ToggleCommunityCardsAnim(4);
+                ToggleCommunityCardsAnim(4, true);
                 break;
         }
     }
+
     /****************************************************************************************************************
     *                                                Action Button methods
     ****************************************************************************************************************/

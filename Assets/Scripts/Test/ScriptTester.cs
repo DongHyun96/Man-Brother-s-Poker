@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Diagnostics;
 using UnityEngine.UI;
+
+
 public class ScriptTester : MonoBehaviour
 {
 
@@ -21,6 +23,8 @@ public class ScriptTester : MonoBehaviour
     // private List<SubPlaceHolder> playerCardsUI = new List<SubPlaceHolder>();
     private SubPlaceHolder[] playerCardsUI = new SubPlaceHolder[6];
     
+    public GameObject exampleGameObj;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -174,6 +178,17 @@ public class ScriptTester : MonoBehaviour
         exampleList.RemoveAll(x => x.Equals(player1));
         print(newList.Count);
 
+        // SceneVisibilityManager.instance.Show()
+        
+        /* exampleGameObj.hideFlags = HideFlags.None; */
+
+
+        LazyAction.GetWkr().Act(() => 
+        {
+            print("Adding");
+        }
+        , 2.0f);
+        
     }
 
     private void InitDeck()

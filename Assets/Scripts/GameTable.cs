@@ -71,7 +71,7 @@ public class GameTable
                     Init_River();
                     break;
                 case Stage.UNCONTESTED:
-                    Init_Uncontested();
+                    /* Init_Uncontested(); */
                     break;
                 case Stage.ROUND_FIN:
                     break;
@@ -289,14 +289,14 @@ public class GameTable
     private void Init_Uncontested()
     {
         // One pot winner
-        foreach(Player p in players)
+        /* foreach(Player p in players)
         {
             if(p.state != Player.State.FOLD)
             {
                 p.totalChips += pot;
                 return;
             }
-        }
+        } */
     }
 
     private void Init_PotFin()
@@ -610,16 +610,20 @@ public class GameTable
         {
             foreach(Player p in players)
             {
+                // Give pot money to last stand player
                 if(p.state != Player.State.FOLD)
                 {
                     p.totalChips += pot;
                 }
             }
+            return;
         }
+        
         /* All round fin */
         if(potWinnerManager == null)
         {
-            return;
+            Debug.Log("potWinner not initialized while stage is POT_FIN");
+            throw new ArgumentNullException();
         }
 
         while(potWinnerManager.potWinnerStack.Count != 0)
