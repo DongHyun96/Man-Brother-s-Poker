@@ -111,6 +111,16 @@ public class PlayerCanvas : MonoBehaviour
         }
     }
 
+    /* First initialization */
+    public void Init(string name)
+    {
+        /* Activate self */
+        gameObject.SetActive(true);
+
+        /* Set name */
+        this.name = name;
+    }
+
     // Public method for current turn response here
     public void EnableTurn()
     {

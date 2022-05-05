@@ -14,7 +14,8 @@ public class GameSceneUpdater : MonoBehaviour
 
     public ScreenCanvas screenCanvas;
 
-    // Character animators
+    // Characters
+    public List<GameCharacter> characters;
 
     // Table animators
 
@@ -30,15 +31,12 @@ public class GameSceneUpdater : MonoBehaviour
     public void InitSettings()
     {
         // Init panel's name and enable the panel or not
+        // Init Characters
         for(int i = 0; i < GameManager.gameTable.players.Count; i++)
         {
-            playerCanvas[i].name = GameManager.gameTable.players[i].name;
+            playerCanvas[i].Init(GameManager.gameTable.players[i].name);
+            characters[i].Init(GameManager.gameTable.players[i].character);
         }
-
-        // Init screenCanvas(maybe)
-
-        // Init characters
-
     }
 
 

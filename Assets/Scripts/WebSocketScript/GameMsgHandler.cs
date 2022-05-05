@@ -72,10 +72,7 @@ public class GameMsgHandler : MonoBehaviour
                     if(message.table.registerCount == GameManager.thisPlayerRoom.players.Count)
                     {   
                         UnityMainThread.wkr.AddJob(() => 
-                        {
-                            // Refresh iterPos from server (Received random start position from server)
-                            GameManager.gameTable.iterPos = message.table.iterPos;
-                            
+                        {   
                             // Set SB_pos
                             GameManager.gameTable.SB_Pos = message.table.SB_Pos;
 
