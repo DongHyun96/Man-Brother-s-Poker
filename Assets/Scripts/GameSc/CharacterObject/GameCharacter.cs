@@ -15,8 +15,5 @@ public class GameCharacter : MonoBehaviour
         characterObject = Instantiate(container, transform.position, transform.rotation);
         animator = characterObject.GetComponent<Animator>();
     }
-
-    
-
     
 }

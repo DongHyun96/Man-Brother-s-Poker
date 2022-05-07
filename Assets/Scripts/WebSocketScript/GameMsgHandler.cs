@@ -76,6 +76,14 @@ public class GameMsgHandler : MonoBehaviour
                             // Set SB_pos
                             GameManager.gameTable.SB_Pos = message.table.SB_Pos;
 
+#if TEST
+                            // Set characters
+                            for(int i = 0; i < GameManager.gameTable.players.Count; i++)
+                            {
+                                GameManager.gameTable.players[i].character = message.table.players[i].character;
+                            }
+#endif
+
                             // Init game settings
                             GameSceneUpdater.GetInstance().InitSettings();
                             
