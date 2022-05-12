@@ -25,6 +25,8 @@ public class ScriptTester : MonoBehaviour
     
     public GameObject exampleGameObj;
 
+    public GameObject chips;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -191,6 +193,10 @@ public class ScriptTester : MonoBehaviour
         
     }
 
+    private void Update() {
+        chips.transform.Translate(Vector3.forward * Time.deltaTime);
+    }
+
     private void InitDeck()
     {
         // Init deck
@@ -256,4 +262,9 @@ public class ScriptTester : MonoBehaviour
 
 
         }
+    
+    private IEnumerator MoveChips()
+    {
+        yield return null;
+    }
 }
