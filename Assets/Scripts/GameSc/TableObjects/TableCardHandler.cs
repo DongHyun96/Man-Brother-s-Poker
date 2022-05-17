@@ -31,6 +31,18 @@ public class TableCardHandler : MonoBehaviour
         anim.SetTrigger(trigger);
     }
 
+    public void FoldPlayerCards(int idx)
+    {
+        GameObject targetCard1 = playerFirstCards[idx];
+        GameObject targetCard2 = playerSecondCards[idx];
+
+        /* Play anim */
+        Animator anim1 = targetCard1.GetComponent<Animator>();
+        Animator anim2 = targetCard2.GetComponent<Animator>();
+        anim1.SetTrigger("fold");
+        anim2.SetTrigger("fold");
+    }
+
     public void FlipPlayerCard(int pIdx, int cardIdx)
     {
         /* Get corresponding card object */
@@ -111,6 +123,11 @@ public class TableCardHandler : MonoBehaviour
         }
         yield return new WaitForSeconds(3.0f);
 
+        /* Fold player cards */
+        FoldPlayerCards(3);
+        FoldPlayerCards(4);
+        yield return new WaitForSeconds(3.0f);
+
         /* Flip players card */
         for(int i = 0; i < 6; i++)
         {
@@ -145,10 +162,5 @@ public class TableCardHandler : MonoBehaviour
                 trigger = "";
                 return null;
         }
-    }
-
-    public void OnFinishGathering()
-    {
-
     }
 }

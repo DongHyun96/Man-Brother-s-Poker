@@ -32,12 +32,12 @@ public class ChipHolder : MonoBehaviour
         return instance;
     }
 
-    /* Return null if chip is 0 */
+    /* Return empty gameObject if chip is 0 */
     public GameObject GetChipPrefab(int chips, int buyIn)
     {
         if(chips == 0)
         {
-            return null;
+            return new GameObject("name");
         }
 
         int gap = buyIn / 10;
@@ -54,12 +54,12 @@ public class ChipHolder : MonoBehaviour
         return chipPrefabs.Last();
     }
 
-    /* Return null if chip is 0 */
+    /* Return empty if chip is 0 */
     public GameObject GetPotPrefab(int pot, int buyIn)
     {
         if(pot == 0)
         {
-            return null;
+            return new GameObject("name");
         }
 
         int gap = buyIn / 5;
