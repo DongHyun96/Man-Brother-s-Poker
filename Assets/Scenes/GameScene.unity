@@ -13750,6 +13750,8 @@ MonoBehaviour:
   - {fileID: 1526237241}
   - {fileID: 239349511}
   - {fileID: 283321089}
+  tableChipHandler: {fileID: 1386545816}
+  tableCardHandler: {fileID: 334888895}
 --- !u!1 &785406976
 GameObject:
   m_ObjectHideFlags: 0

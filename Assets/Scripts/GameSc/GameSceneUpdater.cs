@@ -18,6 +18,8 @@ public class GameSceneUpdater : MonoBehaviour
     public List<GameCharacter> characters;
 
     // Table animators
+    public TableChipHandler tableChipHandler;
+    public TableCardHandler tableCardHandler;
 
     public static GameSceneUpdater GetInstance()
     {
@@ -37,6 +39,9 @@ public class GameSceneUpdater : MonoBehaviour
             playerCanvas[i].Init(GameManager.gameTable.players[i].name);
             characters[i].Init(GameManager.gameTable.players[i].character);
         }
+
+        // Init tableChipHandler's buyIn
+        tableChipHandler.InitBuyIn(GameManager.gameTable.buy);
     }
 
 

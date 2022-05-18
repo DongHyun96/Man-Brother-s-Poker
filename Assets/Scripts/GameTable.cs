@@ -109,6 +109,7 @@ public class GameTable
 
     public List<Card> communityCards = new List<Card>();
 
+    public int buy;
     public int pot;
     public int sbChip;
     public int roundBetMax;
@@ -137,6 +138,7 @@ public class GameTable
                 {
                     p.totalChips = 1000;
                 }
+                buy = 1000;
                 sbChip = 5;
                 break;
             case Room.BuyIn.FIVE:
@@ -144,6 +146,7 @@ public class GameTable
                 {
                     p.totalChips = 5000;
                 }
+                buy = 5000;
                 sbChip = 25;
                 break;
 
@@ -152,6 +155,7 @@ public class GameTable
                 {
                     p.totalChips = 10000;
                 }   
+                buy = 10000;
                 sbChip = 50;
                 break;
 
@@ -160,6 +164,7 @@ public class GameTable
                 {
                     p.totalChips = 20000;
                 }
+                buy = 20000;
                 sbChip  = 100;
                 break;
 
@@ -168,6 +173,7 @@ public class GameTable
                 {
                     p.totalChips = 50000;
                 }
+                buy = 50000;
                 sbChip = 250;
                 break;
 
@@ -176,6 +182,7 @@ public class GameTable
                 {
                     p.totalChips = 100000;
                 }
+                buy = 100000;
                 sbChip  = 500;
                 break;
 
