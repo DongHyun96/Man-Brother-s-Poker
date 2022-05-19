@@ -65,13 +65,13 @@ public class ScreenCanvas : MonoBehaviour
                     UpdatePlayerCards(player.cards);
 
                     // Show playerCards
-                    StartCoroutine(PlayerCardsAnimRoutine());
+                    //StartCoroutine(PlayerCardsAnimRoutine());
                     break;
                 case GameTable.Stage.FLOP:
                 case GameTable.Stage.TURN:
                 case GameTable.Stage.RIVER:
                     UpdateCommunityCards(GameManager.gameTable.communityCards);
-                    StartCoroutine(CommunityCardsAnimRoutine(value));
+                    //StartCoroutine(CommunityCardsAnimRoutine(value));
                     break;
 
                 case GameTable.Stage.ROUND_FIN:
@@ -189,8 +189,25 @@ public class ScreenCanvas : MonoBehaviour
             bettingPanelAnim.SetBool("isIn", false);
         }
         
-        /* Init cards routine */
-        // StartCoroutine(CardsInitRoutine());
+        /* Init cards */
+        if(playerCardAnims[0].GetCurrentAnimatorStateInfo(0).IsName("In"))
+        {
+            /* Reset all the cards */
+            TogglePlayerCardsAnim(0, false);
+            TogglePlayerCardsAnim(1, false);
+
+            for(int i = 0; i < 5; i++)
+            {
+                if(communityCardAnims[i].GetCurrentAnimatorStateInfo(0).IsName("In"))
+                {
+                    ToggleCommunityCardsAnim(i, false);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
 
         if(winnerPanel.gameObject.activeSelf)
         {
@@ -275,12 +292,12 @@ public class ScreenCanvas : MonoBehaviour
     /****************************************************************************************************************
     *                                                Animation toggling
     ****************************************************************************************************************/
-    private void TogglePlayerCardsAnim(int idx, bool isIn)
+    public void TogglePlayerCardsAnim(int idx, bool isIn)
     {
         playerCardAnims[idx].SetBool("isIn", isIn);
     }
 
-    private void ToggleCommunityCardsAnim(int idx, bool isIn)
+    public void ToggleCommunityCardsAnim(int idx, bool isIn)
     {
         communityCardAnims[idx].SetBool("isIn", isIn);
     }
@@ -296,57 +313,6 @@ public class ScreenCanvas : MonoBehaviour
     }
 
     private const float CARD_SEC = 1f;
-
-    /* This Coroutine will be used only in Pre-flop */
-    private IEnumerator PlayerCardsAnimRoutine()
-    {
-
-        /* Check if the previous pot card holds the place */
-        if(playerCardAnims[0].GetCurrentAnimatorStateInfo(0).IsName("In"))
-        {
-            /* Reset all the cards */
-            TogglePlayerCardsAnim(0, false);
-            yield return new WaitForSeconds(0.1f);
-            TogglePlayerCardsAnim(1, false);
-
-            for(int i = 0; i < 5; i++)
-            {
-                if(communityCardAnims[i].GetCurrentAnimatorStateInfo(0).IsName("In"))
-                {
-                    ToggleCommunityCardsAnim(i, false);
-                    yield return new WaitForSeconds(0.1f);
-                }
-                else{
-                    break;
-                }
-            }
-        }
-
-        TogglePlayerCardsAnim(0, true);
-
-        yield return new WaitForSeconds(CARD_SEC);
-        
-        TogglePlayerCardsAnim(1, true);
-    }
-    private IEnumerator CommunityCardsAnimRoutine(GameTable.Stage stage)
-    {
-        switch(stage)
-        {
-            case GameTable.Stage.FLOP:
-                for(int i = 0; i < 3; i++)
-                {
-                    ToggleCommunityCardsAnim(i, true);
-                    yield return new WaitForSeconds(CARD_SEC);
-                }
-                break;
-            case GameTable.Stage.TURN:
-                ToggleCommunityCardsAnim(3, true);
-                break;
-            case GameTable.Stage.RIVER:
-                ToggleCommunityCardsAnim(4, true);
-                break;
-        }
-    }
 
     /****************************************************************************************************************
     *                                                Action Button methods

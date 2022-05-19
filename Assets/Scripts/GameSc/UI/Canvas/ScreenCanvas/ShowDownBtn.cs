@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ShowDownBtn : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameObject pairCard;
+    [SerializeField] private GameObject pairCard;
 
     private const float BUTTON_SCALE = 1.2f;
 

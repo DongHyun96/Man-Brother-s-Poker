@@ -33,42 +33,6 @@ public class TableChipHandler : MonoBehaviour
         this.buyIn = buyIn;
     }
 
-    /* idx -> position */
-    private void UpdatePlayerChips(int idx, int chips)
-    {
-        if(playerChips[idx] != null)
-        {
-            /* Destroy previous prefab */
-            Destroy(playerChips[idx]);
-        }
-
-        GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
-        playerChips[idx] = Instantiate(container, playerChips[idx].transform.position, playerChips[idx].transform.rotation);
-
-    }
-
-    private void UpdateBettingChips(int idx, int chips)
-    {
-        if(bettingChips[idx] != null)
-        {
-            Destroy(bettingChips[idx]);
-        }
-
-        GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
-        bettingChips[idx] = Instantiate(container, bettingChips[idx].transform.position, bettingChips[idx].transform.rotation);
-    }
-
-    private void UpdatePotChips(int chips)
-    {
-        if(potChips != null)
-        {
-            Destroy(potChips);
-        }
-
-        GameObject container = ChipHolder.GetInstance().GetPotPrefab(chips, buyIn);
-        potChips = Instantiate(container, potChips.transform.position, potChips.transform.rotation);
-    }
-
     public void UpdateChips(ContentType type, int idx, int chips)
     {
         switch(type)
@@ -111,12 +75,48 @@ public class TableChipHandler : MonoBehaviour
         
     }
 
-    private void Start() {
+    /* idx -> position */
+    private void UpdatePlayerChips(int idx, int chips)
+    {
+        if(playerChips[idx] != null)
+        {
+            /* Destroy previous prefab */
+            Destroy(playerChips[idx]);
+        }
+
+        GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
+        playerChips[idx] = Instantiate(container, playerChips[idx].transform.position, playerChips[idx].transform.rotation);
+
+    }
+
+    private void UpdateBettingChips(int idx, int chips)
+    {
+        if(bettingChips[idx] != null)
+        {
+            Destroy(bettingChips[idx]);
+        }
+
+        GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
+        bettingChips[idx] = Instantiate(container, bettingChips[idx].transform.position, bettingChips[idx].transform.rotation);
+    }
+
+    private void UpdatePotChips(int chips)
+    {
+        if(potChips != null)
+        {
+            Destroy(potChips);
+        }
+
+        GameObject container = ChipHolder.GetInstance().GetPotPrefab(chips, buyIn);
+        potChips = Instantiate(container, potChips.transform.position, potChips.transform.rotation);
+    }
+
+/*     private void Start() {
         InitBuyIn(20000);
         // MovePlayerChipsToBetting(3, 5000);
         //StartCoroutine(MovePlayerChipsToBetting(3, 5000));
         StartCoroutine(example());
-    }
+    } */
 
     private void SetParent(Transform child, Transform parent)
     {
@@ -126,7 +126,7 @@ public class TableChipHandler : MonoBehaviour
         child.localScale = Vector3.one;
     }
 
-    private IEnumerator example()
+/*     private IEnumerator example()
     {
         yield return new WaitForSeconds(3.0f);
         MoveChips(AnimType.BET, 0, 20000, 20000);
@@ -135,7 +135,7 @@ public class TableChipHandler : MonoBehaviour
         yield return new WaitForSeconds(15f);
         UpdateChips(ContentType.POT, 0, 0);
         MoveChips(AnimType.POT_TO_PLAYER, 3, 400000, 600000);
-    }
+    } */
 
     private List<GameObject> GetCorrespondingChipList(AnimType t, out string trigger, out ContentType destContent)
     {

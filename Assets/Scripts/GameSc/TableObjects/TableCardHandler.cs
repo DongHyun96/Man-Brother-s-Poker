@@ -5,10 +5,10 @@ using UnityEngine;
 public class TableCardHandler : MonoBehaviour
 {
     /* Place the prefab clone object as child of these objects */
-    [SerializeField] private List<GameObject> playerFirstCards;
-    [SerializeField] private List<GameObject> playerSecondCards;
-    [SerializeField] private List<GameObject> communityCards;
-    [SerializeField] private List<GameObject> discards;
+    public List<GameObject> playerFirstCards;
+    public List<GameObject> playerSecondCards;
+    public List<GameObject> communityCards;
+    public List<GameObject> discards;
 
     public enum DrawType{
         FIRST, SECOND, COMMUNITY, DISCARD
@@ -84,9 +84,9 @@ public class TableCardHandler : MonoBehaviour
 
     }
 
-    private void Start() {
+    /* private void Start() {
         StartCoroutine(example());
-    }
+    } */
 
     private void SetParent(Transform child, Transform parent)
     {

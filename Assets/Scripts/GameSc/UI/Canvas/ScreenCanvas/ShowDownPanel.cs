@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ShowDownPanel : MonoBehaviour
 {
-    public Image UpperLeft;
-    public Image UpperRight;
-    public Image left;
-    public Image right;
+    [SerializeField] private Image UpperLeft;
+    [SerializeField] private Image UpperRight;
+    [SerializeField] private Image left;
+    [SerializeField] private Image right;
 
     public void InitShowDown(List<Card> cards)
     {

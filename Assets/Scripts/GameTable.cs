@@ -9,6 +9,7 @@ public class GameTable
 {
     public Guid id; // Same id with Room id
 
+    /* Delete bankrupt players if it is Last man standing */
     public List<Player> players = new List<Player>();
     public int registerCount;
     
@@ -656,6 +657,18 @@ public class GameTable
             }
         }
         return null;
+    }
+
+    public int GetIterPosByName(string name)
+    {
+        for(int i = 0; i < players.Count; i++)
+        {
+            if(players[i].name.Equals(name))
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     // 0 3 4 5

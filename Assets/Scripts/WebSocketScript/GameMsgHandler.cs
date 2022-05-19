@@ -93,6 +93,7 @@ public class GameMsgHandler : MonoBehaviour
                             // Very first Game start
                             print("Game Start");
                             GameSceneUpdater.GetInstance().StartGame();
+                            GameSceneUpdater.GetInstance().isFirstGameStart = true;
                         });
                     }
                     break;

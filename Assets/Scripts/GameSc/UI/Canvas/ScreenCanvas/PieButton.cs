@@ -11,9 +11,9 @@ public class PieButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private const float BUTTON_SCALE = 1.07f;
 
 
-    public Text actionIndicator;
-    public Animator indicatorAnim;
-    public List<Image> icons = new List<Image>();
+    [SerializeField] private Text actionIndicator;
+    [SerializeField] private Animator indicatorAnim;
+    [SerializeField] private List<Image> icons = new List<Image>();
     
     //private List<string> actions = new List<string>();
     private string[] actions = new string[3];

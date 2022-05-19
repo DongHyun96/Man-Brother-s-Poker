@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class UpperButtons : MonoBehaviour
 {
-    public Animator menu;
-    public Animator rankGuide;
-    public Animator keyGuide;
+    [SerializeField] private Animator menu;
+    [SerializeField] private Animator rankGuide;
+    [SerializeField] private Animator keyGuide;
 
     public void OnMenu()
     {

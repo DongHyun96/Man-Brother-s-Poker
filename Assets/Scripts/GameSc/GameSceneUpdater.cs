@@ -8,7 +8,7 @@ using System;
 */
 public class GameSceneUpdater : MonoBehaviour
 {   
-    public static GameSceneUpdater instance;
+    private static GameSceneUpdater instance;
 
     public List<PlayerCanvas> playerCanvas;
 
@@ -17,9 +17,11 @@ public class GameSceneUpdater : MonoBehaviour
     // Characters
     public List<GameCharacter> characters;
 
-    // Table animators
+    // Table animators, Maybe making tableObjectController
     public TableChipHandler tableChipHandler;
     public TableCardHandler tableCardHandler;
+
+    public bool isFirstGameStart = false;
 
     public static GameSceneUpdater GetInstance()
     {
@@ -149,62 +151,7 @@ public class GameSceneUpdater : MonoBehaviour
     ****************************************************************************************************************/
     public void StartGame() // GameTable and player all set! Init the Game scene
     {
-        GameTable table = GameManager.gameTable;
-        
-        int smallPos = table.SB_Pos;
-        int bigPos = table.GetNext(smallPos);
-        int current_UTG = table.iterPos;
-
-        //print(table.players[smallPos].name);
-        //print(playerCanvas[smallPos])
-        
-        // Set up playerCanvas
-        foreach(PlayerCanvas canvas in playerCanvas)
-        {   
-
-            if(canvas.name.Equals(table.players[smallPos].name)) // Small Blind
-            {
-                canvas.playerState = Player.State.SMALL;
-            }
-            else if(canvas.name.Equals(table.players[bigPos].name)) // Big blind
-            {
-                canvas.playerState = Player.State.BIG;
-            }
-            else // Other players
-            {
-                canvas.playerState = Player.State.IDLE;
-            }
-
-
-            if(canvas.name.Equals(table.players[current_UTG].name)) // UTG(first actor)
-            {
-                canvas.EnableTurn();
-            } 
-        }
-
-        // Init ScreenCanvas first
-        screenCanvas.InitCanvas();
-
-        // Set up ScreenCanvas
-        if(GameManager.thisPlayer.name.Equals(table.players[smallPos].name)) // Small Blind
-        {
-            screenCanvas.state = Player.State.SMALL;
-        }
-        else if(GameManager.thisPlayer.name.Equals(table.players[bigPos].name)) // Big blind
-        {
-            screenCanvas.state = Player.State.BIG;
-        }
-        else // Other players
-        {
-            screenCanvas.state = Player.State.IDLE;
-        }
-
-        if(GameManager.thisPlayer.name.Equals(table.players[current_UTG].name)) // UTG (First Actor)
-        {
-            screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2); // Consider All in here
-        }
-
-        screenCanvas.stage = GameTable.Stage.PREFLOP;  
+        StartCoroutine(GameStartRoutine(GameManager.gameTable));
     }
 
     public void StartRound()
@@ -228,6 +175,105 @@ public class GameSceneUpdater : MonoBehaviour
     /****************************************************************************************************************
     *                                                Coroutine
     ****************************************************************************************************************/
+    private IEnumerator GameStartRoutine(GameTable table)
+    {
+        /* Animate characters' greeting */
+        if(!isFirstGameStart)
+        {
+            foreach(GameCharacter character in characters)
+            {
+                character.AnimateCharacter(GameCharacter.AnimType.GREET);
+            }
+            /* Wait till greetings finished */
+            yield return StartCoroutine(WaitForTurningPoint(characters[1].characterObject.GetComponent<AnimTurningPointHandler>()));
+        }
+
+        int smallPos = table.SB_Pos;
+        int bigPos = table.GetNext(smallPos);
+        int current_UTG = table.iterPos;
+
+        // Set up playerCanvas
+        foreach(PlayerCanvas canvas in playerCanvas)
+        {   
+
+            if(canvas.name.Equals(table.players[smallPos].name)) // Small Blind
+            {
+                canvas.playerState = Player.State.SMALL;
+            }
+            else if(canvas.name.Equals(table.players[bigPos].name)) // Big blind
+            {
+                canvas.playerState = Player.State.BIG;
+            }
+            else // Other players
+            {
+                canvas.playerState = Player.State.IDLE;
+            }
+        }
+
+        // Init screenCanvas
+        screenCanvas.InitCanvas();
+        screenCanvas.stage = GameTable.Stage.PREFLOP;
+
+        /* Init players' chip */
+        for(int i = 0; i < table.players.Count; i++)
+        {
+            int chips = table.players[i].totalChips;
+            tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, i, chips);
+        }
+
+        /* Animate small big betting */
+        characters[smallPos].AnimateCharacter(GameCharacter.AnimType.BET);
+        characters[bigPos].AnimateCharacter(GameCharacter.AnimType.BET);
+
+        /* Animate chips */
+        yield return StartCoroutine(WaitForTurningPoint(characters[smallPos].characterObject.GetComponent<AnimTurningPointHandler>()));
+
+        // Update player chips and then animate betting chips
+        int smallTotal = table.players[smallPos].totalChips;
+        int bigTotal = table.players[bigPos].totalChips;
+        int smallBet = table.players[smallPos].roundBet;
+        int bigBet = table.players[bigPos].roundBet;
+        tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, smallPos, smallTotal);
+        tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, bigPos, bigTotal);
+        tableChipHandler.MoveChips(TableChipHandler.AnimType.BET, smallPos, smallBet, smallBet);
+        tableChipHandler.MoveChips(TableChipHandler.AnimType.BET, bigPos, bigBet, bigBet);
+
+        /* Animate cards - Table first and then screen cards */
+        tableCardHandler.DrawCard(TableCardHandler.DrawType.DISCARD, 0, new Card(Card.Suit.CLUB, 0));
+
+        yield return new WaitForSeconds(0.2f);
+
+        for(int i = 0; i < table.players.Count; i++)
+        {
+            Card c = table.players[i].cards[0];
+            tableCardHandler.DrawCard(TableCardHandler.DrawType.FIRST, i, c);
+            yield return new WaitForSeconds(0.2f);
+        }
+        for(int i = 0; i < table.players.Count; i++)
+        {
+            Card c = table.players[i].cards[1];
+            tableCardHandler.DrawCard(TableCardHandler.DrawType.SECOND, i, c);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        int myIdx = table.GetIterPosByName(GameManager.thisPlayer.name);
+
+        yield return StartCoroutine(
+            WaitForTurningPoint(tableCardHandler.playerFirstCards[myIdx].GetComponent<AnimTurningPointHandler>()));
+
+        screenCanvas.TogglePlayerCardsAnim(0, true);
+        yield return new WaitForSeconds(0.5f);
+        screenCanvas.TogglePlayerCardsAnim(1, true);
+        yield return new WaitForSeconds(1f);
+
+        /* Enable turn */
+        playerCanvas[current_UTG].EnableTurn();
+        if(myIdx == current_UTG)
+        {
+            screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
+        }
+    }
+
     public IEnumerator RoundFinRoutine()
     {
         yield return new WaitForSeconds(2.0f);
@@ -342,6 +388,14 @@ public class GameSceneUpdater : MonoBehaviour
         
         GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
         StartGame();
+    }
+
+    private IEnumerator WaitForTurningPoint(AnimTurningPointHandler handler)
+    {
+        while(!handler.IsTurningPointPassed)
+        {
+            yield return null;
+        }
     }
 
     /****************************************************************************************************************

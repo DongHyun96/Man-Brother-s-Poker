@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterHolder : MonoBehaviour
 {
     /* In order -->  MALE, MALE_CAP, FEMALE, POCICE, ZOMBIE */
-    public List<GameObject> characters;
+    [SerializeField] private List<GameObject> characters;
     
     private static CharacterHolder instance;
 

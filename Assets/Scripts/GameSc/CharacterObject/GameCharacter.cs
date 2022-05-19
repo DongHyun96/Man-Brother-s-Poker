@@ -6,7 +6,7 @@ using System;
 /* Controls player game character object's animations */
 public class GameCharacter : MonoBehaviour
 {
-    private GameObject characterObject;
+    public GameObject characterObject;
 
     private Animator animator;
 
@@ -22,9 +22,15 @@ public class GameCharacter : MonoBehaviour
         animator = characterObject.GetComponent<Animator>();
     }
 
-    public void animateCharacter(AnimType type)
+    public void AnimateCharacter(AnimType type)
     {
+        if(characterObject == null)
+        {
+            return;
+        }
+
         System.Random rnd = new System.Random();
+        
         switch(type)
         {
             case AnimType.GREET:
