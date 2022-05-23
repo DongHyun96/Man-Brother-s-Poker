@@ -155,7 +155,7 @@ public class ScreenCanvas : MonoBehaviour
                     break;
                 case Player.State.CHECK:
                     break;
-                case Player.State.FOLD: // only gets value so.. it updates everyone
+                case Player.State.FOLD:
                     bool temp = thisPlayer.state == Player.State.FOLD ? true : false;
                     foldImage.gameObject.SetActive(temp);
                     break;

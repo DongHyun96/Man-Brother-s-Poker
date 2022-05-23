@@ -3638,6 +3638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939186c7855c52048981a64bd340be9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!1 &169569198
 GameObject:
   m_ObjectHideFlags: 0
@@ -4813,6 +4814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939186c7855c52048981a64bd340be9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!1 &239562222
 GameObject:
   m_ObjectHideFlags: 0
@@ -5470,6 +5472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939186c7855c52048981a64bd340be9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!1001 &283567262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7997,6 +8000,7 @@ GameObject:
   - component: {fileID: 455780912}
   - component: {fileID: 455780913}
   - component: {fileID: 455780914}
+  - component: {fileID: 455780915}
   m_Layer: 0
   m_Name: pot (4)
   m_TagString: Untagged
@@ -8065,6 +8069,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &455780915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455780910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &466353643
 GameObject:
   m_ObjectHideFlags: 0
@@ -12271,6 +12287,7 @@ GameObject:
   - component: {fileID: 683996510}
   - component: {fileID: 683996511}
   - component: {fileID: 683996512}
+  - component: {fileID: 683996513}
   m_Layer: 0
   m_Name: pot (5)
   m_TagString: Untagged
@@ -12339,6 +12356,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &683996513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683996508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &690655182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13811,6 +13840,7 @@ MonoBehaviour:
   - {fileID: 283321089}
   tableChipHandler: {fileID: 1386545816}
   tableCardHandler: {fileID: 334888895}
+  worldAnimHandler: {fileID: 939493834}
   isFirstGameStart: 0
 --- !u!1 &785406976
 GameObject:
@@ -14965,6 +14995,7 @@ GameObject:
   - component: {fileID: 850465464}
   - component: {fileID: 850465465}
   - component: {fileID: 850465466}
+  - component: {fileID: 850465467}
   m_Layer: 0
   m_Name: pChips3 (1)
   m_TagString: Untagged
@@ -15033,6 +15064,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &850465467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850465462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &850787975
 GameObject:
   m_ObjectHideFlags: 0
@@ -15840,6 +15883,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1790442086815974575, guid: 3c1aa62133a4dc9418756e139ec6f841, type: 3}
   m_PrefabInstance: {fileID: 938913229}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &939493832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 939493833}
+  - component: {fileID: 939493834}
+  m_Layer: 0
+  m_Name: WorldAnimHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &939493833
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939493832}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1230200018}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &939493834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939493832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619efa06ef4648f43bf8d6baeee6aee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameCharacters:
+  - {fileID: 1059348631}
+  - {fileID: 161473927}
+  - {fileID: 1772108176}
+  - {fileID: 1526237241}
+  - {fileID: 239349511}
+  - {fileID: 283321089}
+  chipHandler: {fileID: 1386545816}
+  cardHandler: {fileID: 334888895}
 --- !u!1 &944485302
 GameObject:
   m_ObjectHideFlags: 0
@@ -16887,6 +16982,7 @@ GameObject:
   - component: {fileID: 984784402}
   - component: {fileID: 984784403}
   - component: {fileID: 984784404}
+  - component: {fileID: 984784405}
   m_Layer: 0
   m_Name: pChips6 (1)
   m_TagString: Untagged
@@ -16955,6 +17051,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &984784405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984784400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &994782792
 GameObject:
   m_ObjectHideFlags: 0
@@ -17943,6 +18051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939186c7855c52048981a64bd340be9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!1001 &1066014395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18488,6 +18597,7 @@ GameObject:
   - component: {fileID: 1105176136}
   - component: {fileID: 1105176137}
   - component: {fileID: 1105176138}
+  - component: {fileID: 1105176139}
   m_Layer: 0
   m_Name: pot (6)
   m_TagString: Untagged
@@ -18556,6 +18666,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &1105176139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105176134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1106521883
 GameObject:
   m_ObjectHideFlags: 0
@@ -20615,6 +20737,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 782063611}
+  - {fileID: 939493833}
   m_Father: {fileID: 0}
   m_RootOrder: 41
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20741,6 +20864,7 @@ GameObject:
   - component: {fileID: 1245004198}
   - component: {fileID: 1245004199}
   - component: {fileID: 1245004200}
+  - component: {fileID: 1245004201}
   m_Layer: 0
   m_Name: pChips1 (1)
   m_TagString: Untagged
@@ -20809,6 +20933,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &1245004201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245004196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1250757416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24701,6 +24837,7 @@ GameObject:
   - component: {fileID: 1509437771}
   - component: {fileID: 1509437772}
   - component: {fileID: 1509437773}
+  - component: {fileID: 1509437774}
   m_Layer: 0
   m_Name: pot (1)
   m_TagString: Untagged
@@ -24769,6 +24906,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &1509437774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509437769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1511747102
 GameObject:
   m_ObjectHideFlags: 0
@@ -25270,6 +25419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939186c7855c52048981a64bd340be9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!1 &1527283502
 GameObject:
   m_ObjectHideFlags: 0
@@ -26364,6 +26514,7 @@ GameObject:
   - component: {fileID: 1562515626}
   - component: {fileID: 1562515627}
   - component: {fileID: 1562515628}
+  - component: {fileID: 1562515629}
   m_Layer: 0
   m_Name: pot (2)
   m_TagString: Untagged
@@ -26432,6 +26583,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &1562515629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562515624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1562874725
 GameObject:
   m_ObjectHideFlags: 0
@@ -28374,6 +28537,7 @@ GameObject:
   - component: {fileID: 1644834102}
   - component: {fileID: 1644834103}
   - component: {fileID: 1644834104}
+  - component: {fileID: 1644834105}
   m_Layer: 0
   m_Name: pChips5 (1)
   m_TagString: Untagged
@@ -28442,6 +28606,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &1644834105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644834100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1648351560
 GameObject:
   m_ObjectHideFlags: 0
@@ -30401,6 +30577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939186c7855c52048981a64bd340be9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterObject: {fileID: 0}
 --- !u!1001 &1773152790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30813,6 +30990,7 @@ GameObject:
   - component: {fileID: 1790781623}
   - component: {fileID: 1790781624}
   - component: {fileID: 1790781625}
+  - component: {fileID: 1790781626}
   m_Layer: 0
   m_Name: pot (3)
   m_TagString: Untagged
@@ -30881,6 +31059,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &1790781626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790781621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1790942840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35018,6 +35208,7 @@ GameObject:
   - component: {fileID: 2058399814}
   - component: {fileID: 2058399815}
   - component: {fileID: 2058399816}
+  - component: {fileID: 2058399817}
   m_Layer: 0
   m_Name: pChips4 (1)
   m_TagString: Untagged
@@ -35086,6 +35277,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &2058399817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058399812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2060891968
 GameObject:
   m_ObjectHideFlags: 0
@@ -35964,6 +36167,7 @@ GameObject:
   - component: {fileID: 2116362808}
   - component: {fileID: 2116362809}
   - component: {fileID: 2116362810}
+  - component: {fileID: 2116362811}
   m_Layer: 0
   m_Name: pChips2 (1)
   m_TagString: Untagged
@@ -36032,6 +36236,18 @@ MonoBehaviour:
   chips: 0
   idx: 0
   contentType: 0
+--- !u!114 &2116362811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116362806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111ac1eac12b954b887f7178714579b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2117913150
 GameObject:
   m_ObjectHideFlags: 0

@@ -191,6 +191,7 @@ public class ScriptTester : MonoBehaviour
         }
         , 2.0f);
         
+        StartCoroutine(ExampleCoroutine());
     }
 
     private void Update() {
@@ -263,8 +264,31 @@ public class ScriptTester : MonoBehaviour
 
         }
     
-    private IEnumerator MoveChips()
+    private IEnumerator ExampleCoroutine()
     {
+        print("Hello1");
+        yield return StartCoroutine(ExampleCoroutine2());
+        print("Hello2");
+    }
+
+    private IEnumerator ExampleCoroutine2()
+    {
+        print("ExampleCoroutine2 - breakpoint 1");
+        yield return StartCoroutine(ExampleCoroutine3());
+        print("ExampleCoroutine2 - breakpoint 2");
+    }
+
+    private IEnumerator ExampleCoroutine3()
+    {
+        print("ExampleCoroutine 3 - breakpoint 1");
+        yield return StartCoroutine(ExampleCoroutine4());
+        print("ExampleCoroutine 3 - breakPoint 2");
+    }
+
+    private IEnumerator ExampleCoroutine4()
+    {
+        print("Entering rock bottom");
         yield return null;
     }
+    
 }

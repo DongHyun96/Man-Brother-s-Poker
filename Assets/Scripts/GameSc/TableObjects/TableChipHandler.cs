@@ -13,10 +13,10 @@ public class TableChipHandler : MonoBehaviour
     [SerializeField] private List<GameObject> playerChips;
     [SerializeField] private List<GameObject> bettingChips;
     [SerializeField] private GameObject potChips;
-
+ 
     /* These are for transformation (Moving chips) */
-    [SerializeField] private List<GameObject> m_playerChips;
-    [SerializeField] private List<GameObject> m_potChips;
+    public List<GameObject> m_playerChips;
+    public List<GameObject> m_potChips;
 
     private int buyIn;
 

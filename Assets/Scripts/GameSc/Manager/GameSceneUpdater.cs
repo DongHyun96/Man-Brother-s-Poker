@@ -14,12 +14,7 @@ public class GameSceneUpdater : MonoBehaviour
 
     public ScreenCanvas screenCanvas;
 
-    // Characters
-    public List<GameCharacter> characters;
-
-    // Table animators, Maybe making tableObjectController
-    public TableChipHandler tableChipHandler;
-    public TableCardHandler tableCardHandler;
+    public WorldAnimHandler worldAnimHandler;
 
     public bool isFirstGameStart = false;
 
@@ -35,92 +30,20 @@ public class GameSceneUpdater : MonoBehaviour
     public void InitSettings()
     {
         // Init panel's name and enable the panel or not
-        // Init Characters
         for(int i = 0; i < GameManager.gameTable.players.Count; i++)
         {
             playerCanvas[i].Init(GameManager.gameTable.players[i].name);
-            characters[i].Init(GameManager.gameTable.players[i].character);
         }
 
-        // Init tableChipHandler's buyIn
-        tableChipHandler.InitBuyIn(GameManager.gameTable.buy);
+        // Init worldAnimHandler
+        worldAnimHandler.Init(GameManager.gameTable);
     }
 
 
     // Facade methods to update the canvas and anim
     public void UpdateGameScene(Player p)
     {
-        GameTable table = GameManager.gameTable;
-
-        /* Update target playerCanvas */
-        PlayerCanvas targetCanvas = GetPlayerCanvasFromName(p.name);
-        targetCanvas.playerState = p.state; // Update sender's canvas
-        UpdateTabs(); // Update rankings
-
-
-        screenCanvas.state = p.state;
-
-        /* Check if the stage is finished*/
-        switch(table.stage)
-        {
-            case GameTable.Stage.ROUND_FIN:
-                // Round fin animation routine needed
-                //screenCanvas.state = p.state;
-                StartCoroutine(RoundFinRoutine());
-                return;
-            case GameTable.Stage.UNCONTESTED:
-                StartCoroutine(UncontestedRoutine());
-                return;
-            case GameTable.Stage.POT_FIN:
-                StartCoroutine(PotFinRoutine());
-                return;
-            case GameTable.Stage.GAME_FIN:
-                return;
-            
-            default:
-                /* Update screenCanvas */
-                //screenCanvas.state = p.state;
-                break;
-        }
-
-        /* Check iterator turn */
-        if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
-        {
-            // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
-            switch(table.tableStatus)
-            {
-                case GameTable.TableStatus.IDLE:
-                case GameTable.TableStatus.CHECK:
-                    screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD);
-                    break;
-                case GameTable.TableStatus.BET:
-                    int big = table.GetNext(table.SB_Pos);
-
-                    // Big blind PREFLOP case
-                    if(table.stage == GameTable.Stage.PREFLOP && table.players[big].Equals(table.GetCurrentPlayer()))
-                    {
-                        if(table.roundBetMax == table.GetCurrentPlayer().roundBet)
-                        {
-                            // All players didn't raised
-                            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
-                            break;
-                        }
-                    }
-                    PieButton.ActionState a = table.GetCurrentPlayer().totalChips <= table.roundBetMax ?
-                    PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
-                    screenCanvas.EnableTurn(a, table.roundBetMax);
-
-
-                    break;
-                case GameTable.TableStatus.ALLIN:
-                    break;
-                    
-
-            }
-        }
-        
-        /* Enable iterator turn on iterTurn player's canvas */
-        GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
+        StartCoroutine(UpdateGameSceneRoutine(p));
     }
 
     public void ShowDownCardsByPlayer(string name, List<bool> showDownBool)
@@ -180,12 +103,7 @@ public class GameSceneUpdater : MonoBehaviour
         /* Animate characters' greeting */
         if(!isFirstGameStart)
         {
-            foreach(GameCharacter character in characters)
-            {
-                character.AnimateCharacter(GameCharacter.AnimType.GREET);
-            }
-            /* Wait till greetings finished */
-            yield return StartCoroutine(WaitForTurningPoint(characters[1].characterObject.GetComponent<AnimTurningPointHandler>()));
+            yield return StartCoroutine(worldAnimHandler.AnimateGreetings());
         }
 
         int smallPos = table.SB_Pos;
@@ -218,48 +136,17 @@ public class GameSceneUpdater : MonoBehaviour
         for(int i = 0; i < table.players.Count; i++)
         {
             int chips = table.players[i].totalChips;
-            tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, i, chips);
+            worldAnimHandler.chipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, i, chips);
         }
 
         /* Animate small big betting */
-        characters[smallPos].AnimateCharacter(GameCharacter.AnimType.BET);
-        characters[bigPos].AnimateCharacter(GameCharacter.AnimType.BET);
-
-        /* Animate chips */
-        yield return StartCoroutine(WaitForTurningPoint(characters[smallPos].characterObject.GetComponent<AnimTurningPointHandler>()));
-
-        // Update player chips and then animate betting chips
-        int smallTotal = table.players[smallPos].totalChips;
-        int bigTotal = table.players[bigPos].totalChips;
-        int smallBet = table.players[smallPos].roundBet;
-        int bigBet = table.players[bigPos].roundBet;
-        tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, smallPos, smallTotal);
-        tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, bigPos, bigTotal);
-        tableChipHandler.MoveChips(TableChipHandler.AnimType.BET, smallPos, smallBet, smallBet);
-        tableChipHandler.MoveChips(TableChipHandler.AnimType.BET, bigPos, bigBet, bigBet);
+        //yield return worldAnimHandler.AnimateBetting(smallPos, table.players[smallPos]);
+        yield return StartCoroutine(worldAnimHandler.AnimateBetting(smallPos, table.players[smallPos]));
+        yield return StartCoroutine(worldAnimHandler.AnimateBetting(bigPos, table.players[bigPos]));
 
         /* Animate cards - Table first and then screen cards */
-        tableCardHandler.DrawCard(TableCardHandler.DrawType.DISCARD, 0, new Card(Card.Suit.CLUB, 0));
-
-        yield return new WaitForSeconds(0.2f);
-
-        for(int i = 0; i < table.players.Count; i++)
-        {
-            Card c = table.players[i].cards[0];
-            tableCardHandler.DrawCard(TableCardHandler.DrawType.FIRST, i, c);
-            yield return new WaitForSeconds(0.2f);
-        }
-        for(int i = 0; i < table.players.Count; i++)
-        {
-            Card c = table.players[i].cards[1];
-            tableCardHandler.DrawCard(TableCardHandler.DrawType.SECOND, i, c);
-            yield return new WaitForSeconds(0.2f);
-        }
-
         int myIdx = table.GetIterPosByName(GameManager.thisPlayer.name);
-
-        yield return StartCoroutine(
-            WaitForTurningPoint(tableCardHandler.playerFirstCards[myIdx].GetComponent<AnimTurningPointHandler>()));
+        yield return StartCoroutine(worldAnimHandler.PreflopRoutine(table.players, myIdx));
 
         screenCanvas.TogglePlayerCardsAnim(0, true);
         yield return new WaitForSeconds(0.5f);
@@ -273,6 +160,100 @@ public class GameSceneUpdater : MonoBehaviour
             screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
         }
     }
+
+    private IEnumerator UpdateGameSceneRoutine(Player p)
+    {
+        GameTable table = GameManager.gameTable;
+
+        /* Update target playerCanvas */
+        PlayerCanvas targetCanvas = GetPlayerCanvasFromName(p.name);
+        targetCanvas.playerState = p.state;
+        UpdateTabs();
+
+        screenCanvas.state = p.state;
+
+        /* Animate target player's animations */
+        int targetIdx = table.GetIterPosByName(p.name);
+        switch(p.state)
+        {
+            case Player.State.CHECK:
+                yield return new WaitForSeconds(0.5f);
+                break;
+            case Player.State.BET:
+            case Player.State.CALL:
+            case Player.State.RAISE:
+            case Player.State.ALLIN:
+                yield return StartCoroutine(worldAnimHandler.AnimateBetting(targetIdx, p));
+                break;
+            case Player.State.FOLD:
+                yield return StartCoroutine(worldAnimHandler.AnimateFold(targetIdx));
+                break;
+        }
+
+        /* Wait for couple of sec here */
+        yield return new WaitForSeconds(1.5f);
+
+        /* check if the stage is finished */
+        switch(table.stage)
+        {
+            case GameTable.Stage.ROUND_FIN:
+                // Round fin animation routine needed
+                //screenCanvas.state = p.state;
+                StartCoroutine(RoundFinRoutine());
+                yield break;
+            case GameTable.Stage.UNCONTESTED:
+                StartCoroutine(UncontestedRoutine());
+                yield break;
+            case GameTable.Stage.POT_FIN:
+                StartCoroutine(PotFinRoutine());
+                yield break;
+            case GameTable.Stage.GAME_FIN:
+                yield break;
+            
+            default:
+                /* Update screenCanvas */
+                //screenCanvas.state = p.state;
+                break;
+        }
+
+        /* Check iterator turn */
+        if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
+        {
+            // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
+            switch(table.tableStatus)
+            {
+                case GameTable.TableStatus.IDLE:
+                case GameTable.TableStatus.CHECK:
+                    screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD);
+                    break;
+                case GameTable.TableStatus.BET:
+                    int big = table.GetNext(table.SB_Pos);
+
+                    // Big blind PREFLOP case
+                    if(table.stage == GameTable.Stage.PREFLOP && table.players[big].Equals(table.GetCurrentPlayer()))
+                    {
+                        if(table.roundBetMax == table.GetCurrentPlayer().roundBet)
+                        {
+                            // All players didn't raised
+                            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
+                            break;
+                        }
+                    }
+                    PieButton.ActionState a = table.GetCurrentPlayer().totalChips <= table.roundBetMax ?
+                    PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
+                    screenCanvas.EnableTurn(a, table.roundBetMax);
+
+
+                    break;
+                case GameTable.TableStatus.ALLIN:
+                    break;
+            }
+        }
+        
+        /* Enable iterator turn on iterTurn player's canvas */
+        GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
+    }
+
 
     public IEnumerator RoundFinRoutine()
     {
@@ -398,6 +379,33 @@ public class GameSceneUpdater : MonoBehaviour
         }
     }
 
+
+/*     private IEnumerator AnimateActionRoutine(Player player, int idx)
+    {
+        switch(player.state)
+        {
+            case Player.State.SMALL:
+            case Player.State.BIG:
+            case Player.State.BET:
+            case Player.State.CALL:
+            case Player.State.RAISE:
+            case Player.State.ALLIN:
+                // Animate character
+                characters[idx].AnimateCharacter(GameCharacter.AnimType.BET);
+                
+                yield return StartCoroutine(
+                    WaitForTurningPoint(characters[idx].characterObject.GetComponent<AnimTurningPointHandler>())
+                    );
+                
+                // Animate chips
+                tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, idx, player.totalChips);
+                tableChipHandler.MoveChips(TableChipHandler.AnimType.BET, idx, player.roundBet, player.roundBet);
+
+            case Player.State.CHECK:
+            case Player.State.FOLD:
+
+        }
+    } */
     /****************************************************************************************************************
     *                                                Extra methods
     ****************************************************************************************************************/

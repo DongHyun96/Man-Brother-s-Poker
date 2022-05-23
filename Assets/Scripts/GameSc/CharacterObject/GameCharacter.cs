@@ -29,6 +29,9 @@ public class GameCharacter : MonoBehaviour
             return;
         }
 
+        /* Init AnimTurningPointHandler */
+        characterObject.GetComponent<AnimTurningPointHandler>().IsTurningPointPassed = false;
+
         System.Random rnd = new System.Random();
         
         switch(type)
@@ -56,5 +59,4 @@ public class GameCharacter : MonoBehaviour
                 break;
         }
     }
-     
 }
