@@ -54,18 +54,13 @@ public class GameSceneUpdater : MonoBehaviour
         canvas.OpenCards(showDownBool[0], showDownBool[1]);
 
         /* Some animation needed */
+        int pIdx = GameManager.gameTable.GetIterPosByName(name);
+        StartCoroutine(worldAnimHandler.AnimateShowDown(pIdx, showDownBool));
         
         /* Check if the show down is over */
         if(IsShowDownOver())
         {
-            /* Wait for the last player shows the card */
-            /* Prepare next pot */
-            LazyAction.GetWkr().Act(
-            ()=>{
-                GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
-                StartGame();
-            }, 3.0f);
-        
+            StartCoroutine(PrepareNextPotRoutine());
         }
     }
 
@@ -75,24 +70,6 @@ public class GameSceneUpdater : MonoBehaviour
     public void StartGame() // GameTable and player all set! Init the Game scene
     {
         StartCoroutine(GameStartRoutine(GameManager.gameTable));
-    }
-
-    public void StartRound()
-    {
-        GameTable table = GameManager.gameTable;
-
-        /* Set up playerCanvas table turn */
-        GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn();
-
-        /* Set up ScreenCanvas */
-        screenCanvas.state = Player.State.IDLE;
-
-        if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
-        {
-            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD, 0);
-        }
-
-        screenCanvas.stage = table.stage;
     }
 
     /****************************************************************************************************************
@@ -140,13 +117,12 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         /* Animate small big betting */
-        //yield return worldAnimHandler.AnimateBetting(smallPos, table.players[smallPos]);
-        yield return StartCoroutine(worldAnimHandler.AnimateBetting(smallPos, table.players[smallPos]));
+        StartCoroutine(worldAnimHandler.AnimateBetting(smallPos, table.players[smallPos]));
         yield return StartCoroutine(worldAnimHandler.AnimateBetting(bigPos, table.players[bigPos]));
 
         /* Animate cards - Table first and then screen cards */
         int myIdx = table.GetIterPosByName(GameManager.thisPlayer.name);
-        yield return StartCoroutine(worldAnimHandler.PreflopRoutine(table.players, myIdx));
+        yield return StartCoroutine(worldAnimHandler.PreflopRoutine(table, myIdx));
 
         screenCanvas.TogglePlayerCardsAnim(0, true);
         yield return new WaitForSeconds(0.5f);
@@ -265,14 +241,52 @@ public class GameSceneUpdater : MonoBehaviour
             canvas.playerState = Player.State.IDLE;
         }
 
-        // Show Round fin table animation here (Collecting chips to pot etc.)
-        yield return new WaitForSeconds(2.0f);
+        // Show Round fin table animation here (Collecting chips to pot)
+        yield return StartCoroutine(worldAnimHandler.RoundFinRoutine(GameManager.gameTable.players, GameManager.gameTable.pot));
+        yield return new WaitForSeconds(0.5f);
 
         // Update GameTable to next round
         GameManager.gameTable.UpdateToNextRound();
 
         // Update all canvas
-        StartRound();
+
+        /* Set up ScreenCanvas */
+        screenCanvas.state = Player.State.IDLE;
+
+        /* Update community cards in gameTable*/
+        screenCanvas.stage = GameManager.gameTable.stage;
+
+        /* Animate table cards */
+        yield return StartCoroutine(
+            worldAnimHandler.FlopTurnRiverRoutine(
+                GameManager.gameTable.stage, GameManager.gameTable.communityCards
+                ));
+
+        /* Animate screenCanvas cards */
+        switch(GameManager.gameTable.stage)
+        {
+            case GameTable.Stage.FLOP:
+                for(int i = 0; i < 3; i++)
+                {
+                    screenCanvas.ToggleCommunityCardsAnim(i, true);
+                    yield return new WaitForSeconds(0.2f);
+                }
+                break;
+            case GameTable.Stage.TURN:
+                screenCanvas.ToggleCommunityCardsAnim(3, true);
+                break;
+            case GameTable.Stage.RIVER:
+                screenCanvas.ToggleCommunityCardsAnim(4, true);
+                break;
+        }
+        yield return new WaitForSeconds(1f);
+        
+        /* Enable turn */
+        GetPlayerCanvasFromName(GameManager.gameTable.GetCurrentPlayer().name).EnableTurn();
+        if(GameManager.thisPlayer.name.Equals(GameManager.gameTable.GetCurrentPlayer().name))
+        {
+            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD, 0);
+        }
     }
 
     public IEnumerator PotFinRoutine()
@@ -288,16 +302,22 @@ public class GameSceneUpdater : MonoBehaviour
         // Init ScreenCanvas
         //screenCanvas.state = Player.State.IDLE;
 
-        /* Round fin table anim (Collecting chips to pot etc.) */
-        yield return new WaitForSeconds(2.0f);
+        /* Round fin table anim (Collecting chips to pot) */
+        yield return StartCoroutine(worldAnimHandler.RoundFinRoutine(GameManager.gameTable.players, GameManager.gameTable.pot));
+        yield return new WaitForSeconds(0.5f);
 
         /* ShowDown / Animation needed */
         foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
         {
+            int pIdx = GameManager.gameTable.GetIterPosByName(p.name);
+            List<bool> showDownBool = new List<bool>();
+            showDownBool.Add(true);
+            showDownBool.Add(true);
+            yield return StartCoroutine(worldAnimHandler.AnimateShowDown(pIdx, showDownBool));
             PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
             pCanvas.OpenCards(true, true);
-            yield return new WaitForSeconds(1.5f);
         }
+        yield return new WaitForSeconds(1.5f);
         
         /* Cam works and Showing winner routine / Update totalChips and potchips */
         screenCanvas.stage = GameTable.Stage.POT_FIN;
@@ -317,11 +337,7 @@ public class GameSceneUpdater : MonoBehaviour
         /* If all cards are shown, Go to next pot game */
         if(IsShowDownOver())
         {
-            LazyAction.GetWkr().Act(
-            ()=>{
-                GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
-                StartGame();
-            }, 3.0f);
+            yield return StartCoroutine(PrepareNextPotRoutine());
             yield break;
         }
         
@@ -367,6 +383,18 @@ public class GameSceneUpdater : MonoBehaviour
         /* Prepare Next stage */
         print("Prepare next pot");
         
+        GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
+        StartGame();
+    }
+
+    private IEnumerator PrepareNextPotRoutine()
+    {
+        yield return new WaitForSeconds(3.5f);
+        Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
+        /* Play table preparation animations */
+        yield return StartCoroutine(worldAnimHandler.PrepareNextRoundRoutine(PWS));
+        
+        /* Go to next pot */
         GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
         StartGame();
     }

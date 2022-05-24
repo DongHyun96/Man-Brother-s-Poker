@@ -49,7 +49,7 @@ public class GameMsgHandler : MonoBehaviour
     {
         try
         {
-            GameMessage message = JsonConvert.DeserializeObject<GameMessage>(e.Data); // FATAL ERROR HERE
+            GameMessage message = JsonConvert.DeserializeObject<GameMessage>(e.Data);
            
             print("Game Message received --> " + message.type);
 
@@ -102,7 +102,7 @@ public class GameMsgHandler : MonoBehaviour
 
                         List<Card> deck = GameManager.gameTable.deck;
                         GameManager.gameTable = message.table; // Update gameTable
-                        GameManager.gameTable.deck = deck; // Set deck again
+                        GameManager.gameTable.deck = deck; // Set deck again (because server - client doesn't share deck in TOSS msg)
 
                         Player targetPlayer = GameManager.gameTable.GetPlayerByName(message.sender);
                         GameSceneUpdater.GetInstance().UpdateGameScene(targetPlayer); //Update UI
@@ -127,14 +127,14 @@ public class GameMsgHandler : MonoBehaviour
             Debug.Log("Exception occured while Receiving message from GameMsgHandler: /n" + exc);
         }
     }
+    private void Awake() 
+    {
+        websocket.Connect();
+        websocket.OnMessage += ReceiveMessage;
+    }
 
     private void Start()
     {
-        websocket.Connect();
-
-        websocket.OnMessage += ReceiveMessage;
-        
-
 #if TEST
         Guid guid = new Guid("0f8fad5b-d9cb-469f-a165-70867728950e");
 
@@ -157,10 +157,16 @@ public class GameMsgHandler : MonoBehaviour
 #endif
 
         // REGISTER the gameTable and this player to server
+        StartCoroutine(DelayRegisterRoutine());
+
+    }
+
+    private IEnumerator DelayRegisterRoutine()
+    {
+        yield return new WaitForSeconds(2.0f);
         GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.REGISTER,
          GameManager.thisPlayer.name, GameManager.gameTable);
         SendMessage(msg);
-
     }
 
 }

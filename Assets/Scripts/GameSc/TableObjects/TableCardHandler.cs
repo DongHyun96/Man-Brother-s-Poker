@@ -46,7 +46,7 @@ public class TableCardHandler : MonoBehaviour
     public void FlipPlayerCard(int pIdx, int cardIdx)
     {
         /* Get corresponding card object */
-        GameObject targetCard = pIdx == 0 ? playerFirstCards[cardIdx] : playerSecondCards[cardIdx];
+        GameObject targetCard = cardIdx == 0 ? playerFirstCards[pIdx] : playerSecondCards[pIdx];
 
         /* Play anim */
         Animator anim = targetCard.GetComponent<Animator>();

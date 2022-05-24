@@ -13831,15 +13831,6 @@ MonoBehaviour:
   - {fileID: 1148208079}
   - {fileID: 1744905334}
   screenCanvas: {fileID: 2042381944}
-  characters:
-  - {fileID: 1059348631}
-  - {fileID: 161473927}
-  - {fileID: 1772108176}
-  - {fileID: 1526237241}
-  - {fileID: 239349511}
-  - {fileID: 283321089}
-  tableChipHandler: {fileID: 1386545816}
-  tableCardHandler: {fileID: 334888895}
   worldAnimHandler: {fileID: 939493834}
   isFirstGameStart: 0
 --- !u!1 &785406976
@@ -34940,7 +34931,7 @@ Canvas:
   m_GameObject: {fileID: 2042381939}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 1292906901}
   m_PlaneDistance: 1
   m_PixelPerfect: 0

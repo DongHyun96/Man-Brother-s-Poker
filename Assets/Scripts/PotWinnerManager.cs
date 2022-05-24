@@ -85,6 +85,9 @@ public class PotWinnerManager
     /* Set up winners and showDown players */
     private void CalculateWinners(List<KeyValuePair<int, List<Player>>> pots)
     {
+        /* Init potWinnerStack */
+        potWinnerStack.Clear();
+
         for(int i = pots.Count - 1; i >= 0; i--)
         {
             KeyValuePair<int, List<Player>> kvPair = pots[i];

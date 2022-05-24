@@ -218,6 +218,11 @@ public class ScreenCanvas : MonoBehaviour
             showDownPanel.gameObject.SetActive(false);
         }
         foldImage.gameObject.SetActive(false);
+
+        /* Init pot Chips and player chips */
+        UpdatePotChips(0);
+        Player p = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
+        UpdateTotalChips(p.totalChips);
     }
 
 
@@ -421,7 +426,7 @@ public class ScreenCanvas : MonoBehaviour
     {
         if(playerChips_Num < chips)
         {
-            while(playerChips_Num != chips)
+            while(playerChips_Num < chips)
             {
                 playerChips_Num += GameManager.gameTable.sbChip;
                 playerChips.text = GetChipString(playerChips_Num);
@@ -430,20 +435,21 @@ public class ScreenCanvas : MonoBehaviour
         }
         else if(playerChips_Num > chips)
         {
-            while(playerChips_Num != chips)
+            while(playerChips_Num > chips)
             {
                 playerChips_Num -= GameManager.gameTable.sbChip;
                 playerChips.text = GetChipString(playerChips_Num);
                 yield return new WaitForSeconds(WAIT_SEC);
             }
         }
+        playerChips.text = GetChipString(chips);
     }
 
     private IEnumerator UpdatePotChipsRoutine(int chips)
     {
         if(pot_Num < chips)
         {
-            while(pot_Num != chips)
+            while(pot_Num < chips)
             {
                 pot_Num += GameManager.gameTable.sbChip;
                 pot.text = GetChipString(pot_Num);
@@ -452,12 +458,13 @@ public class ScreenCanvas : MonoBehaviour
         }
         else if(pot_Num > chips)
         {
-            while(pot_Num != chips)
+            while(pot_Num > chips)
             {
                 pot_Num -= GameManager.gameTable.sbChip;
                 pot.text = GetChipString(pot_Num);
                 yield return new WaitForSeconds(WAIT_SEC);
             }
         }
+        pot.text = GetChipString(chips);
     }
 }

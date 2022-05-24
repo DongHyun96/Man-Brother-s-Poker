@@ -183,7 +183,7 @@ public class ScriptTester : MonoBehaviour
         // SceneVisibilityManager.instance.Show()
         
         /* exampleGameObj.hideFlags = HideFlags.None; */
-
+        print(GetChipString(2425));
 
         LazyAction.GetWkr().Act(() => 
         {
@@ -192,6 +192,18 @@ public class ScriptTester : MonoBehaviour
         , 2.0f);
         
         StartCoroutine(ExampleCoroutine());
+
+        int i = 0;
+        do
+        {
+            print(i);
+            i++;
+            if(i == 10)
+            {
+                break;
+            }
+        }
+        while(i != 0);
     }
 
     private void Update() {
@@ -220,6 +232,11 @@ public class ScriptTester : MonoBehaviour
         Card card = deck[0];
         deck.RemoveAt(0);
         return card;
+    }
+
+    private string GetChipString(int chips)
+    {
+        return (chips < 1000) ? chips.ToString() : (Math.Round(chips / 1000f, 2)).ToString() + "k";
     }
 
     private void GiveCardToRiver(List<Player> players)

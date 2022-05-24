@@ -229,12 +229,15 @@ public class GameTable
         
         // Draw cards to player
         DrawCard(); // Remove first cards
+        // Give card to small blind first
         for(int i = 0; i < 2; i++)
         {
-            foreach(Player p in players)
+            int temp = SB_Pos;
+            do
             {
-                p.cards.Add(DrawCard());
-            }
+                players[temp].cards.Add(DrawCard());
+                temp = GetNext(temp);
+            } while(temp != SB_Pos);
         }
     }
 
@@ -633,11 +636,9 @@ public class GameTable
             Debug.Log("potWinner not initialized while stage is POT_FIN");
             throw new ArgumentNullException();
         }
-
-        while(potWinnerManager.potWinnerStack.Count != 0)
+        
+        foreach(KeyValuePair<int, List<Player>> potPair in potWinnerManager.potWinnerStack)
         {
-            KeyValuePair<int ,List<Player>> potPair = potWinnerManager.potWinnerStack.Pop();
-
             foreach(Player p in potPair.Value)
             {
                 GetPlayerByName(p.name).totalChips += potPair.Key / potPair.Value.Count;

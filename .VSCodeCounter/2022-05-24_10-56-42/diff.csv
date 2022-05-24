@@ -1,0 +1,15 @@
+"filename", "language", "C#", "comment", "blank", "total"
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\AnimStateMachine.cs", "C#", 16, 1, 4, 21
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\AnimTurningPointHandler.cs", "C#", 36, 2, 6, 44
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\CharacterObject\GameCharacter.cs", "C#", 35, 2, 6, 43
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\GameSceneUpdater.cs", "C#", -245, -65, -75, -385
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\Manager\GameSceneUpdater.cs", "C#", 296, 96, 79, 471
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\Manager\WorldAnimHandler.cs", "C#", 110, 9, 19, 138
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\TableObjects\ChipObjectUpdater.cs", "C#", 14, 0, 4, 18
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\TableObjects\TableCardHandler.cs", "C#", 6, 5, 1, 12
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\TableObjects\TableChipHandler.cs", "C#", 4, -2, -9, -7
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ScreenCanvas.cs", "C#", -28, -1, -5, -34
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameTable.cs", "C#", 18, 1, 1, 20
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Test\ScriptTester.cs", "C#", 20, 0, 4, 24
+"c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\GameMsgHandler.cs", "C#", 1, 0, 0, 1
+"Total", "-", 283, 48, 35, 366
