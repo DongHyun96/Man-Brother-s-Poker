@@ -60,7 +60,8 @@ public class GameSceneUpdater : MonoBehaviour
         /* Check if the show down is over */
         if(IsShowDownOver())
         {
-            StartCoroutine(PrepareNextPotRoutine());
+            Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
+            StartCoroutine(PrepareNextPotRoutine(PWS));
         }
     }
 
@@ -106,6 +107,14 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         // Init screenCanvas
+        
+        print("Before initing sceenCanvas cards: ");
+        Player p = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
+        foreach(Card c in p.cards)
+        {
+            print(c.ToString());
+        }
+
         screenCanvas.InitCanvas();
         screenCanvas.stage = GameTable.Stage.PREFLOP;
 
@@ -168,7 +177,7 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Wait for couple of sec here */
         yield return new WaitForSeconds(1.5f);
-
+        print("Before checking stage is finished on UpdateGameSceneRoutine");
         /* check if the stage is finished */
         switch(table.stage)
         {
@@ -337,7 +346,8 @@ public class GameSceneUpdater : MonoBehaviour
         /* If all cards are shown, Go to next pot game */
         if(IsShowDownOver())
         {
-            yield return StartCoroutine(PrepareNextPotRoutine());
+            Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
+            yield return StartCoroutine(PrepareNextPotRoutine(PWS));
             yield break;
         }
         
@@ -362,11 +372,12 @@ public class GameSceneUpdater : MonoBehaviour
             canvas.playerState = Player.State.IDLE;
         }
 
-        /* (Collecting chips to pot etc.) */
+        /* (Collecting chips to pot) */
+        yield return StartCoroutine(worldAnimHandler.RoundFinRoutine(GameManager.gameTable.players, GameManager.gameTable.pot));
         yield return new WaitForSeconds(2.0f);
 
         /* Cam works and showing winner routine */
-        screenCanvas.stage = GameTable.Stage.UNCONTESTED;
+        screenCanvas.stage = GameTable.Stage.UNCONTESTED; // PayEachPotWinners on GameTable in here
         yield return new WaitForSeconds(5.0f);
 
         /* Set cam to original position */
@@ -380,19 +391,31 @@ public class GameSceneUpdater : MonoBehaviour
         /* Update player tab */
         UpdateTabs();
 
-        /* Prepare Next stage */
-        print("Prepare next pot");
-        
-        GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
-        StartGame();
+        /* Prepare Next pot */
+
+        /* Making PotWinnerStack */
+        Stack<KeyValuePair<int, List<Player>>> PWS = new Stack<KeyValuePair<int, List<Player>>>();
+        List<Player> uncontestedPlayer = new List<Player>();
+        foreach(Player p in GameManager.gameTable.players)
+        {
+            if(p.state != Player.State.FOLD)
+            {
+                uncontestedPlayer.Add(p);
+                break;
+            }
+        }
+        KeyValuePair<int, List<Player>> kvPair = new KeyValuePair<int, List<Player>>(GameManager.gameTable.pot, uncontestedPlayer);
+        PWS.Push(kvPair);
+
+        yield return StartCoroutine(PrepareNextPotRoutine(PWS));
     }
 
-    private IEnumerator PrepareNextPotRoutine()
+    private IEnumerator PrepareNextPotRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
     {
         yield return new WaitForSeconds(3.5f);
-        Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
+
         /* Play table preparation animations */
-        yield return StartCoroutine(worldAnimHandler.PrepareNextRoundRoutine(PWS));
+        yield return StartCoroutine(worldAnimHandler.PrepareNextPotRoutine(potWinnerStack));
         
         /* Go to next pot */
         GameManager.gameTable.stage = GameTable.Stage.PREFLOP;

@@ -164,6 +164,7 @@ public class GameMsgHandler : MonoBehaviour
     private IEnumerator DelayRegisterRoutine()
     {
         yield return new WaitForSeconds(2.0f);
+        
         GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.REGISTER,
          GameManager.thisPlayer.name, GameManager.gameTable);
         SendMessage(msg);

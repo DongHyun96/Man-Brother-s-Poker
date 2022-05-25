@@ -57,12 +57,6 @@ public class TableCardHandler : MonoBehaviour
     /* Do this by animation events */
     public void GatherCardsToDeck()
     {
-        foreach(GameObject obj in playerFirstCards)
-        {
-            Animator anim = obj.GetComponent<Animator>();
-            anim.SetTrigger("goToDeck");
-        }
-        // foreach(GameObject obj in )
         for(int i = 0; i < playerFirstCards.Count; i++)
         {
             Animator firstCardAnim = playerFirstCards[i].GetComponent<Animator>();

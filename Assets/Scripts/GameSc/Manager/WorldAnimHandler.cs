@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* Use this object to sync each animations */
+/* Use this object to sync each animations */  
 /* start animation and then return the AnimTurningPointHandler of the end */
 public class WorldAnimHandler : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class WorldAnimHandler : MonoBehaviour
         {
             gameCharacters[i].Init(table.players[i].character);
         }
-
+        
         /* Init tableChipHandler's buyIn */
         chipHandler.InitBuyIn(table.buy);
     }
@@ -153,7 +153,7 @@ public class WorldAnimHandler : MonoBehaviour
         yield return StartCoroutine(WaitForTurningPoint(h));
     }
 
-    public IEnumerator PrepareNextRoundRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
+    public IEnumerator PrepareNextPotRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
     {
         /* Collecting cards and give winner pot chips */
         cardHandler.GatherCardsToDeck();

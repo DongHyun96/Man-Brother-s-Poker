@@ -9,14 +9,12 @@ public class AnimTurningPointHandler : MonoBehaviour
 
     public void OnAnimTurningPoint()
     {
-        print(gameObject.ToString() + " OnAnimTurningPoint");
         isTurningPointPassed = true;
     }
 
     /* Always set this start method if using turningPointHandler on animation */
     public void OnAnimStart()
     {
-        print(gameObject.ToString() + " OnAnimStart");
         isTurningPointPassed = false;
     }
 

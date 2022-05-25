@@ -112,7 +112,7 @@ public class ScreenCanvas : MonoBehaviour
         set{
             // Find corresponding player
             Player thisPlayer = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
-            print($"Value = {value}");
+            print($"Screen scene Value = {value}");
 
             switch(value)
             {
