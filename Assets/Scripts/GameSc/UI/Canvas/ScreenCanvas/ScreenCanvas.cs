@@ -274,6 +274,12 @@ public class ScreenCanvas : MonoBehaviour
             p.UpdateContents(state, callChips);
         }
 
+        /* Doesn't need to Init bettingPanel if it is ALLIN_FOLD */
+        if(state == PieButton.ActionState.ALLIN_FOLD)
+        {
+            return;
+        }
+
         // Update BettingPanel
         bettingPanel.InitContents(callChips * 2); // Set floor and ceiling bet in bettingPanel
         //bettingPanel.SetMinBet(callChips * 2); // Set minimum bet to double up, Not Fully implemented yet.
@@ -397,12 +403,24 @@ public class ScreenCanvas : MonoBehaviour
         switch(pieButtons[0].State)
         {
             case PieButton.ActionState.CHECK_BET_FOLD: // Bet
-                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.BET,
+                Player.State pState = Player.State.BET;
+                // All in case
+                if(bettingPanel.Ceil == bettingPanel.betChips)
+                {
+                    pState = Player.State.ALLIN;
+                }
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, pState,
                 bettingPanel.betChips);
                 break;
             case PieButton.ActionState.CALL_RAISE_FOLD: // Raise
             case PieButton.ActionState.CHECK_RAISE_FOLD:
-                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.RAISE,
+                Player.State s = Player.State.RAISE;
+                // All in case
+                if(bettingPanel.Ceil == bettingPanel.betChips)
+                {
+                    s = Player.State.ALLIN;
+                }
+                GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, s,
                 bettingPanel.betChips);
                 break;
         }

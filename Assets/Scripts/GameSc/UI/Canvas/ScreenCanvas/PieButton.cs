@@ -33,11 +33,6 @@ public class PieButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         this.GetComponent<Image>().alphaHitTestMinimumThreshold = THRESH_HOLD;
         
-        // Testing
-        //actions[0] = "CALL 1.5k";
-        //actions[1] = "RAISE";
-        //actions[2] = "FOLD";
-        
     }
 
     // Override

@@ -43,7 +43,14 @@ public class GameSceneUpdater : MonoBehaviour
     // Facade methods to update the canvas and anim
     public void UpdateGameScene(Player p)
     {
-        StartCoroutine(UpdateGameSceneRoutine(p));
+        try{
+            StartCoroutine(UpdateGameSceneRoutine(p));
+        }
+        catch(Exception e)
+        {
+            print("Try Catch ");
+        }
+        // StartCoroutine(UpdateGameSceneRoutine(p));
     }
 
     public void ShowDownCardsByPlayer(string name, List<bool> showDownBool)
@@ -155,6 +162,7 @@ public class GameSceneUpdater : MonoBehaviour
         targetCanvas.playerState = p.state;
         UpdateTabs();
 
+        /* Update totalChips and pot chips or enable fold image */
         screenCanvas.state = p.state;
 
         /* Animate target player's animations */
@@ -177,7 +185,7 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Wait for couple of sec here */
         yield return new WaitForSeconds(1.5f);
-        print("Before checking stage is finished on UpdateGameSceneRoutine");
+
         /* check if the stage is finished */
         switch(table.stage)
         {
@@ -224,7 +232,8 @@ public class GameSceneUpdater : MonoBehaviour
                             break;
                         }
                     }
-                    PieButton.ActionState a = table.GetCurrentPlayer().totalChips <= table.roundBetMax ?
+                    int currentPTotal = table.GetCurrentPlayer().totalChips + table.GetCurrentPlayer().roundBet;
+                    PieButton.ActionState a = currentPTotal <= table.roundBetMax ?
                     PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
                     screenCanvas.EnableTurn(a, table.roundBetMax);
 
@@ -430,33 +439,6 @@ public class GameSceneUpdater : MonoBehaviour
         }
     }
 
-
-/*     private IEnumerator AnimateActionRoutine(Player player, int idx)
-    {
-        switch(player.state)
-        {
-            case Player.State.SMALL:
-            case Player.State.BIG:
-            case Player.State.BET:
-            case Player.State.CALL:
-            case Player.State.RAISE:
-            case Player.State.ALLIN:
-                // Animate character
-                characters[idx].AnimateCharacter(GameCharacter.AnimType.BET);
-                
-                yield return StartCoroutine(
-                    WaitForTurningPoint(characters[idx].characterObject.GetComponent<AnimTurningPointHandler>())
-                    );
-                
-                // Animate chips
-                tableChipHandler.UpdateChips(TableChipHandler.ContentType.PLAYER, idx, player.totalChips);
-                tableChipHandler.MoveChips(TableChipHandler.AnimType.BET, idx, player.roundBet, player.roundBet);
-
-            case Player.State.CHECK:
-            case Player.State.FOLD:
-
-        }
-    } */
     /****************************************************************************************************************
     *                                                Extra methods
     ****************************************************************************************************************/

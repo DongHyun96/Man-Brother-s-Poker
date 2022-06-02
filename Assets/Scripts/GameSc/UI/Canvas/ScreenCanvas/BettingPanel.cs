@@ -6,10 +6,12 @@ using System;
 
 public class BettingPanel : MonoBehaviour
 {
+    // Used for slider's left side text
     [SerializeField]
     private Text minBet;
-    private int min; // 0
+    private int min = 0; // 0
 
+    // Used for slider's right side text
     [SerializeField]
     private Text maxBet;
     private int max; // 100
@@ -17,14 +19,19 @@ public class BettingPanel : MonoBehaviour
     [SerializeField]
     private Slider slider;
 
+    // Used for betting chip text
     [SerializeField]
     private Text betting;
     public int betChips;
     
-
-    // These for slider area restriction (e.g.1K room => 0, 1000)
+    // These for slider area restriction, these are actual chip values (e.g.1K room => 0, 1000)
     private int floor; // 0
     private int ceil; // 1000
+
+    public int Ceil
+    {
+        get => ceil;
+    }
 
     public void InitContents(int minChips)
     {
@@ -36,6 +43,9 @@ public class BettingPanel : MonoBehaviour
         // Setting floor and ceil
         floor = minChips;
         ceil = thisP.totalChips + thisP.roundBet;
+
+        // When floor exceeds ceiling
+        floor = (floor > ceil) ? ceil : floor;
 
         int tempMin = 0;
         while(tempMin * 2 <= floor)
@@ -53,7 +63,8 @@ public class BettingPanel : MonoBehaviour
                 tempMin *= 2;
             }
         }
-        SetMin(0);
+
+        minBet.text = "0";
 
         int tempMax = tempMin == 0 ? GameManager.gameTable.sbChip * 20 : tempMin * 2;
         SetMax(tempMax);
@@ -72,9 +83,10 @@ public class BettingPanel : MonoBehaviour
 
         SetMax(max / 2);
 
-        // Update current betting
+        // Update current betting and slider pos
         if(betChips > max)
         {
+            // When previous betting amount exceeds current range -> Set to maximum amount of current range
             SetBet(max);
             slider.value = GetSliderValueFromChips(max);
         }
@@ -94,30 +106,25 @@ public class BettingPanel : MonoBehaviour
         }
         SetMax(max * 2);
 
-        // Update current slider pos
-        slider.value = GetSliderValueFromChips(betChips);
-        
+        // Update current betting and slider pos
+        int sliderValue = (int)Mathf.Ceil(GetSliderValueFromChips(betChips));
+        slider.value = sliderValue;
+        SetBet(GetChipsFromSliderValue(sliderValue));
     }
 
     /* Update betChips and bettingText here */
     public void OnSliderValueChange()
     {
         // Restriction
-        float sliderMin = GetSliderValueFromChips(floor);
-        float sliderMax = GetSliderValueFromChips(ceil);
+        float sliderMin = Mathf.Ceil(GetSliderValueFromChips(floor));
+        float sliderMax = Mathf.Ceil(GetSliderValueFromChips(ceil));
 
         slider.value = slider.value < sliderMin ? sliderMin : slider.value;
         slider.value = slider.value > sliderMax ? sliderMax : slider.value;
 
         int bet = GetChipsFromSliderValue(slider.value);
-
+        
         SetBet(bet);
-    }
-
-    private void SetMin(int chips)
-    {
-        min = chips;
-        minBet.text = GetChipString(min);
     }
 
     private void SetMax(int chips)
@@ -133,6 +140,14 @@ public class BettingPanel : MonoBehaviour
     private void SetBet(int chips)
     {
         betChips = chips;
+
+        // All in case
+        if(betChips >= ceil)
+        {
+            betChips = ceil;
+            betting.text = "All";
+            return;
+        }
         betting.text = GetChipString(betChips);
     }
 
@@ -152,22 +167,6 @@ public class BettingPanel : MonoBehaviour
         
         int minMax = GameManager.gameTable.sbChip * 20; // Minimum slider max value 
 
-        /* if(max <= minMax * 2)
-        {
-            slider.maxValue = sliderMaxDefault; 
-        }
-        else if(max == minMax * 4)
-        {
-            slider.maxValue = sliderMaxDefault / 2;
-        }
-        else if(max == minMax * 8)
-        {
-            slider.maxValue = sliderMaxDefault / 4;
-        }
-        else
-        {
-            slider.maxValue = 32;
-        } */
         if(max < minMax * 2)
         {
             slider.maxValue = 20; 
@@ -187,15 +186,4 @@ public class BettingPanel : MonoBehaviour
     {
         return (chips < 1000) ? chips.ToString() : (Math.Round(chips / 1000f, 2)).ToString() + "k";
     }
-
-    private void Start() {
-        /* Just for testing */
-      /*   GameManager.thisPlayer = new Player("Dongman");
-        List<Player> players = new List<Player>();
-        players.Add(GameManager.thisPlayer);
-        GameManager.gameTable = new GameTable(Guid.NewGuid(), players, Room.Mode.CHICKEN, Room.BuyIn.HUNDRED);
-        GameManager.thisPlayer.totalChips = 100000;
-        InitContents(0); */
-    }
-    
 }

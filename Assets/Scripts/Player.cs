@@ -112,7 +112,7 @@ public class Player
     public void AllIn()
     {
         state = State.ALLIN;
-        roundBet = totalChips;
+        roundBet += totalChips;
         totalBet += totalChips;
         totalChips = 0;
     }

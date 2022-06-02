@@ -454,6 +454,13 @@ public class GameTable
                 pot += player.totalChips - player.roundBet;
                 player.AllIn();
                 
+                // Update gameTable status if it is first bet
+                // Check All in status when the round finished
+                if(tableStatus != TableStatus.BET)
+                {
+                    tableStatus = TableStatus.BET;
+                }
+
                 roundBetMax = (roundBetMax < player.roundBet) ? player.roundBet : roundBetMax;
 
                 break;
@@ -471,6 +478,8 @@ public class GameTable
         // check if the table round is over
         if(IsRoundOver())
         {
+            Debug.Log("Round over from GameTable");
+            
             // Check if it is uncontested
             if(IsUncontested())
             {
@@ -538,29 +547,26 @@ public class GameTable
                         return false;
                     }
                 }
-                return true; // When everyone checked except fold
+                return true; // When everyone checked except fold and all in
             case TableStatus.BET:
 
-                // PREFLOP case exception (After small blind action)
+                // PREFLOP case exception (After small blind action, big blind has one exception chance to make decision)
                 if(stage == Stage.PREFLOP && roundBetMax == sbChip * 2 && iterPos == SB_Pos)
                 {
                     return false;
                 }
 
-                int bet = -1;
-                
+                // Normal case
                 foreach(Player p in players)
                 {
-                    if(p.state != Player.State.FOLD && p.state != Player.State.ALLIN)
+                    if(p.state == Player.State.FOLD || p.state == Player.State.ALLIN)
                     {
-                        if(bet == -1)
-                        {
-                            bet = p.roundBet;
-                        }
-                        else if(p.roundBet != bet)
-                        {
-                            return false;
-                        }
+                        continue;
+                    }
+
+                    if(p.roundBet != roundBetMax)
+                    {
+                        return false;
                     }
                 }
                 return true; // When every player's bet is same except fold and allIn(side pot)
