@@ -79,6 +79,8 @@ public class PlayerCanvas : MonoBehaviour
                 case Player.State.BIG:
                     // Init contents
                     UpdateTab(player);
+                    UpdateCard(player.cards);
+                    
                     UpdateActionPanel(value, player.roundBet); // sbChip all in 고려
                     CloseCards();
                     

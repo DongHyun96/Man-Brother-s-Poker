@@ -48,7 +48,7 @@ public class GameSceneUpdater : MonoBehaviour
         }
         catch(Exception e)
         {
-            print("Try Catch ");
+            print("Try Catch");
         }
         // StartCoroutine(UpdateGameSceneRoutine(p));
     }
@@ -57,10 +57,10 @@ public class GameSceneUpdater : MonoBehaviour
     {
         PlayerCanvas canvas = GetPlayerCanvasFromName(name);
 
-        /* Show down cards */
+        /* Show down cards (playerCanvas) */
         canvas.OpenCards(showDownBool[0], showDownBool[1]);
 
-        /* Some animation needed */
+        /* Show down cards (Table Animation) */
         int pIdx = GameManager.gameTable.GetIterPosByName(name);
         StartCoroutine(worldAnimHandler.AnimateShowDown(pIdx, showDownBool));
         
@@ -249,7 +249,7 @@ public class GameSceneUpdater : MonoBehaviour
     }
 
 
-    public IEnumerator RoundFinRoutine()
+    private IEnumerator RoundFinRoutine()
     {
         yield return new WaitForSeconds(2.0f);
 
@@ -269,7 +269,7 @@ public class GameSceneUpdater : MonoBehaviour
         // Update all canvas
 
         /* Set up ScreenCanvas */
-        screenCanvas.state = Player.State.IDLE;
+        screenCanvas.state = Player.State.IDLE; 
 
         /* Update community cards in gameTable*/
         screenCanvas.stage = GameManager.gameTable.stage;
@@ -298,6 +298,21 @@ public class GameSceneUpdater : MonoBehaviour
                 break;
         }
         yield return new WaitForSeconds(1f);
+
+        /* All in status Routine */
+        if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN)
+        {
+            // Reach base case
+            if(GameManager.gameTable.stage == GameTable.Stage.POT_FIN)
+            {
+                yield return StartCoroutine(PotFinRoutine());
+                yield break;
+            }
+
+            // Recursive RoundFinRoutine here
+            yield return StartCoroutine(RoundFinRoutine());
+
+        }
         
         /* Enable turn */
         GetPlayerCanvasFromName(GameManager.gameTable.GetCurrentPlayer().name).EnableTurn();
@@ -307,7 +322,8 @@ public class GameSceneUpdater : MonoBehaviour
         }
     }
 
-    public IEnumerator PotFinRoutine()
+
+    private IEnumerator PotFinRoutine()
     {
         yield return new WaitForSeconds(2.0f);
         
@@ -371,7 +387,7 @@ public class GameSceneUpdater : MonoBehaviour
         
     }
 
-    public IEnumerator UncontestedRoutine()
+    private IEnumerator UncontestedRoutine()
     {
         yield return new WaitForSeconds(2.0f);
 

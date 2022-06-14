@@ -60,31 +60,122 @@ public class GameTable
             switch(value)
             {
                 case Stage.PREFLOP:
-                    Init_Preflop();
+                    Debug.Log("Entering preflop");
+        
+                    // Init players
+                    foreach(Player p in players)
+                    {
+                        p.state = Player.State.IDLE;
+                        p.roundBet = 0;
+                        p.totalBet = 0;
+
+                        p.cards.Clear();
+                    }
+
+                    // init new SB_Pos and iterPos(UTG) / Have to consider player's broken or not
+                    SB_Pos = GetNext(SB_Pos);
+                    iterPos = GetNext(GetNext(SB_Pos));
+
+                    // Init table fields
+                    tableStatus = TableStatus.IDLE;
+                    communityCards.Clear();
+                    pot = 0;
+
+                    // Small, big betting
+                    Player small = players[SB_Pos];
+                    Player big = players[GetNext(SB_Pos)];
+
+                    small.Bet(sbChip);
+                    tableStatus = TableStatus.BET;
+                    pot += small.roundBet;
+
+                    pot += (big.totalChips <= sbChip * 2) ? big.totalChips - big.roundBet : sbChip * 2 - big.roundBet;
+                    big.Raise(sbChip * 2);
+                    roundBetMax = big.roundBet;
+
+                    // Draw cards to player
+                    DrawCard(); // Remove first cards
+                    // Give card to small blind first
+                    for(int i = 0; i < 2; i++)
+                    {
+                        int temp = SB_Pos;
+                        do
+                        {
+                            players[temp].cards.Add(DrawCard());
+                            temp = GetNext(temp);
+                        } while(temp != SB_Pos);
+                    }
                     break;
                 case Stage.FLOP:
-                    Init_Flop();
+                    Debug.Log("Entering Flop");
+                    FlopTurnRiverRoutine();
+
+                    /* Draw Cards */
+                    DrawCard(); // Remove first card
+
+                    for(int i = 0; i < 3; i++)
+                    {
+                        communityCards.Add(DrawCard());
+                    }
+
                     break;
                 case Stage.TURN:
-                    Init_Turn();
+                    Debug.Log("Entering Turn");
+                    FlopTurnRiverRoutine();
+
+                    /* Draw Card */
+                    DrawCard();
+                    communityCards.Add(DrawCard()); 
                     break;
                 case Stage.RIVER:
-                    Init_River();
+                    Debug.Log("Entering River");
+                    FlopTurnRiverRoutine();
+
+                    /* Draw Card */
+                    DrawCard();
+                    communityCards.Add(DrawCard());
                     break;
                 case Stage.UNCONTESTED:
-                    /* Init_Uncontested(); */
                     break;
                 case Stage.ROUND_FIN:
                     break;
                 case Stage.POT_FIN:
-                    Init_PotFin();
+                    /* Get Players' best hand */
+                    foreach(Player p in players)
+                    {
+                        p.bestHand = new BestHand(p.cards, communityCards);
+                    }
+                    /* Calculate PotWinner */
+                    potWinnerManager = new PotWinnerManager(players);
+
+                    /* potWinnerManager.PayEachPotWinners(); */
                     break;
                 case Stage.GAME_FIN:
-                    Init_GameFin();
+                    throw new NotImplementedException();
                     break;
             }
             m_stage = value;
         }
+    }
+    private void FlopTurnRiverRoutine()
+    {
+        /* Init players */
+        foreach(Player p in players)
+        {
+            if(p.state != Player.State.ALLIN && p.state != Player.State.FOLD)
+            {
+                p.state = Player.State.IDLE;
+            }
+            p.roundBet = 0;
+        }
+
+        /* Init table fields if it is not ALLIN Status*/
+        tableStatus = (tableStatus == TableStatus.ALLIN) ? tableStatus : TableStatus.IDLE;
+
+        /* Set iterPos */
+        iterPos = (players[SB_Pos].state != Player.State.FOLD && players[SB_Pos].state != Player.State.ALLIN)
+         ? SB_Pos : GetNext(SB_Pos);
+        roundBetMax = 0;
     }
     
     [JsonIgnore]
@@ -96,7 +187,7 @@ public class GameTable
             if(value == TableStatus.ALLIN)
             {
                 /* Get ShowDown order */
-
+                
                 /* Draw cards to community card till the end */
 
                 /* 정산 */
@@ -192,142 +283,6 @@ public class GameTable
         }
     }
 
-    private void Init_Preflop()
-    {
-        Debug.Log("Entering preflop");
-        
-        // Init players
-        foreach(Player p in players)
-        {
-            p.state = Player.State.IDLE;
-            p.roundBet = 0;
-            p.totalBet = 0;
-
-            p.cards.Clear();
-        }
-
-        // init new SB_Pos and iterPos(UTG) / Have to consider player's broken or not
-        SB_Pos = GetNext(SB_Pos);
-        iterPos = GetNext(GetNext(SB_Pos));
-
-        // Init table fields
-        tableStatus = TableStatus.IDLE;
-        communityCards.Clear();
-        pot = 0;
-
-        // Small, big betting
-        Player small = players[SB_Pos];
-        Player big = players[GetNext(SB_Pos)];
-
-        small.Bet(sbChip);
-        tableStatus = TableStatus.BET;
-        pot += small.roundBet;
-
-        pot += (big.totalChips <= sbChip * 2) ? big.totalChips - big.roundBet : sbChip * 2 - big.roundBet;
-        big.Raise(sbChip * 2);
-        roundBetMax = big.roundBet;
-        
-        // Draw cards to player
-        DrawCard(); // Remove first cards
-        // Give card to small blind first
-        for(int i = 0; i < 2; i++)
-        {
-            int temp = SB_Pos;
-            do
-            {
-                players[temp].cards.Add(DrawCard());
-                temp = GetNext(temp);
-            } while(temp != SB_Pos);
-        }
-    }
-
-    private void Init_Flop()
-    {
-        Debug.Log("Entering Flop");
-
-        FlopTurnRiverRoutine();
-
-        /* Draw Cards */
-        DrawCard(); // Remove first card
-        for(int i = 0; i < 3; i++)
-        {
-            communityCards.Add(DrawCard());
-        }
-        
-    }
-
-    private void Init_Turn()
-    {
-        Debug.Log("Entering Turn");
-        FlopTurnRiverRoutine();
-
-        /* Draw Card */
-        DrawCard();
-        communityCards.Add(DrawCard()); 
-    }
-
-    private void Init_River()
-    {
-        Debug.Log("Entering River");
-        FlopTurnRiverRoutine();
-
-        /* Draw Card */
-        DrawCard();
-        communityCards.Add(DrawCard());
-    }
-
-    private void FlopTurnRiverRoutine()
-    {
-        /* Init players */
-        foreach(Player p in players)
-        {
-            if(p.state != Player.State.ALLIN && p.state != Player.State.FOLD)
-            {
-                p.state = Player.State.IDLE;
-            }
-            p.roundBet = 0;
-        }
-
-        /* Init table fields */
-        tableStatus = TableStatus.IDLE;
-
-        /* Set iterPos */
-        iterPos = (players[SB_Pos].state != Player.State.FOLD && players[SB_Pos].state != Player.State.ALLIN)
-         ? SB_Pos : GetNext(SB_Pos);
-        roundBetMax = 0;
-    }
-
-    private void Init_Uncontested()
-    {
-        // One pot winner
-        /* foreach(Player p in players)
-        {
-            if(p.state != Player.State.FOLD)
-            {
-                p.totalChips += pot;
-                return;
-            }
-        } */
-    }
-
-    private void Init_PotFin()
-    {
-        /* Get Players' best hand */
-        foreach(Player p in players)
-        {
-            p.bestHand = new BestHand(p.cards, communityCards);
-        }
-
-        /* Calculate PotWinner */
-        potWinnerManager = new PotWinnerManager(players);
-        
-
-        /* potWinnerManager.PayEachPotWinners(); */
-    }
-    private void Init_GameFin()
-    {
-        throw new NotImplementedException();
-    }
     /****************************************************************************************************************
     *                                                Iterator methods
     ****************************************************************************************************************/
@@ -490,7 +445,6 @@ public class GameTable
             // Check if the pot is over
             if(IsPotOver())
             {
-                Debug.Log("POT FIN ENTERED!");
                 stage = Stage.POT_FIN;
                 return;
             }
@@ -506,7 +460,9 @@ public class GameTable
 
             if(players.Count - foldCnt - allInCnt <= 1)
             {
+                // Change tableStatus to ALLIN and change stage to roundFin
                 tableStatus = TableStatus.ALLIN;
+                stage = Stage.ROUND_FIN;
                 return;
             }
             else 
@@ -542,7 +498,7 @@ public class GameTable
                 
                 foreach(Player p in players)
                 {
-                    if(p.state != Player.State.FOLD && p.state != Player.State.CHECK)
+                    if(p.state != Player.State.FOLD && p.state != Player.State.ALLIN && p.state != Player.State.CHECK)
                     {
                         return false;
                     }
