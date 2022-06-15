@@ -271,8 +271,35 @@ public class GameSceneUpdater : MonoBehaviour
         /* Set up ScreenCanvas */
         screenCanvas.state = Player.State.IDLE; 
 
-        /* Update community cards in gameTable*/
+        /* Update community cards in gameTable */
         screenCanvas.stage = GameManager.gameTable.stage;
+
+        /* All in status player cards showdown */
+        if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN)
+        {
+            // Card showDown if it isn't shown
+            List<Player> players = GameManager.gameTable.players;
+            for(int i = 0; i < players.Count; i++)
+            {  
+                if(players[i].state != Player.State.FOLD)
+                {
+                    PlayerCanvas pCanvas = GetPlayerCanvasFromName(players[i].name);
+
+                    // If it is already shown
+                    if(pCanvas.card1.gameObject.activeSelf)
+                    {
+                        break;
+                    }
+
+                    List<bool> showDownBool = new List<bool>();
+                    showDownBool.Add(true);
+                    showDownBool.Add(true);
+                    yield return StartCoroutine(worldAnimHandler.AnimateShowDown(i, showDownBool));
+                    
+                    pCanvas.OpenCards(true, true);
+                }
+            }
+        }
 
         /* Animate table cards */
         yield return StartCoroutine(
@@ -299,7 +326,7 @@ public class GameSceneUpdater : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
 
-        /* All in status Routine */
+        /* All in status recursion */
         if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN)
         {
             // Reach base case
@@ -311,7 +338,6 @@ public class GameSceneUpdater : MonoBehaviour
 
             // Recursive RoundFinRoutine here
             yield return StartCoroutine(RoundFinRoutine());
-
         }
         
         /* Enable turn */
@@ -337,22 +363,27 @@ public class GameSceneUpdater : MonoBehaviour
         //screenCanvas.state = Player.State.IDLE;
 
         /* Round fin table anim (Collecting chips to pot) */
-        yield return StartCoroutine(worldAnimHandler.RoundFinRoutine(GameManager.gameTable.players, GameManager.gameTable.pot));
-        yield return new WaitForSeconds(0.5f);
-
-        /* ShowDown / Animation needed */
-        foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
+        /* If table Status is equal to ALLIN, then RoundFinRoutine already took place + ShowDown doesn't needed */
+        if(GameManager.gameTable.tableStatus != GameTable.TableStatus.ALLIN)
         {
-            int pIdx = GameManager.gameTable.GetIterPosByName(p.name);
-            List<bool> showDownBool = new List<bool>();
-            showDownBool.Add(true);
-            showDownBool.Add(true);
-            yield return StartCoroutine(worldAnimHandler.AnimateShowDown(pIdx, showDownBool));
-            PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
-            pCanvas.OpenCards(true, true);
+            yield return StartCoroutine(worldAnimHandler.RoundFinRoutine(GameManager.gameTable.players, GameManager.gameTable.pot));
+        
+            yield return new WaitForSeconds(0.5f);
+
+            /* ShowDown / Animation needed */
+            foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
+            {
+                int pIdx = GameManager.gameTable.GetIterPosByName(p.name);
+                List<bool> showDownBool = new List<bool>();
+                showDownBool.Add(true);
+                showDownBool.Add(true);
+                yield return StartCoroutine(worldAnimHandler.AnimateShowDown(pIdx, showDownBool));
+                PlayerCanvas pCanvas = GetPlayerCanvasFromName(p.name);
+                pCanvas.OpenCards(true, true);
+            }
         }
         yield return new WaitForSeconds(1.5f);
-        
+    
         /* Cam works and Showing winner routine / Update totalChips and potchips */
         screenCanvas.stage = GameTable.Stage.POT_FIN;
         
@@ -384,7 +415,6 @@ public class GameSceneUpdater : MonoBehaviour
                 screenCanvas.chooseShowDown.SetActive(true);
             }
         }
-        
     }
 
     private IEnumerator UncontestedRoutine()

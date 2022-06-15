@@ -72,9 +72,13 @@ public class PlayerCanvas : MonoBehaviour
                     {
                         ToggleTimer();
                     }
-                    CloseCards();
-                    break;
 
+                    // If the table status is ALLIN, do not close the cards
+                    if(GameManager.gameTable.tableStatus != GameTable.TableStatus.ALLIN)
+                    {
+                        CloseCards();
+                    }
+                    break;
                 case Player.State.SMALL:
                 case Player.State.BIG:
                     // Init contents
