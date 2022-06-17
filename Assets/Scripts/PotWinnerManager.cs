@@ -8,7 +8,7 @@ public class PotWinnerManager
     /* (potMoney, pot involvedPlayers) --> BUTTOM / (MainPot, players), (sidepot1, players), ... /TOP */
     public List<KeyValuePair<int, List<Player>>> pots = new List<KeyValuePair<int, List<Player>>>();
 
-    /* Contains each Pot winners --> (LastSidePot, winners) ... (MainPot, winners) */
+    /* Contains each Pot winners --> BUTTOM / (LastSidePot, winners) ... (MainPot, winners) /TOP */
     public Stack<KeyValuePair<int, List<Player>>> potWinnerStack = new Stack<KeyValuePair<int, List<Player>>>();
 
     /* Show down order */
@@ -25,6 +25,12 @@ public class PotWinnerManager
         CalculateWinners(pots);
 
     }
+
+    public List<Player> GetMainPotWinners()
+    {
+        return potWinnerStack.Peek().Value;
+    }
+
 
     /* Set up the potMaps */
     private void CalculatePots(List<Player> players)
@@ -88,6 +94,7 @@ public class PotWinnerManager
         /* Init potWinnerStack */
         potWinnerStack.Clear();
 
+        // Start calculating main pot to the last side pot
         for(int i = pots.Count - 1; i >= 0; i--)
         {
             KeyValuePair<int, List<Player>> kvPair = pots[i];

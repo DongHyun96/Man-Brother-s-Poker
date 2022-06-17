@@ -81,6 +81,13 @@ public class WorldAnimHandler : MonoBehaviour
         yield return StartCoroutine(WaitForTurningPoint(handler));
     }
 
+    public IEnumerator AnimateWinningPot(int idx)
+    {
+        /* Animate Characters' winning pot */
+        gameCharacters[idx].AnimateCharacter(GameCharacter.AnimType.POTWIN);
+        yield return null;
+    }
+
     public IEnumerator RoundFinRoutine(List<Player> players, int potChips)
     {
         /* Collecting players' chip into pot */

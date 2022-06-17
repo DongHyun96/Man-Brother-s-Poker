@@ -16,6 +16,8 @@ public class GameSceneUpdater : MonoBehaviour
 
     public WorldAnimHandler worldAnimHandler;
 
+    public CamController camController;
+
     public bool isFirstGameStart = false;
 
     public static GameSceneUpdater GetInstance()
@@ -195,7 +197,16 @@ public class GameSceneUpdater : MonoBehaviour
                 StartCoroutine(RoundFinRoutine());
                 yield break;
             case GameTable.Stage.UNCONTESTED:
-                StartCoroutine(UncontestedRoutine());
+                Player winner = new Player();
+                foreach(Player player in GameManager.gameTable.players)
+                {
+                    if(player.state != Player.State.FOLD)
+                    {
+                        winner = player;
+                        break;
+                    }
+                }
+                StartCoroutine(UncontestedRoutine(winner));
                 yield break;
             case GameTable.Stage.POT_FIN:
                 StartCoroutine(PotFinRoutine());
@@ -386,10 +397,29 @@ public class GameSceneUpdater : MonoBehaviour
     
         /* Cam works and Showing winner routine / Update totalChips and potchips */
         screenCanvas.stage = GameTable.Stage.POT_FIN;
+
+        int winnerIdx = -1;
+        foreach(Player p in GameManager.gameTable.potWinnerManager.GetMainPotWinners())
+        {
+            int idx = GameManager.gameTable.GetIterPosByName(p.name);
+            winnerIdx = idx;
+            StartCoroutine(worldAnimHandler.AnimateWinningPot(idx));
+        }
         
+        // Cam works if the main pot winner is only one man 
+        if(GameManager.gameTable.potWinnerManager.GetMainPotWinners().Count == 1)
+        {
+            camController.SetCamToWinnerPos(winnerIdx);
+        }
+
         yield return new WaitForSeconds(5.0f);
         
-        /* Set cam to original position  */
+        /* Set cam to original position */
+        if(!camController.IsMovable)
+        {
+            camController.SetCamToPrev();
+        }
+
         /* Close winningPanel and Show upper buttons, Buttom left */
         screenCanvas.winnerPanel.HidePanel();
         screenCanvas.upperPanel.SetActive(true);
@@ -417,7 +447,7 @@ public class GameSceneUpdater : MonoBehaviour
         }
     }
 
-    private IEnumerator UncontestedRoutine()
+    private IEnumerator UncontestedRoutine(Player winner)
     {
         yield return new WaitForSeconds(2.0f);
 
@@ -433,9 +463,19 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Cam works and showing winner routine */
         screenCanvas.stage = GameTable.Stage.UNCONTESTED; // PayEachPotWinners on GameTable in here
+
+        // Animate winners' character
+        int idx = GameManager.gameTable.GetIterPosByName(winner.name);
+        StartCoroutine(worldAnimHandler.AnimateWinningPot(idx));
+        
+        // Cam works
+        camController.SetCamToWinnerPos(idx);
+
         yield return new WaitForSeconds(5.0f);
 
         /* Set cam to original position */
+        camController.SetCamToPrev();
+
         /* Close winning panel and Showupper buttons, button left */
         screenCanvas.winnerPanel.HidePanel();
         screenCanvas.upperPanel.SetActive(true);
@@ -451,14 +491,8 @@ public class GameSceneUpdater : MonoBehaviour
         /* Making PotWinnerStack */
         Stack<KeyValuePair<int, List<Player>>> PWS = new Stack<KeyValuePair<int, List<Player>>>();
         List<Player> uncontestedPlayer = new List<Player>();
-        foreach(Player p in GameManager.gameTable.players)
-        {
-            if(p.state != Player.State.FOLD)
-            {
-                uncontestedPlayer.Add(p);
-                break;
-            }
-        }
+        uncontestedPlayer.Add(winner);
+
         KeyValuePair<int, List<Player>> kvPair = new KeyValuePair<int, List<Player>>(GameManager.gameTable.pot, uncontestedPlayer);
         PWS.Push(kvPair);
 
