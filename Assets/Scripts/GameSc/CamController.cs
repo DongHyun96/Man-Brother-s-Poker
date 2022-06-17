@@ -24,7 +24,7 @@ public class CamController : MonoBehaviour
 
     private const int ROT_MIN = 0;
     private const float ROT_MAX = 35f;
-    private const float lerpT = 0.1f;
+    private const float lerpT = 0.07f;
 
     /* Pin camera by player's mouse input function */
     void CamMove()
@@ -66,7 +66,7 @@ public class CamController : MonoBehaviour
     // Control cam lerp when pot is finished with only one winner
     private void FixedUpdate() 
     {
-        if(!isMovable)
+        if(!isMovable && !isLerpingToPrev)
         {
             // Lerp
             Vector3 targetPos = playersTransform[playerPosIdx].position;
@@ -86,12 +86,23 @@ public class CamController : MonoBehaviour
             mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPos, lerpT);
             mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, targetRot, lerpT);
 
-            if(mainCamera.transform.position == targetPos && mainCamera.transform.rotation == targetRot)
+            // Reach target pos
+            if(Vector3.Distance(mainCamera.transform.position, targetPos) < 0.01f)
+            {
+                // Lerping is over
+                mainCamera.transform.position = targetPos;
+                mainCamera.transform.rotation = targetRot;
+                isMovable = true;
+                isLerpingToPrev = false;
+            }
+
+            /* if(mainCamera.transform.position == targetPos && mainCamera.transform.rotation == targetRot)
             {
                 // Lerping is over
                 isMovable = true;
                 isLerpingToPrev = false;
-            }
+            } */
         }
+        
     }
 }
