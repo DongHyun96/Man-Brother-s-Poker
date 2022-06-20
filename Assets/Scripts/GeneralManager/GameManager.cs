@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     // This player's game table
     public static GameTable gameTable;
 
-    /// Cinemachine cam & lobbyPos, RoomPos
+    /// Cinemachine cam , lobbyPos, RoomPos
     public CinemachineVirtualCamera currentCam;
     public LobbyCamPos lobbyPos;
     public RoomCamPos roomPos;

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ShowDownPanel : MonoBehaviour
 {
+    [SerializeField] private Timer timer;
     [SerializeField] private Image UpperLeft;
     [SerializeField] private Image UpperRight;
     [SerializeField] private Image left;
@@ -21,6 +22,11 @@ public class ShowDownPanel : MonoBehaviour
 
         // Init right
         right.sprite = CardSprite.GetInstance().GetSprite(cards[1]);
+    }
+
+    private void OnEnable() 
+    {
+        timer.IsTimerActive = true;
     }
 
     public void OnUpper()

@@ -332,7 +332,7 @@ public class ScreenCanvas : MonoBehaviour
 
     /* Action routine : Update gameTable -> Send it to server ->
      Receive updated gameTable from server -> Update gameTable and UI */
-    public void OnpieLeft() // CHECK, CALL, ALLIN
+    public void OnPieLeft() // CHECK, CALL, ALLIN
     {
         switch(pieButtons[0].State)
         {
@@ -380,6 +380,29 @@ public class ScreenCanvas : MonoBehaviour
         GameMsgHandler.TossTable();
 
         TogglePieButtonAnim();
+    }
+
+    public void OnTimerTimeOut()
+    {
+        // If the action is already taken
+        Player current = GameManager.gameTable.GetCurrentPlayer();
+        if(!current.name.Equals(GameManager.thisPlayer.name))
+        {
+            return;
+        }
+
+        // Forces the action to be taken
+        switch(pieButtons[0].State)
+        {
+            case PieButton.ActionState.CHECK_BET_FOLD:
+            case PieButton.ActionState.CHECK_RAISE_FOLD:
+                OnPieLeft();
+                break;
+            case PieButton.ActionState.CALL_RAISE_FOLD:
+            case PieButton.ActionState.ALLIN_FOLD:
+                OnPieButtom();
+                break;
+        }
     }
 
     

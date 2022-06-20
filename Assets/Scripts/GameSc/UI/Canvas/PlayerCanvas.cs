@@ -27,8 +27,7 @@ public class PlayerCanvas : MonoBehaviour
     public Image action_icon;
     public Text actionText;
     public Text chipText;
-    public GameObject timer;
-    public Image fill;
+    public Timer timer;
 
     // TabPanel animators
     public Animator tabPanelAnim;
@@ -37,7 +36,6 @@ public class PlayerCanvas : MonoBehaviour
     public Animator iconAnim;
     public Animator actionTextAnim;
     public Animator chipTextAnim;
-    public Animator timerAnim;
     
     // States enum
     private Player.State m_playerState;
@@ -68,9 +66,9 @@ public class PlayerCanvas : MonoBehaviour
                     {
                         ToggleActionIconAndChip();
                     }
-                    if(timerAnim.GetBool("isIn"))
+                    if(timer.gameObject.GetComponent<Animator>().GetBool("isIn"))
                     {
-                        ToggleTimer();
+                        ToggleTimer(false);
                     }
 
                     // If the table status is ALLIN, do not close the cards
@@ -94,17 +92,22 @@ public class PlayerCanvas : MonoBehaviour
 
                 case Player.State.CHECK:
                 case Player.State.FOLD:
+                    // Init timer
+                    timer.IsTimerActive = false;
+
                     // Init contents
                     UpdateActionPanel(value);
                     
                     // Action routine
                     StartCoroutine(ActionAnimationRoutine());
                     break;
-
                 case Player.State.BET:
                 case Player.State.CALL:
                 case Player.State.RAISE:
                 case Player.State.ALLIN:
+                    // Init timer
+                    timer.IsTimerActive = false;
+
                     UpdateTab(player);
                     UpdateActionPanel(value, player.roundBet);
 
@@ -132,6 +135,7 @@ public class PlayerCanvas : MonoBehaviour
     {
         // Enable Timer
         print($"EnableTurn from playerCanvas: {name}");
+        ToggleTimer(true);
     }
 
 
@@ -262,9 +266,10 @@ public class PlayerCanvas : MonoBehaviour
         actionTextAnim.SetBool("isIn", !actionTextAnim.GetBool("isIn"));
     }
 
-    private void ToggleTimer()
+    private void ToggleTimer(bool isActive)
     {
-        timerAnim.SetBool("isIn", !timerAnim.GetBool("isIn"));
+        //timerAnim.SetBool("isIn", isActive);
+        timer.IsTimerActive = isActive;
     }
 
     private IEnumerator ActionAnimationRoutine()
