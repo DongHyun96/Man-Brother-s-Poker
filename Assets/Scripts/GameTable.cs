@@ -70,6 +70,12 @@ public class GameTable
                         p.totalBet = 0;
 
                         p.cards.Clear();
+
+                        // Check Bankrupt
+                        if(p.totalChips <= 0)
+                        {
+                            p.state = Player.State.FOLD;
+                        }
                     }
 
                     // init new SB_Pos and iterPos(UTG) / Have to consider player's broken or not

@@ -18,6 +18,8 @@ public class GameSceneUpdater : MonoBehaviour
 
     public CamController camController;
 
+    public List<GameObject> lights;
+
     public bool isFirstGameStart = false;
 
     public static GameSceneUpdater GetInstance()
@@ -116,13 +118,7 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         // Init screenCanvas
-        
-        print("Before initing sceenCanvas cards: ");
         Player p = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
-        foreach(Card c in p.cards)
-        {
-            print(c.ToString());
-        }
 
         screenCanvas.InitCanvas();
         screenCanvas.stage = GameTable.Stage.PREFLOP;
@@ -152,12 +148,19 @@ public class GameSceneUpdater : MonoBehaviour
         if(myIdx == current_UTG)
         {
             screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
+            lights[myIdx].SetActive(true);
         }
     }
 
     private IEnumerator UpdateGameSceneRoutine(Player p)
     {
         GameTable table = GameManager.gameTable;
+
+        /* Turn off the lights */
+        foreach(GameObject light in lights)
+        {
+            light.SetActive(false);
+        }
 
         /* Update target playerCanvas */
         PlayerCanvas targetCanvas = GetPlayerCanvasFromName(p.name);
@@ -253,6 +256,9 @@ public class GameSceneUpdater : MonoBehaviour
                 case GameTable.TableStatus.ALLIN:
                     break;
             }
+            // Enable light
+            int idx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
+            lights[idx].SetActive(true);
         }
         
         /* Enable iterator turn on iterTurn player's canvas */
@@ -277,7 +283,13 @@ public class GameSceneUpdater : MonoBehaviour
         // Update GameTable to next round
         GameManager.gameTable.UpdateToNextRound();
 
-        // Update all canvas
+        // All in status recursion base case
+        if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN
+        && GameManager.gameTable.stage == GameTable.Stage.POT_FIN)
+        {
+            yield return StartCoroutine(PotFinRoutine());
+            yield break;
+        }
 
         /* Set up ScreenCanvas */
         screenCanvas.state = Player.State.IDLE; 
@@ -312,7 +324,7 @@ public class GameSceneUpdater : MonoBehaviour
             }
         }
 
-        /* Animate table cards */
+        /* Animate table cards (New community cards) */
         yield return StartCoroutine(
             worldAnimHandler.FlopTurnRiverRoutine(
                 GameManager.gameTable.stage, GameManager.gameTable.communityCards
@@ -340,15 +352,9 @@ public class GameSceneUpdater : MonoBehaviour
         /* All in status recursion */
         if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN)
         {
-            // Reach base case
-            if(GameManager.gameTable.stage == GameTable.Stage.POT_FIN)
-            {
-                yield return StartCoroutine(PotFinRoutine());
-                yield break;
-            }
-
             // Recursive RoundFinRoutine here
             yield return StartCoroutine(RoundFinRoutine());
+            yield break;
         }
         
         /* Enable turn */
@@ -356,6 +362,10 @@ public class GameSceneUpdater : MonoBehaviour
         if(GameManager.thisPlayer.name.Equals(GameManager.gameTable.GetCurrentPlayer().name))
         {
             screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD, 0);
+            
+            // light
+            int idx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
+            lights[idx].SetActive(true);
         }
     }
 

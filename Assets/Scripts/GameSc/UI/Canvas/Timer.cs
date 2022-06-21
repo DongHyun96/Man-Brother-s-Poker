@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
                 // Reset timer fill amount
                 fill.fillAmount = 0f;
             }
-           
+            
             // Set Scalar animation
             if(gameObject.GetComponent<Animator>() != null)
             {
