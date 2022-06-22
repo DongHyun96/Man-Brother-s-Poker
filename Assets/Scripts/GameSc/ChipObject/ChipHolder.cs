@@ -37,7 +37,8 @@ public class ChipHolder : MonoBehaviour
     {
         if(chips == 0)
         {
-            return new GameObject("name");
+            //return new GameObject("name");
+            return null;
         }
 
         int gap = buyIn / 10;
@@ -59,7 +60,8 @@ public class ChipHolder : MonoBehaviour
     {
         if(pot == 0)
         {
-            return new GameObject("name");
+            //return new GameObject("name");
+            return null;
         }
 
         int gap = buyIn / 5;

@@ -238,11 +238,11 @@ MonoBehaviour:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
         m_MethodName: OnTimerTimeOut
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3500,11 +3500,11 @@ MonoBehaviour:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
         m_MethodName: OnTimerTimeOut
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3942,7 +3942,7 @@ GameObject:
   m_Layer: 0
   m_Name: betting5
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -7718,7 +7718,7 @@ GameObject:
   m_Layer: 0
   m_Name: betting3
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -10771,7 +10771,7 @@ GameObject:
   m_Layer: 0
   m_Name: betting2
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -11815,7 +11815,7 @@ GameObject:
   m_Layer: 0
   m_Name: betting1
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -13586,11 +13586,11 @@ MonoBehaviour:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
         m_MethodName: OnTimerTimeOut
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -14259,11 +14259,11 @@ MonoBehaviour:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
         m_MethodName: OnTimerTimeOut
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -15906,7 +15906,7 @@ GameObject:
   m_Layer: 0
   m_Name: betting6
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -23487,21 +23487,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31ff6bb72c7ab4c4e856a7785652a09c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerChips:
-  - {fileID: 497099085}
-  - {fileID: 1134367745}
-  - {fileID: 239562222}
-  - {fileID: 625173545}
-  - {fileID: 1524715548}
-  - {fileID: 412791029}
-  bettingChips:
-  - {fileID: 657202168}
-  - {fileID: 598348158}
-  - {fileID: 413551597}
-  - {fileID: 1571504926}
-  - {fileID: 173626918}
-  - {fileID: 907394378}
-  potChips: {fileID: 2133059371}
+  playerChipsT:
+  - {fileID: 497099086}
+  - {fileID: 1134367746}
+  - {fileID: 239562223}
+  - {fileID: 625173546}
+  - {fileID: 1524715549}
+  - {fileID: 412791030}
+  bettingChipsT:
+  - {fileID: 657202169}
+  - {fileID: 598348159}
+  - {fileID: 413551598}
+  - {fileID: 1571504927}
+  - {fileID: 173626919}
+  - {fileID: 907394379}
+  potChipsT: {fileID: 2133059372}
   m_playerChips:
   - {fileID: 1245004196}
   - {fileID: 2116362806}
@@ -27270,7 +27270,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
         m_MethodName: OnTimerTimeOut
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -28041,7 +28041,7 @@ GameObject:
   m_Layer: 0
   m_Name: betting4
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -32590,11 +32590,11 @@ MonoBehaviour:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
         m_MethodName: OnTimerTimeOut
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

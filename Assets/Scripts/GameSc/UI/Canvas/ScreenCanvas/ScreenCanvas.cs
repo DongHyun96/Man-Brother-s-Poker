@@ -382,11 +382,12 @@ public class ScreenCanvas : MonoBehaviour
         TogglePieButtonAnim();
     }
 
-    public void OnTimerTimeOut()
+    public void OnTimerTimeOut(int idx)
     {
-        // If the action is already taken
+        // If it isn't player's turn
+        int pIdx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
         Player current = GameManager.gameTable.GetCurrentPlayer();
-        if(!current.name.Equals(GameManager.thisPlayer.name))
+        if(pIdx != idx && !current.name.Equals(GameManager.thisPlayer.name))
         {
             return;
         }

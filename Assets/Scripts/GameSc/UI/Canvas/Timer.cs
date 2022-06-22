@@ -20,10 +20,15 @@ public class Timer : MonoBehaviour
                 fill.fillAmount = 0f;
             }
             
+            Animator animator = gameObject.GetComponent<Animator>();
+
             // Set Scalar animation
             if(gameObject.GetComponent<Animator>() != null)
             {
-                gameObject.GetComponent<Animator>().SetBool("isIn", value);
+                if(animator.GetBool("isIn") != value)
+                {
+                    animator.SetBool("isIn", value);
+                }
             }
 
             isTimerActive = value;

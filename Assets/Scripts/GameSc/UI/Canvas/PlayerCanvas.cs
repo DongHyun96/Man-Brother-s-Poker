@@ -93,7 +93,7 @@ public class PlayerCanvas : MonoBehaviour
                 case Player.State.CHECK:
                 case Player.State.FOLD:
                     // Init timer
-                    timer.IsTimerActive = false;
+                    ToggleTimer(false);
 
                     // Init contents
                     UpdateActionPanel(value);
@@ -106,7 +106,7 @@ public class PlayerCanvas : MonoBehaviour
                 case Player.State.RAISE:
                 case Player.State.ALLIN:
                     // Init timer
-                    timer.IsTimerActive = false;
+                    ToggleTimer(false);
 
                     UpdateTab(player);
                     UpdateActionPanel(value, player.roundBet);

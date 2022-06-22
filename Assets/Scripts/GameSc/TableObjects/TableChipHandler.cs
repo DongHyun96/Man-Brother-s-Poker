@@ -10,10 +10,15 @@ Automatically update by animation finish events
 public class TableChipHandler : MonoBehaviour
 {
     /* Place Holders */
-    [SerializeField] private List<GameObject> playerChips;
-    [SerializeField] private List<GameObject> bettingChips;
-    [SerializeField] private GameObject potChips;
- 
+    [SerializeField] private List<Transform> playerChipsT;
+    [SerializeField] private List<Transform> bettingChipsT;
+    [SerializeField] private Transform potChipsT;
+
+    /* GameObject containers */
+    private GameObject[] playerChipsContainer = new GameObject[6];
+    private GameObject[] betChipsContainer = new GameObject[6];
+    private GameObject potChipsContainer;
+
     /* These are for transformation (Moving chips) */
     public List<GameObject> m_playerChips;
     public List<GameObject> m_potChips;
@@ -58,8 +63,11 @@ public class TableChipHandler : MonoBehaviour
 
         /* Set contents */
         GameObject prefab = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
-        GameObject container = Instantiate(prefab);
-        SetParent(container.transform, chipList[idx].transform);
+        if(prefab != null)
+        {
+            GameObject container = Instantiate(prefab);
+            SetParent(container.transform, chipList[idx].transform);
+        }
 
         /* If animation finished, Destroy child object and update arrival point chips by animation event */
         /* Set chip amounts before event is activated */
@@ -78,45 +86,47 @@ public class TableChipHandler : MonoBehaviour
     /* idx -> position */
     private void UpdatePlayerChips(int idx, int chips)
     {
-        if(playerChips[idx] != null)
+        if(playerChipsContainer[idx] != null)
         {
             /* Destroy previous prefab */
-            Destroy(playerChips[idx]);
+            Destroy(playerChipsContainer[idx]);
         }
 
         GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
-        playerChips[idx] = Instantiate(container, playerChips[idx].transform.position, playerChips[idx].transform.rotation);
+        if(container != null)
+        {
+            playerChipsContainer[idx] = Instantiate(container, playerChipsT[idx].position, playerChipsT[idx].rotation);
+        }
 
     }
 
     private void UpdateBettingChips(int idx, int chips)
     {
-        if(bettingChips[idx] != null)
+        if(betChipsContainer[idx] != null)
         {
-            Destroy(bettingChips[idx]);
+            Destroy(betChipsContainer[idx]);
         }
 
         GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
-        bettingChips[idx] = Instantiate(container, bettingChips[idx].transform.position, bettingChips[idx].transform.rotation);
+        if(container != null)
+        {
+            betChipsContainer[idx] = Instantiate(container, bettingChipsT[idx].position, bettingChipsT[idx].rotation);
+        }
     }
 
     private void UpdatePotChips(int chips)
     {
-        if(potChips != null)
+        if(potChipsContainer != null)
         {
-            Destroy(potChips);
+            Destroy(potChipsContainer);
         }
 
         GameObject container = ChipHolder.GetInstance().GetPotPrefab(chips, buyIn);
-        potChips = Instantiate(container, potChips.transform.position, potChips.transform.rotation);
+        if(container != null)
+        {
+            potChipsContainer = Instantiate(container, potChipsT.position, potChipsT.rotation);
+        }
     }
-
-/*     private void Start() {
-        InitBuyIn(20000);
-        // MovePlayerChipsToBetting(3, 5000);
-        //StartCoroutine(MovePlayerChipsToBetting(3, 5000));
-        StartCoroutine(example());
-    } */
 
     private void SetParent(Transform child, Transform parent)
     {
@@ -125,17 +135,6 @@ public class TableChipHandler : MonoBehaviour
         child.localRotation = Quaternion.identity;
         child.localScale = Vector3.one;
     }
-
-/*     private IEnumerator example()
-    {
-        yield return new WaitForSeconds(3.0f);
-        MoveChips(AnimType.BET, 0, 20000, 20000);
-        yield return new WaitForSeconds(3.0f);
-        MoveChips(AnimType.BET_TO_POT, 3, 150000, 400000);
-        yield return new WaitForSeconds(15f);
-        UpdateChips(ContentType.POT, 0, 0);
-        MoveChips(AnimType.POT_TO_PLAYER, 3, 400000, 600000);
-    } */
 
     private List<GameObject> GetCorrespondingChipList(AnimType t, out string trigger, out ContentType destContent)
     {
