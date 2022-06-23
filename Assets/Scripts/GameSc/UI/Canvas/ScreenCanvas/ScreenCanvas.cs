@@ -129,35 +129,16 @@ public class ScreenCanvas : MonoBehaviour
                     {
                         bettingPanelAnim.SetBool("isIn", false);
                     }
-                    /* foreach(Animator a in playerCardAnims)
-                    {
-                        if(a.GetBool("isIn"))
-                        {
-                            a.SetBool("isIn", false);
-                        }
-                    }
-                    foreach(Animator a in communityCardAnims)
-                    {
-                        if(a.GetBool("isIn"))
-                        {
-                            a.SetBool("isIn", false);
-                        }
-                    }
-                    if(winnerPanel.gameObject.activeSelf)
-                    {
-                        winnerPanel.gameObject.SetActive(false);
-                    }
-                    if(showDownPanel.gameObject.activeSelf)
-                    {
-                        showDownPanel.gameObject.SetActive(false);
-                    }
-                    foldImage.gameObject.SetActive(false); */
+
                     break;
                 case Player.State.CHECK:
                     break;
                 case Player.State.FOLD:
-                    bool temp = thisPlayer.state == Player.State.FOLD ? true : false;
-                    foldImage.gameObject.SetActive(temp);
+                    if(playerCardAnims[0].GetBool("isIn"))
+                    {
+                        bool temp = thisPlayer.state == Player.State.FOLD ? true : false;
+                        foldImage.gameObject.SetActive(temp);
+                    }
                     break;
 
                 default: // SMALL, BIG, BET, CALL, RAISE, ALLIN
@@ -189,14 +170,16 @@ public class ScreenCanvas : MonoBehaviour
             bettingPanelAnim.SetBool("isIn", false);
         }
         
-        /* Init cards */
+        /* Init player cards */
         if(playerCardAnims[0].GetCurrentAnimatorStateInfo(0).IsName("In"))
         {
             /* Reset all the cards */
             TogglePlayerCardsAnim(0, false);
             TogglePlayerCardsAnim(1, false);
+        }
 
-            for(int i = 0; i < 5; i++)
+        /* Init Community cards */
+        for(int i = 0; i < 5; i++)
             {
                 if(communityCardAnims[i].GetCurrentAnimatorStateInfo(0).IsName("In"))
                 {
@@ -207,7 +190,6 @@ public class ScreenCanvas : MonoBehaviour
                     break;
                 }
             }
-        }
 
         if(winnerPanel.gameObject.activeSelf)
         {
@@ -232,6 +214,11 @@ public class ScreenCanvas : MonoBehaviour
     ****************************************************************************************************************/
     private void UpdatePlayerCards(List<Card> cards)
     {
+        if(cards.Count < 2)
+        {
+            return;
+        }
+        
         // Update BottomLeft cards
         playerCards[0].sprite = CardSprite.GetInstance().GetSprite(cards[0]);
         playerCards[1].sprite = CardSprite.GetInstance().GetSprite(cards[1]);
@@ -297,6 +284,10 @@ public class ScreenCanvas : MonoBehaviour
 
     private void UpdateShowDownPanel(List<Card> cards)
     {
+        if(cards.Count < 2)
+        {
+            return;
+        }
         showDownPanel.InitShowDown(cards);
     }
     
@@ -387,7 +378,7 @@ public class ScreenCanvas : MonoBehaviour
         // If it isn't player's turn
         int pIdx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
         Player current = GameManager.gameTable.GetCurrentPlayer();
-        if(pIdx != idx && !current.name.Equals(GameManager.thisPlayer.name))
+        if(pIdx != idx || !current.name.Equals(GameManager.thisPlayer.name))
         {
             return;
         }

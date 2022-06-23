@@ -21,8 +21,28 @@ public class PotWinnerManager
         HandleBackStraightException(players); // Change back straight ace number to -1(Lowest)
         
         CalculatePots(players);
+
+        foreach(KeyValuePair<int, List<Player>> kvPair in pots)
+        {
+            Debug.Log("Pots: " + kvPair.Key);
+            foreach(Player p in kvPair.Value)
+            {
+                Debug.Log(p.name);
+            }
+            Debug.Log("");
+        }
         
         CalculateWinners(pots);
+        foreach(KeyValuePair<int, List<Player>> kvPair in potWinnerStack)
+        {
+            Debug.Log("Pot winner(pot size): " + kvPair.Key);
+            foreach(Player p in kvPair.Value)
+            {
+                Debug.Log(p.name);
+            }
+            Debug.Log("");
+        }
+
 
     }
 
@@ -94,7 +114,7 @@ public class PotWinnerManager
         /* Init potWinnerStack */
         potWinnerStack.Clear();
 
-        // Start calculating main pot to the last side pot
+        // Start calculating last side pot to the main pot
         for(int i = pots.Count - 1; i >= 0; i--)
         {
             KeyValuePair<int, List<Player>> kvPair = pots[i];
@@ -171,7 +191,7 @@ public class PotWinnerManager
         }
     }
 
-
+    // Min ~ Max
     private List<Player> GetSortedPlayersByTotalBet(List<Player> players)
     {
         List<Player> result = new List<Player>();

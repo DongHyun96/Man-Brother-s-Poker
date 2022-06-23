@@ -9,7 +9,6 @@ public class GameTable
 {
     public Guid id; // Same id with Room id
 
-    /* Delete bankrupt players if it is Last man standing */
     public List<Player> players = new List<Player>();
     public int registerCount;
     

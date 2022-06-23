@@ -18,4 +18,9 @@ public class SidePotPanel : MonoBehaviour
             name.text += p.name + " "; 
         }
     }
+
+    public void ClearSidePot()
+    {
+        name.text = "";
+    }
 }

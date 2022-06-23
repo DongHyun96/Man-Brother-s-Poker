@@ -55,6 +55,9 @@ public class WinnerPanel : MonoBehaviour
         {
             hands.text = "UNCONTESTED";
 
+            // Clear sidePot text
+            sidePotPanel.ClearSidePot();
+            
             foreach(Image img in playerCards)
             {
                 img.sprite = CardSprite.GetInstance().back;
@@ -183,31 +186,24 @@ public class WinnerPanel : MonoBehaviour
         }
         Stack<KeyValuePair<int, List<Player>>> winnerStack = GameManager.gameTable.potWinnerManager.potWinnerStack;
         
-        /* Sidepot Winners container */
-        List<Player> sideWinners = new List<Player>();
-
+        // Mainpot ~ LastSidePot
         KeyValuePair<int, List<Player>>[] kvPairArray = winnerStack.ToArray();
 
-        /* Investigate winners until main pot previous side pot reached */
-        for(int i = 0; i < kvPairArray.Length - 1; i++)
-        {
-            List<Player> currentPotWinners = kvPairArray[i].Value;
-
-            foreach(Player p in currentPotWinners)
-            {
-                if(sideWinners.Contains(p))
-                {
-                    continue;
-                }
-                sideWinners.Add(p);
-            }
-        }
-
+        // Clear
         sidePotPanel.name.text = "";
-        foreach(Player p in sideWinners)
+
+        // Fist side pot ~ Last side pot
+        for(int i = 1; i < kvPairArray.Length; i++)
         {
-            sidePotPanel.name.text += p.name + " ";
+            sidePotPanel.name.text += GetChipString(kvPairArray[i].Key) + " - ";
+
+            foreach(Player p in kvPairArray[i].Value)
+            {
+                sidePotPanel.name.text += p.name + " ";
+            }
+            sidePotPanel.name.text += "\n";
         }
+        
     }
 
 

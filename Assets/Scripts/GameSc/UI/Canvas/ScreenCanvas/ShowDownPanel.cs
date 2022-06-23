@@ -13,6 +13,12 @@ public class ShowDownPanel : MonoBehaviour
 
     public void InitShowDown(List<Card> cards)
     {
+        // If cards are empty, return
+        if(cards.Count < 2)
+        {
+            return;
+        }
+        
         // Init Upper
         UpperLeft.sprite = CardSprite.GetInstance().GetSprite(cards[0]);
         UpperRight.sprite = CardSprite.GetInstance().GetSprite(cards[1]);

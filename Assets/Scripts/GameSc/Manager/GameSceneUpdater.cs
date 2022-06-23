@@ -89,6 +89,8 @@ public class GameSceneUpdater : MonoBehaviour
     ****************************************************************************************************************/
     private IEnumerator GameStartRoutine(GameTable table)
     {
+        print("Entering GameStartRoutine");
+        
         /* Animate characters' greeting */
         if(!isFirstGameStart)
         {
@@ -138,10 +140,18 @@ public class GameSceneUpdater : MonoBehaviour
         int myIdx = table.GetIterPosByName(GameManager.thisPlayer.name);
         yield return StartCoroutine(worldAnimHandler.PreflopRoutine(table, myIdx));
 
-        screenCanvas.TogglePlayerCardsAnim(0, true);
-        yield return new WaitForSeconds(0.5f);
-        screenCanvas.TogglePlayerCardsAnim(1, true);
-        yield return new WaitForSeconds(1f);
+        // If the player is bankrupt, do not Toggle cards
+        if(table.players[myIdx].state != Player.State.FOLD)
+        {
+            screenCanvas.TogglePlayerCardsAnim(0, true);
+            yield return new WaitForSeconds(0.5f);
+            screenCanvas.TogglePlayerCardsAnim(1, true);
+            yield return new WaitForSeconds(1f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
 
         /* Enable turn */
         playerCanvas[current_UTG].EnableTurn();
