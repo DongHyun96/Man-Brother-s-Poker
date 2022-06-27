@@ -91,6 +91,13 @@ public class GameSceneUpdater : MonoBehaviour
     {
         print("Entering GameStartRoutine");
         
+        /* GameOver */
+        if(table.stage == GameTable.Stage.GAME_FIN)
+        {
+            /* Game fin routine */
+            yield break;
+        }
+
         /* Animate characters' greeting */
         if(!isFirstGameStart)
         {
@@ -141,16 +148,16 @@ public class GameSceneUpdater : MonoBehaviour
         yield return StartCoroutine(worldAnimHandler.PreflopRoutine(table, myIdx));
 
         // If the player is bankrupt, do not Toggle cards
-        if(table.players[myIdx].state != Player.State.FOLD)
+        if(table.players[myIdx].state == Player.State.FOLD)
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+        else
         {
             screenCanvas.TogglePlayerCardsAnim(0, true);
             yield return new WaitForSeconds(0.5f);
             screenCanvas.TogglePlayerCardsAnim(1, true);
             yield return new WaitForSeconds(1f);
-        }
-        else
-        {
-            yield return new WaitForSeconds(1.5f);
         }
 
         /* Enable turn */
@@ -519,6 +526,17 @@ public class GameSceneUpdater : MonoBehaviour
         yield return StartCoroutine(PrepareNextPotRoutine(PWS));
     }
 
+    private IEnumerator GameFinRoutine()
+    {
+        // ScreenCanvas Game Over UI ( & Exit to Lobby btn )
+
+        // PlayerCanvas - Show rankings and totalChips
+
+        // WorldAnimHandler - Put winner chairs' back and animate winner gameWinAnimation
+        
+        yield return null;
+    }
+
     private IEnumerator PrepareNextPotRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
     {
         yield return new WaitForSeconds(3.5f);
@@ -580,5 +598,4 @@ public class GameSceneUpdater : MonoBehaviour
         
         return showDownCnt == cnt ? true : false;
     }
-
 }

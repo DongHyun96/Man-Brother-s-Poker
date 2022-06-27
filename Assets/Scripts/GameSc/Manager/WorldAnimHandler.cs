@@ -9,6 +9,9 @@ public class WorldAnimHandler : MonoBehaviour
     public List<GameCharacter> gameCharacters;
     public TableChipHandler chipHandler;
     public TableCardHandler cardHandler;
+    
+    public List<Animator> chairAnims;
+
 
     public void Init(GameTable table)
     {
@@ -86,6 +89,18 @@ public class WorldAnimHandler : MonoBehaviour
         /* Animate Characters' winning pot */
         gameCharacters[idx].AnimateCharacter(GameCharacter.AnimType.POTWIN);
         yield return null;
+    }
+
+    public IEnumerator AnimateWinningGame(int idx)
+    {
+        yield return null;
+
+        /* Pull the chair */
+        chairAnims[idx].SetInteger("index", idx);
+        chairAnims[idx].SetTrigger("out");
+
+        /* Animate Character's Game win */
+        gameCharacters[idx].AnimateCharacter(GameCharacter.AnimType.GAMEWIN);
     }
 
     public IEnumerator RoundFinRoutine(List<Player> players, int potChips)

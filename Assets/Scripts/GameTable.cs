@@ -86,6 +86,13 @@ public class GameTable
                     communityCards.Clear();
                     pot = 0;
 
+                    // Check if the game is over
+                    if(IsGameOver())
+                    {
+                        stage = Stage.GAME_FIN;
+                        break;
+                    }
+
                     // Small, big betting
                     Player small = players[SB_Pos];
                     Player big = players[GetNext(SB_Pos)];
@@ -156,7 +163,6 @@ public class GameTable
                     /* potWinnerManager.PayEachPotWinners(); */
                     break;
                 case Stage.GAME_FIN:
-                    throw new NotImplementedException();
                     break;
             }
             m_stage = value;
@@ -558,6 +564,34 @@ public class GameTable
         if(stage == Stage.RIVER)
         {
             return true;
+        }
+        return false;
+    }
+
+    private bool IsGameOver()
+    {
+        switch(mode)
+        {
+            case Room.Mode.CHICKEN:
+            case Room.Mode.HEADS:
+                foreach(Player p in players)
+                {
+                    if(p.totalChips <= 0)
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case Room.Mode.LASTMAN:
+                int cnt = 0;
+                foreach(Player p in players)
+                {
+                    if(p.totalChips <= 0)
+                    {
+                        cnt++;
+                    }
+                }
+                return (cnt >= players.Count - 1);
         }
         return false;
     }
