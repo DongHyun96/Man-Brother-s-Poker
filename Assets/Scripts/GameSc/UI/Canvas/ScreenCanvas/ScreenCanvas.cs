@@ -38,6 +38,9 @@ public class ScreenCanvas : MonoBehaviour
     // ChooseShowDown Component
     public ShowDownPanel showDownPanel;
 
+    // GameOver Text
+    public Animator gameOverTextAnim;
+
     // Constants
     private const float WAIT_SEC = 0.001f;
 
@@ -100,11 +103,18 @@ public class ScreenCanvas : MonoBehaviour
 
                     break;
                 case GameTable.Stage.GAME_FIN:
-                    throw new NotImplementedException();
+                    StartCoroutine(GameFinRoutine());
                     break;
             }
             m_stage = value;
         }
+    }
+
+    private IEnumerator GameFinRoutine()
+    {
+        // Show GameOver Text and show Exit to Lobby button
+        gameOverTextAnim.SetTrigger("in");
+        yield return new WaitForSeconds(5.0f);
     }
 
     public Player.State state{ // Chips etc update here.

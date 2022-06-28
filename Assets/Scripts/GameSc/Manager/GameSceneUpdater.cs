@@ -95,6 +95,7 @@ public class GameSceneUpdater : MonoBehaviour
         if(table.stage == GameTable.Stage.GAME_FIN)
         {
             /* Game fin routine */
+            StartCoroutine(GameFinRoutine());
             yield break;
         }
 
@@ -528,11 +529,23 @@ public class GameSceneUpdater : MonoBehaviour
 
     private IEnumerator GameFinRoutine()
     {
-        // ScreenCanvas Game Over UI ( & Exit to Lobby btn )
 
-        // PlayerCanvas - Show rankings and totalChips
+        // Init SCreenCanvas and show Game Over UI ( & Exit to Lobby btn )
+        screenCanvas.InitCanvas();
+        screenCanvas.stage = GameTable.Stage.GAME_FIN;
+
+        // PlayerCanvas - Init playerCanvas and Show rankings and totalChips
+        foreach(PlayerCanvas c in playerCanvas)
+        {
+            c.playerState = Player.State.IDLE;
+            c.GameOver();
+        }
 
         // WorldAnimHandler - Put winner chairs' back and animate winner gameWinAnimation
+        foreach(int idx in GameManager.gameTable.GetWinnersIndex())
+        {
+            StartCoroutine(worldAnimHandler.AnimateWinningGame(idx));
+        }
         
         yield return null;
     }

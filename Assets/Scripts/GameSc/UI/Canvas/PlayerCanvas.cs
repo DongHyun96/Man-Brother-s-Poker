@@ -36,7 +36,11 @@ public class PlayerCanvas : MonoBehaviour
     public Animator iconAnim;
     public Animator actionTextAnim;
     public Animator chipTextAnim;
-    
+
+    // GameFin fields
+    private bool isGameOver = false;
+    public Text winnerText;
+
     // States enum
     private Player.State m_playerState;
 
@@ -138,7 +142,54 @@ public class PlayerCanvas : MonoBehaviour
         ToggleTimer(true);
     }
 
+    public void GameOver()
+    {
+        if(!gameObject.activeSelf)
+        {
+            return;
+        }
 
+        // Update Tab and Fix the tab
+        isGameOver = true;
+
+        Player player = GameManager.gameTable.GetPlayerByName(name);
+        int rank = GetRanking();
+
+        UpdateTab(player);
+        if(!tabPanelAnim.GetBool("isIn"))
+        {
+            tabPanelAnim.SetBool("isIn", true);
+        }
+
+        switch(GameManager.gameTable.mode)
+        {
+            case Room.Mode.LASTMAN:
+                // Only show rank of lastMan
+                if(rank != 1)
+                {
+                    tab_rank.text = "";
+                }
+                break;
+        }
+        
+        // Show winnerText if the rank is 1st
+        if(rank == 1)
+        {
+            StartCoroutine(WinnerTextRoutine());
+        }
+    }
+
+    private IEnumerator WinnerTextRoutine()
+    {
+        winnerText.text = "Y";
+        for(int i = 0; i < 7; i++)
+        {
+            yield return new WaitForSeconds(0.2f);
+            winnerText.text += "E";
+        }
+        yield return new WaitForSeconds(0.2f);
+        winnerText.text += "!";
+    }
 
 
     /****************************************************************************************************************
@@ -338,7 +389,7 @@ public class PlayerCanvas : MonoBehaviour
     
     
     private void Update() {
-        if(Input.GetKeyDown(KeyCode.Tab)) // Toggle tab panel
+        if(!isGameOver && Input.GetKeyDown(KeyCode.Tab)) // Toggle tab panel
         {
             ToggleTabPanel();
         }

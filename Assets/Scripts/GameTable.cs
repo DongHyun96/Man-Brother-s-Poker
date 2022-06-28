@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class GameTable
 {
@@ -11,7 +12,7 @@ public class GameTable
 
     public List<Player> players = new List<Player>();
     public int registerCount;
-    
+
     public int iterPos;
     public int SB_Pos; // For the next round start
 
@@ -90,7 +91,7 @@ public class GameTable
                     if(IsGameOver())
                     {
                         stage = Stage.GAME_FIN;
-                        break;
+                        return;
                     }
 
                     // Small, big betting
@@ -163,6 +164,7 @@ public class GameTable
                     /* potWinnerManager.PayEachPotWinners(); */
                     break;
                 case Stage.GAME_FIN:
+                    Debug.Log("From GameTable: " + "GAME_FIN");
                     break;
             }
             m_stage = value;
@@ -671,6 +673,33 @@ public class GameTable
             }
         }
         return -1;
+    }
+
+    public List<int> GetWinnersIndex()
+    {
+        List<int> result = new List<int>();
+
+        List<Player> sorted = players.OrderByDescending(x => x.totalChips).ToList();
+
+        int winnerChips = -100;
+        foreach(Player p in sorted)
+        {
+            // Init winnerChips
+            winnerChips = winnerChips == -100 ? p.totalChips : winnerChips;
+
+            // Poker Champion!
+            if(p.totalChips == winnerChips)
+            {
+                int idx = GetIterPosByName(p.name);
+                result.Add(idx);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return result;
     }
 
     // 0 3 4 5

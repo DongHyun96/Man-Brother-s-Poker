@@ -52,7 +52,12 @@ public class GameCharacter : MonoBehaviour
                 animator.SetTrigger("winPot");
                 break;
             case AnimType.GAMEWIN:
-                int random = rnd.Next(0, 3);
+                int random = rnd.Next(1, 3); // Without 'BreakDance'
+
+                // Set foot on the ground
+                /* float x = characterObject.transform.position.x;
+                float z = characterObject.transform.position.z;
+                characterObject.transform.position = new Vector3(x, 0.05f, z); */
 
                 animator.SetInteger("winIndex", random);
                 animator.SetTrigger("winGame");
