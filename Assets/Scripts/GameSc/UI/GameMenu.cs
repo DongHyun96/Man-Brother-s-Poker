@@ -15,6 +15,15 @@ public class GameMenu : MonoBehaviour
         }
     }
 
+    public void OnExitToLobby()
+    {
+        // Disconnect Game socket
+        GameMsgHandler.DisconnectSocket();
+
+        // Change the scene by using GameManager
+        GameManager.GetInstance().state = GameManager.State.LOBBY;
+    }
+
     public void OnExitGame()
     {
         Application.Quit();

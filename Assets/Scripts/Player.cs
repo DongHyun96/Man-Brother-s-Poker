@@ -36,6 +36,10 @@ public class Player
 
     public List<Card> cards = new List<Card>();
     public BestHand bestHand;
+
+    // Reference for in game left player
+    [JsonIgnore]
+    public bool isInGame = true; 
     
     /********************************************************************************************************/
 

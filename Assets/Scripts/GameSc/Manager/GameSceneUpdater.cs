@@ -9,7 +9,7 @@ using System;
 public class GameSceneUpdater : MonoBehaviour
 {   
     private static GameSceneUpdater instance;
-
+    
     public List<PlayerCanvas> playerCanvas;
 
     public ScreenCanvas screenCanvas;
@@ -76,6 +76,12 @@ public class GameSceneUpdater : MonoBehaviour
         }
     }
 
+    // When someone leaves the game
+    public void OnPlayerLeft(string name)
+    {
+        
+    }
+
     /****************************************************************************************************************
     *                                                Starting methods
     ****************************************************************************************************************/
@@ -102,6 +108,10 @@ public class GameSceneUpdater : MonoBehaviour
         /* Animate characters' greeting */
         if(!isFirstGameStart)
         {
+            // First game start
+
+            // Remove Waiting text
+            screenCanvas.waitingText.SetActive(false);
             yield return StartCoroutine(worldAnimHandler.AnimateGreetings());
         }
 

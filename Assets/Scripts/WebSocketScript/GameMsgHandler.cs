@@ -20,6 +20,24 @@ public class GameMsgHandler : MonoBehaviour
         return instance;
     }
 
+    public static void DisconnectSocket()
+    {
+        try
+        {
+            if(websocket == null)
+            {
+                return;
+            }
+            if(websocket.IsAlive)
+            {
+                websocket.Close();
+            }
+        } catch(Exception e)
+        {
+            Debug.Log("From GameMsgHandler DisconnectSocket(): " + e.ToString());
+        }
+    }
+
     public static void SendMessage(GameMessage message)
     {
         Debug.Log("Sending game message: " + JsonConvert.SerializeObject(message));
@@ -115,6 +133,10 @@ public class GameMsgHandler : MonoBehaviour
                     });
                     break;
                 case GameMessage.MessageType.LEAVE:
+                    UnityMainThread.wkr.AddJob(() => {
+                        // When someone left the game
+                        GameSceneUpdater.GetInstance().OnPlayerLeft(message.sender);
+                    });
                     break;
                 default:
                     print("No Matching message type or type is null");
@@ -163,7 +185,10 @@ public class GameMsgHandler : MonoBehaviour
 
     private IEnumerator DelayRegisterRoutine()
     {
-        yield return new WaitForSeconds(2.0f);
+        // Wait for random seconds
+        System.Random rnd = new System.Random();
+        float rand = rnd.Next(0, 7);
+        yield return new WaitForSeconds(rand);
         
         GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.REGISTER,
          GameManager.thisPlayer.name, GameManager.gameTable);

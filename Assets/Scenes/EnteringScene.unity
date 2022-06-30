@@ -3934,6 +3934,7 @@ GameObject:
   - component: {fileID: 127349645}
   - component: {fileID: 127349646}
   - component: {fileID: 127349644}
+  - component: {fileID: 127349647}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -4030,6 +4031,84 @@ MonoBehaviour:
   anim_Room: {fileID: 916808945}
   anim_Inviting: {fileID: 238214457}
   anim_Menu: {fileID: 2048279585}
+--- !u!114 &127349647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127349643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5730c86b45e514ab59d4af391f2584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterSelectObj: {fileID: 2080280995}
+  currentCam: {fileID: 844646414}
+  lobbyPos: {fileID: 1062426720}
+  roomPos: {fileID: 208246399}
+  gamePos: {fileID: 1791161551}
+  panelAnimController: {fileID: 127349646}
+  onValidSignUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 127349644}
+        m_TargetAssemblyTypeName: EnteringSceneUpdater, Assembly-CSharp
+        m_MethodName: InitLobby
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onRoomToLobby:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 127349644}
+        m_TargetAssemblyTypeName: EnteringSceneUpdater, Assembly-CSharp
+        m_MethodName: InitLobby
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onPlayingToLobby:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 127349644}
+        m_TargetAssemblyTypeName: EnteringSceneUpdater, Assembly-CSharp
+        m_MethodName: InitLobby
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onLobbyToRoom:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 916808946}
+        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
+        m_MethodName: InitRoomPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &134236115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14433,7 +14512,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7, y: 402.43866}
+  m_AnchoredPosition: {x: 7, y: 402.4388}
   m_SizeDelta: {x: -29.5157, y: 606.6704}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &461811717
@@ -22858,65 +22937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4d128c9a94e3043bc73ca6dd00759f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentCam: {fileID: 844646414}
-  lobbyPos: {fileID: 1062426720}
-  roomPos: {fileID: 208246399}
-  gamePos: {fileID: 1791161551}
-  panelAnimController: {fileID: 127349646}
-  onValidSignUp:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 127349644}
-        m_TargetAssemblyTypeName: EnteringSceneUpdater, Assembly-CSharp
-        m_MethodName: InitLobby
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onRoomToLobby:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 127349644}
-        m_TargetAssemblyTypeName: EnteringSceneUpdater, Assembly-CSharp
-        m_MethodName: InitLobby
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onPlayingToLobby:
-    m_PersistentCalls:
-      m_Calls: []
-  onLobbyToRoom:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 916808946}
-        m_TargetAssemblyTypeName: RoomPanel, Assembly-CSharp
-        m_MethodName: InitRoomPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onPlayingToRoom:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlayingState:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &749840220
 Transform:
   m_ObjectHideFlags: 0
@@ -34318,7 +34338,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 885788759}
   m_HandleRect: {fileID: 885788758}
   m_Direction: 2
-  m_Value: 0
+  m_Value: -0.0000006066531
   m_Size: 0.33664376
   m_NumberOfSteps: 0
   m_OnValueChanged:

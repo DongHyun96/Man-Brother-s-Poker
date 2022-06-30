@@ -87,8 +87,16 @@ public class RoomMsgHandler : MonoBehaviour
                     break;
                 case RoomMessage.MessageType.LEAVE:
                     UnityMainThread.wkr.AddJob(() => {
+                        // Handle invitable first
+                        HandleInvitable(message);
+
                         // Update corresponding room in room table
                         GameManager.rooms[message.id] = message.room;
+
+                        /* if(EnteringSceneUpdater.GetInstance() == null)
+                        {
+                            return;
+                        } */
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
@@ -128,6 +136,9 @@ public class RoomMsgHandler : MonoBehaviour
                     break;
                 case RoomMessage.MessageType.REMOVE_ROOM:
                     UnityMainThread.wkr.AddJob(() => {
+                        // Handle invitable first
+                        HandleInvitable(message);
+                        
                         // Remove room from the table
                         GameManager.rooms.Remove(message.id);
 
@@ -167,6 +178,38 @@ public class RoomMsgHandler : MonoBehaviour
 
     private void Start() {
         webSocket.OnMessage += ReceiveMessage;
+    }
+
+    /* This function will use when player leaves the room ( Precisely left from gamescene ) */
+    private void HandleInvitable(RoomMessage message)
+    {
+        if(GameManager.allOthers[message.sender] == null)
+        {
+            return;
+        }
+
+        if(message.sender.Equals(GameManager.thisPlayer.name))
+        {
+            return;
+        }
+
+        if(GameManager.allOthers[message.sender].invitable == true)
+        {
+            return;
+        }
+
+        // Change targetPlayer's invitable to true
+        GameManager.allOthers[message.sender].invitable = true;
+
+        // Handle change
+        if(GameManager.GetInstance().state == GameManager.State.LOBBY)
+        {
+            EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+        }
+        else if(GameManager.GetInstance().state == GameManager.State.ROOM)
+        {
+            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.INV_ADD);
+        }
     }
     
 }

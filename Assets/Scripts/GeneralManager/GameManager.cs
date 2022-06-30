@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+
 using System;
-using Cinemachine;
+
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -23,27 +25,8 @@ public class GameManager : MonoBehaviour
     // This player's game table
     public static GameTable gameTable;
 
-    /// Cinemachine cam , lobbyPos, RoomPos
-    public CinemachineVirtualCamera currentCam;
-    public LobbyCamPos lobbyPos;
-    public RoomCamPos roomPos;
-    public GameCamPos gamePos;
-
-    private const int LOBBY_PATH_POS = 2;
-    private const int ROOM_PATH_POS = 5;
-    private const int GAME_PATH_POS = 8;
-
-    /// Changing scene(panel) events
-    public EntPanelController panelAnimController;
-    public UnityEvent onValidSignUp;
-    public UnityEvent onRoomToLobby;
-    public UnityEvent onPlayingToLobby;
-
-    public UnityEvent onLobbyToRoom;
-    public UnityEvent onPlayingToRoom;
-
-    public UnityEvent onPlayingState;
-    
+    // Ent scene index
+    private const int ENT_SCENE_IDX = 1;
 
     public enum State{
         LOGIN, LOBBY, ROOM, PLAYING
@@ -58,35 +41,39 @@ public class GameManager : MonoBehaviour
         get => m_state;
 
         set{
+
+            EntCamController camController = EntCamController.GetInstance();
+
             switch(value)
             {
                 case State.LOBBY:
-                    if(state == State.PLAYING) // PLAYING -> LOBBY : Change invitable to true and notify to other players
+                    if(state == State.PLAYING) // PLAYING -> LOBBY
                     {                   
-                        thisPlayer.invitable = true;
+                        /* thisPlayer.invitable = true; */
+                        StartCoroutine(PlayingToLobbyRoutine());
                     }
                     else if(state == State.ROOM) // ROOM -> LOBBY
                     {
-                        StartCoroutine(RoomToLobbyRoutine());
+                        StartCoroutine(camController.RoomToLobbyRoutine());
                     }
                     else if(state == State.LOGIN) // SIGNUP -> LOBBY
                     {
-                        StartCoroutine(LogInToLobbyRoutine());
+                        StartCoroutine(camController.LogInToLobbyRoutine());
                     }
 
                     break;
                 case State.ROOM:
-                    if(state == State.PLAYING) // PLAYING -> ROOM : Change invitable to true and notify to other players
+                    if(state == State.PLAYING) // PLAYING -> ROOM (not supported)
                     {
-                        thisPlayer.invitable = true;
+                        throw new NotImplementedException();
                     }
                     else if(state == State.ROOM) // ROOM -> ROOM
                     {
-                        StartCoroutine(RoomToRoomRoutine());
+                        StartCoroutine(camController.RoomToRoomRoutine());
                     }
                     else // LOBBY -> ROOM
                     {
-                        StartCoroutine(LobbyToRoomRoutine());
+                        StartCoroutine(camController.LobbyToRoomRoutine());
                     }
                     break;
                 case State.PLAYING: // ROOM -> PLAYING
@@ -95,7 +82,7 @@ public class GameManager : MonoBehaviour
                     gameTable = new GameTable(thisPlayerRoom.id, thisPlayerRoom.players,
                      thisPlayerRoom.mode, thisPlayerRoom.buyIn);
                     
-                    StartCoroutine(RoomToGameRoutine()); // Changing scene and cinemachine cam.
+                    StartCoroutine(camController.RoomToGameRoutine()); // Changing scene and cinemachine cam.
                     break;
             }
             m_state = value;
@@ -106,130 +93,36 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        // DontDestroyOnLoad(this.gameObject);
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if(instance != this)
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
     public static GameManager GetInstance()
     {
-        if(instance == null)
-        {
-            instance = FindObjectOfType<GameManager>();
-
-            if (instance == null)
-            {
-                GameObject container = new GameObject("GameManager");
-                instance = container.AddComponent<GameManager>();
-            }
-        }
         return instance;
     }
 
-    private IEnumerator LogInToLobbyRoutine()
+    private IEnumerator PlayingToLobbyRoutine()
     {
-        // camera animation routine
-        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        dolly.m_PathPosition = LOBBY_PATH_POS;
+        // Load scene
+        LoadingSceneController.LoadScene("EnteringScene");
 
-        // Panel Anim
-        panelAnimController.UpdatePanel(EntPanelController.Panel.SIGN);
-
-        while(!lobbyPos.isTriggered)
+        // Wait until Ent scene fully loaded
+        while(SceneManager.GetActiveScene().buildIndex != ENT_SCENE_IDX)
         {
             yield return null;
         }
 
-        // Loose cinemachine damping little bit
-        dolly.m_ZDamping = 1.5f;
-
-        // Panel init and panel animation routine
-        onValidSignUp.Invoke();
-        panelAnimController.UpdatePanel(EntPanelController.Panel.LOBBY);
-
-        RoomMessage msg = new RoomMessage(Guid.NewGuid(), RoomMessage.MessageType.INIT, thisPlayer.name);
-        RoomMsgHandler.SendMessage(msg);
-    }
-
-    private IEnumerator LobbyToRoomRoutine()
-    {
-        // Cam animation routine
-        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        dolly.m_PathPosition = ROOM_PATH_POS;
-
-        // Panel anim
-        panelAnimController.UpdatePanel(EntPanelController.Panel.LOBBY);
-
-        while(!roomPos.isTriggered)
-        {
-            yield return null;
-        }
-
-        // Panel init and panel animation routine
-        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
-        onLobbyToRoom.Invoke();
-    }
-
-    private IEnumerator RoomToLobbyRoutine()
-    {
-        // Cam animation routine
-        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        dolly.m_PathPosition = LOBBY_PATH_POS;
-
-        // Panel anim
-        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
-
-        while(!lobbyPos.isTriggered)
-        {
-            yield return null;
-        }
-
-        // Panel init and panel animation routine
-        panelAnimController.UpdatePanel(EntPanelController.Panel.LOBBY);
-        onRoomToLobby.Invoke();
-    }
-
-    private IEnumerator RoomToRoomRoutine()
-    {
-        // Cam animation routine
-        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        dolly.m_PathPosition = LOBBY_PATH_POS;
-
-        // Panel anim
-        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
-
-        while(!lobbyPos.isTriggered)
-        {
-            yield return null;
-        }
-
-        // Cam animation again (back to room again)
-        dolly.m_PathPosition = ROOM_PATH_POS;
-        
-        while(!roomPos.isTriggered)
-        {
-            yield return null;
-        }
-
-        // Panel init and return to room panel
-        onLobbyToRoom.Invoke();
-        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
-    }
-
-    private IEnumerator RoomToGameRoutine()
-    {
-        // Cam animation routine
-        var dolly = currentCam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        dolly.m_PathPosition = GAME_PATH_POS;
-
-        // Panel anim
-        panelAnimController.UpdatePanel(EntPanelController.Panel.ROOM);
-
-        while(!gamePos.isTriggered)
-        {
-            yield return null;
-        }
-        
-        // Change scene to gameScene
-        LoadingSceneController.LoadScene("GameScene");
+        StartCoroutine(EntCamController.GetInstance().GameToLobbyRoutine());
     }
 
 }

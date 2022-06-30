@@ -8,8 +8,15 @@ internal class UnityMainThread : MonoBehaviour
     Queue<Action> jobs = new Queue<Action>();
     
     void Awake() {
-        wkr = this;
-        DontDestroyOnLoad(this.gameObject);
+        if(wkr == null)
+        {
+            wkr = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if(wkr != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Update() {
@@ -20,4 +27,7 @@ internal class UnityMainThread : MonoBehaviour
     internal void AddJob(Action newJob) {
         jobs.Enqueue(newJob);
     }
+
+
+    
 }

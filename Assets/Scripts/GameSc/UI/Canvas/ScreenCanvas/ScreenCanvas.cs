@@ -11,6 +11,9 @@ public class ScreenCanvas : MonoBehaviour
     public GameObject winnerAnnounce;
     public GameObject chooseShowDown;
 
+    // Waiting for other players text
+    public GameObject waitingText;
+
     // BottomLeft components
     public List<Image> playerCards;
     public List<Image> communityCards;
