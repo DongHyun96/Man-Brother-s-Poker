@@ -7,18 +7,7 @@ using System;
 
 public class GameMsgHandler : MonoBehaviour
 {
-    private static GameMsgHandler instance;
-
     private static WebSocket websocket = new WebSocket(UrlBase.addressBase + "gameEcho");
-
-    public static GameMsgHandler GetInstance()
-    {
-        if(instance == null)
-        {
-            instance = FindObjectOfType<GameMsgHandler>();
-        }
-        return instance;
-    }
 
     public static void DisconnectSocket()
     {
@@ -30,6 +19,7 @@ public class GameMsgHandler : MonoBehaviour
             }
             if(websocket.IsAlive)
             {
+                websocket.OnMessage -= ReceiveMessage;
                 websocket.Close();
             }
         } catch(Exception e)

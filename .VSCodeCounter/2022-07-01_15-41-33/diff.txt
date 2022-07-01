@@ -1,0 +1,58 @@
+Date : 2022-07-01 15:41:33
+Directory : c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts
+Total : 21 files,  223 codes, -41 comments, 47 blanks, all 229 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         21 |        223 |        -41 |         47 |        229 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                     | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                        |         21 |        223 |        -41 |         47 |        229 |
+| EnteringSc                                                                                               |          1 |        120 |         25 |         40 |        185 |
+| GameSc                                                                                                   |         12 |        122 |         -9 |         29 |        142 |
+| GameSc\CharacterObject                                                                                   |          1 |          0 |          4 |          1 |          5 |
+| GameSc\ChipObject                                                                                        |          1 |          0 |          2 |          0 |          2 |
+| GameSc\Manager                                                                                           |          2 |         37 |         10 |         12 |         59 |
+| GameSc\TableObjects                                                                                      |          1 |         15 |        -15 |         -1 |         -1 |
+| GameSc\UI                                                                                                |          7 |         70 |        -10 |         17 |         77 |
+| GameSc\UI\Canvas                                                                                         |          6 |         65 |        -12 |         15 |         68 |
+| GameSc\UI\Canvas\ScreenCanvas                                                                            |          4 |         20 |        -16 |          8 |         12 |
+| GeneralManager                                                                                           |          1 |        -72 |        -14 |        -21 |       -107 |
+| Test                                                                                                     |          1 |        -79 |        -59 |        -23 |       -161 |
+| Util                                                                                                     |          1 |          7 |          0 |          3 |         10 |
+| WebSocketScript                                                                                          |          2 |         48 |         11 |          9 |         68 |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                 | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\EnteringSc\EntCamController.cs                 | C#       |        120 |         25 |         40 |        185 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\CharacterObject\GameCharacter.cs        | C#       |          0 |          4 |          1 |          5 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\ChipObject\ChipHolder.cs                | C#       |          0 |          2 |          0 |          2 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\Manager\GameSceneUpdater.cs             | C#       |         29 |          8 |          7 |         44 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\Manager\WorldAnimHandler.cs             | C#       |          8 |          2 |          5 |         15 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\TableObjects\TableChipHandler.cs        | C#       |         15 |        -15 |         -1 |         -1 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\PlayerCanvas.cs               | C#       |         41 |          4 |          6 |         51 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ScreenCanvas.cs  | C#       |         19 |        -19 |          5 |          5 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ShowDownPanel.cs | C#       |          4 |          1 |          1 |          6 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\SidePotPanel.cs  | C#       |          4 |          0 |          1 |          5 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\WinnerPanel.cs   | C#       |         -7 |          2 |          1 |         -4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\Timer.cs                      | C#       |          4 |          0 |          1 |          5 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\GameMenu.cs                          | C#       |          5 |          2 |          2 |          9 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameTable.cs                                   | C#       |         57 |          3 |          8 |         68 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GeneralManager\GameManager.cs                  | C#       |        -72 |        -14 |        -21 |       -107 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Player.cs                                      | C#       |          2 |          1 |          1 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\PotWinnerManager.cs                            | C#       |         18 |          1 |          1 |         20 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Test\ScriptTester.cs                           | C#       |        -79 |        -59 |        -23 |       -161 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Util\UnityMainThread.cs                        | C#       |          7 |          0 |          3 |         10 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\GameMsgHandler.cs              | C#       |         22 |          2 |          1 |         25 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\RoomMsgHandler.cs              | C#       |         26 |          9 |          8 |         43 |
+| Total                                                                                                    |          |        223 |        -41 |         47 |        229 |
++----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

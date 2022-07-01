@@ -183,7 +183,7 @@ public class RoomMsgHandler : MonoBehaviour
     /* This function will use when player leaves the room ( Precisely left from gamescene ) */
     private void HandleInvitable(RoomMessage message)
     {
-        if(GameManager.allOthers[message.sender] == null)
+        if(!GameManager.allOthers.ContainsKey(message.sender))
         {
             return;
         }
