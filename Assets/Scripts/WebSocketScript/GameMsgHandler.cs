@@ -81,6 +81,12 @@ public class GameMsgHandler : MonoBehaviour
                     {   
                         UnityMainThread.wkr.AddJob(() => 
                         {   
+                            // Set players' isInGame
+                            foreach(Player p in GameManager.gameTable.players)
+                            {
+                                p.isInGame = true;
+                            }
+
                             // Set SB_pos
                             GameManager.gameTable.SB_Pos = message.table.SB_Pos;
 
@@ -107,10 +113,17 @@ public class GameMsgHandler : MonoBehaviour
                     break;
                 case GameMessage.MessageType.TOSS:
                     UnityMainThread.wkr.AddJob(() => {
-
+                        
+                        // Saving deck and players' isInGame
                         List<Card> deck = GameManager.gameTable.deck;
+                        List<Player> players = GameManager.gameTable.players;
                         GameManager.gameTable = message.table; // Update gameTable
                         GameManager.gameTable.deck = deck; // Set deck again (because server - client doesn't share deck in TOSS msg)
+                        for(int i = 0; i < players.Count; i++)
+                        {
+                            // Set isInGame
+                            GameManager.gameTable.players[i].isInGame = players[i].isInGame;
+                        }
 
                         Player targetPlayer = GameManager.gameTable.GetPlayerByName(message.sender);
                         GameSceneUpdater.GetInstance().UpdateGameScene(targetPlayer); //Update UI

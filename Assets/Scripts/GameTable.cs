@@ -71,8 +71,8 @@ public class GameTable
 
                         p.cards.Clear();
 
-                        // Check Bankrupt
-                        if(p.totalChips <= 0)
+                        // Check Bankrupt and isInGame
+                        if(p.totalChips <= 0 || !p.isInGame)
                         {
                             p.state = Player.State.FOLD;
                         }
@@ -164,7 +164,6 @@ public class GameTable
                     /* potWinnerManager.PayEachPotWinners(); */
                     break;
                 case Stage.GAME_FIN:
-                    Debug.Log("From GameTable: " + "GAME_FIN");
                     break;
             }
             m_stage = value;
@@ -570,8 +569,21 @@ public class GameTable
         return false;
     }
 
-    private bool IsGameOver()
+    /* private bool IsGameOver()
     {
+        int leftCount = 0;
+        foreach(Player p in players)
+        {
+            leftCount += p.isInGame ? 1 : 0;
+        }
+
+        // Only one player left case
+        if(leftCount == 1)
+        {
+            return true;
+        }
+
+        // Mode case
         switch(mode)
         {
             case Room.Mode.CHICKEN:
@@ -595,6 +607,33 @@ public class GameTable
                 }
                 return (cnt >= players.Count - 1);
         }
+        return false;
+    } */
+    private bool IsGameOver()
+    {
+        int leftCount = 0;
+        int bankruptCount = 0;
+        foreach(Player p in players)
+        {
+            if(p.totalChips <= 0)
+            {
+                bankruptCount++;
+                continue;
+            }
+            leftCount += !p.isInGame ? 1 : 0;
+        }
+
+        // if only one player remains
+        if(leftCount + bankruptCount >= players.Count - 1)
+        {
+            return true;
+        }
+
+        if(mode == Room.Mode.CHICKEN || mode == Room.Mode.HEADS)
+        {
+            return bankruptCount > 0;
+        }
+
         return false;
     }
     /****************************************************************************************************************

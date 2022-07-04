@@ -218,6 +218,10 @@ public class PlayerCanvas : MonoBehaviour
                 case 3:
                     tab_rank.text = "3rd";
                     break;
+                case -1:
+                    // Left in game scene case
+                    tab_rank.text = "Left";
+                    break;
                 default:
                     tab_rank.text = $"{rank}th";
                     break;
@@ -350,6 +354,19 @@ public class PlayerCanvas : MonoBehaviour
     private int GetRanking()
     {
         List<Player> sorted = GameManager.gameTable.players.OrderByDescending(x => x.totalChips).ToList();
+
+        // Remove left players
+        int idx = 0;
+        while(idx < sorted.Count)
+        {
+            if(!sorted[idx].isInGame)
+            {
+                sorted.RemoveAt(idx);
+            }
+            else{
+                ++idx;
+            }
+        }
         
         for(int cur = 0; cur < sorted.Count; cur++)
         {

@@ -41,8 +41,9 @@ public class ScreenCanvas : MonoBehaviour
     // ChooseShowDown Component
     public ShowDownPanel showDownPanel;
 
-    // GameOver Text
+    // GameOver Text & return to lobby btn
     public Animator gameOverTextAnim;
+    public Animator lobbyBtnAnim;
 
     // Constants
     private const float WAIT_SEC = 0.001f;
@@ -168,7 +169,7 @@ public class ScreenCanvas : MonoBehaviour
     public void EnableTurn(PieButton.ActionState state, int callChips = 0)
     {
         UpdateActionGUI(state, callChips);
-        TogglePieButtonAnim();
+        TogglePieButtonAnim(true);
     }
 
     public void InitCanvas()
@@ -317,9 +318,14 @@ public class ScreenCanvas : MonoBehaviour
         communityCardAnims[idx].SetBool("isIn", isIn);
     }
 
-    private void TogglePieButtonAnim()
+    /* private void TogglePieButtonAnim()
     {
         pieButtonAnim.SetBool("isIn", !pieButtonAnim.GetBool("isIn"));
+    } */
+
+    private void TogglePieButtonAnim(bool isIn)
+    {
+        pieButtonAnim.SetBool("isIn", isIn);
     }
 
     private void ToggleBettingPanelAnim()
@@ -344,20 +350,20 @@ public class ScreenCanvas : MonoBehaviour
             case PieButton.ActionState.CHECK_RAISE_FOLD:
                 GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.CHECK);
                 GameMsgHandler.TossTable();
-                TogglePieButtonAnim();
+                TogglePieButtonAnim(false);
                 break;
             case PieButton.ActionState.CALL_RAISE_FOLD:
                 GameManager.gameTable.TakeAction(GameManager.thisPlayer.name,
                  Player.State.CALL, GameManager.gameTable.roundBetMax);
                 
                 GameMsgHandler.TossTable();
-                TogglePieButtonAnim();
+                TogglePieButtonAnim(false);
                 break;
             case PieButton.ActionState.ALLIN_FOLD:
                 GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
 
                 GameMsgHandler.TossTable();
-                TogglePieButtonAnim();
+                TogglePieButtonAnim(false);
                 break;
         }
     }
@@ -369,11 +375,11 @@ public class ScreenCanvas : MonoBehaviour
             GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
 
             GameMsgHandler.TossTable();
-            TogglePieButtonAnim();
+            TogglePieButtonAnim(false);
             return;
         }
 
-        TogglePieButtonAnim();
+        TogglePieButtonAnim(false);
         ToggleBettingPanelAnim();
     }
 
@@ -383,7 +389,7 @@ public class ScreenCanvas : MonoBehaviour
 
         GameMsgHandler.TossTable();
 
-        TogglePieButtonAnim();
+        TogglePieButtonAnim(false);
     }
 
     public void OnTimerTimeOut(int idx)
@@ -423,7 +429,7 @@ public class ScreenCanvas : MonoBehaviour
     public void OnBettingpanelCancel()
     {
         ToggleBettingPanelAnim();
-        TogglePieButtonAnim();
+        TogglePieButtonAnim(true);
     }
 
     public void OnBettingPanelBet()

@@ -79,7 +79,35 @@ public class GameSceneUpdater : MonoBehaviour
     // When someone leaves the game
     public void OnPlayerLeft(string name)
     {
-        
+        // Make targetPlayer's isInGame false
+        Player targetPlayer = GameManager.gameTable.GetPlayerByName(name);
+        targetPlayer.isInGame = false;
+
+        // If the game is over
+        if(GameManager.gameTable.stage == GameTable.Stage.GAME_FIN)
+        {
+            return;
+        }
+        switch(GameManager.gameTable.stage)
+        {
+            case GameTable.Stage.ROUND_FIN:
+            case GameTable.Stage.UNCONTESTED:
+            case GameTable.Stage.POT_FIN:
+            case GameTable.Stage.GAME_FIN:
+                return;
+        }
+
+        // If it is left player's turn and didn't fold yet
+        if(GameManager.gameTable.GetCurrentPlayer().name.Equals(name))
+        {
+            if(GameManager.gameTable.GetCurrentPlayer().state != Player.State.FOLD)
+            {
+                UnityMainThread.wkr.AddJob(() => {
+                    GameManager.gameTable.TakeAction(name, Player.State.FOLD);
+                    UpdateGameScene(targetPlayer);
+                });
+            }
+        }
     }
 
     /****************************************************************************************************************
@@ -229,7 +257,7 @@ public class GameSceneUpdater : MonoBehaviour
                 yield break;
             case GameTable.Stage.UNCONTESTED:
                 Player winner = new Player();
-                foreach(Player player in GameManager.gameTable.players)
+                foreach(Player player in table.players)
                 {
                     if(player.state != Player.State.FOLD)
                     {
@@ -251,8 +279,26 @@ public class GameSceneUpdater : MonoBehaviour
                 break;
         }
 
+        Player currentPlayer = table.GetCurrentPlayer();
+        
+        /* Check if the turn is left player */
+        if(!currentPlayer.isInGame)
+        {
+            // Check if the left player didn't fold yet and then takeAction
+            if(currentPlayer.state != Player.State.FOLD)
+            {
+                UnityMainThread.wkr.AddJob(() => {
+                    table.TakeAction(currentPlayer.name, Player.State.FOLD);
+
+                    // UpdateGameSceneRoutine again
+                    UpdateGameScene(currentPlayer);
+                });
+                yield break;
+            }
+        }
+
         /* Check iterator turn */
-        if(GameManager.thisPlayer.name.Equals(table.GetCurrentPlayer().name))
+        if(GameManager.thisPlayer.name.Equals(currentPlayer.name))
         {
             // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
             switch(table.tableStatus)
@@ -265,16 +311,16 @@ public class GameSceneUpdater : MonoBehaviour
                     int big = table.GetNext(table.SB_Pos);
 
                     // Big blind PREFLOP case
-                    if(table.stage == GameTable.Stage.PREFLOP && table.players[big].Equals(table.GetCurrentPlayer()))
+                    if(table.stage == GameTable.Stage.PREFLOP && table.players[big].Equals(currentPlayer))
                     {
-                        if(table.roundBetMax == table.GetCurrentPlayer().roundBet)
+                        if(table.roundBetMax == currentPlayer.roundBet)
                         {
                             // All players didn't raised
                             screenCanvas.EnableTurn(PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
                             break;
                         }
                     }
-                    int currentPTotal = table.GetCurrentPlayer().totalChips + table.GetCurrentPlayer().roundBet;
+                    int currentPTotal = currentPlayer.totalChips + currentPlayer.roundBet;
                     PieButton.ActionState a = currentPTotal <= table.roundBetMax ?
                     PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
                     screenCanvas.EnableTurn(a, table.roundBetMax);
@@ -285,7 +331,7 @@ public class GameSceneUpdater : MonoBehaviour
                     break;
             }
             // Enable light
-            int idx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
+            int idx = table.GetIterPosByName(GameManager.thisPlayer.name);
             lights[idx].SetActive(true);
         }
         
@@ -557,7 +603,10 @@ public class GameSceneUpdater : MonoBehaviour
             StartCoroutine(worldAnimHandler.AnimateWinningGame(idx));
         }
         
-        yield return null;
+        yield return new WaitForSeconds(5.0f);
+
+        // Show Return to lobby btn
+        screenCanvas.lobbyBtnAnim.SetTrigger("in");
     }
 
     private IEnumerator PrepareNextPotRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
