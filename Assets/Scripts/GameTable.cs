@@ -569,46 +569,7 @@ public class GameTable
         return false;
     }
 
-    /* private bool IsGameOver()
-    {
-        int leftCount = 0;
-        foreach(Player p in players)
-        {
-            leftCount += p.isInGame ? 1 : 0;
-        }
 
-        // Only one player left case
-        if(leftCount == 1)
-        {
-            return true;
-        }
-
-        // Mode case
-        switch(mode)
-        {
-            case Room.Mode.CHICKEN:
-            case Room.Mode.HEADS:
-                foreach(Player p in players)
-                {
-                    if(p.totalChips <= 0)
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case Room.Mode.LASTMAN:
-                int cnt = 0;
-                foreach(Player p in players)
-                {
-                    if(p.totalChips <= 0)
-                    {
-                        cnt++;
-                    }
-                }
-                return (cnt >= players.Count - 1);
-        }
-        return false;
-    } */
     private bool IsGameOver()
     {
         int leftCount = 0;
@@ -719,6 +680,9 @@ public class GameTable
         List<int> result = new List<int>();
 
         List<Player> sorted = players.OrderByDescending(x => x.totalChips).ToList();
+
+        // Remove left players
+        sorted.RemoveAll(p => (!p.isInGame));
 
         int winnerChips = -100;
         foreach(Player p in sorted)

@@ -92,8 +92,15 @@ public class GameSceneUpdater : MonoBehaviour
         {
             case GameTable.Stage.ROUND_FIN:
             case GameTable.Stage.UNCONTESTED:
-            case GameTable.Stage.POT_FIN:
             case GameTable.Stage.GAME_FIN:
+                return;
+            case GameTable.Stage.POT_FIN:
+                // Check if the showDown is over by leaving
+                if(IsShowDownOver() && !is_prepare_running && GameManager.gameTable.stage == GameTable.Stage.POT_FIN)
+                {
+                    Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
+                    StartCoroutine(PrepareNextPotRoutine(PWS));
+                }
                 return;
         }
 
@@ -102,10 +109,8 @@ public class GameSceneUpdater : MonoBehaviour
         {
             if(GameManager.gameTable.GetCurrentPlayer().state != Player.State.FOLD)
             {
-                UnityMainThread.wkr.AddJob(() => {
-                    GameManager.gameTable.TakeAction(name, Player.State.FOLD);
-                    UpdateGameScene(targetPlayer);
-                });
+                GameManager.gameTable.TakeAction(name, Player.State.FOLD);
+                UpdateGameScene(targetPlayer);
             }
         }
     }
@@ -125,6 +130,16 @@ public class GameSceneUpdater : MonoBehaviour
     {
         print("Entering GameStartRoutine");
         
+        /* Hide left players */
+        for(int i = 0; i < table.players.Count; i++)
+        {
+            if(!table.players[i].isInGame)
+            {
+                playerCanvas[i].gameObject.SetActive(false);
+                worldAnimHandler.gameCharacters[i].characterObject.SetActive(false);
+            }
+        }
+
         /* GameOver */
         if(table.stage == GameTable.Stage.GAME_FIN)
         {
@@ -197,6 +212,13 @@ public class GameSceneUpdater : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             screenCanvas.TogglePlayerCardsAnim(1, true);
             yield return new WaitForSeconds(1f);
+        }
+
+        /* Check if the turn is left player */
+        bool isHandled = HandleLeftPlayerTurn(table.GetCurrentPlayer());
+        if(isHandled)
+        {
+            yield break;
         }
 
         /* Enable turn */
@@ -282,19 +304,10 @@ public class GameSceneUpdater : MonoBehaviour
         Player currentPlayer = table.GetCurrentPlayer();
         
         /* Check if the turn is left player */
-        if(!currentPlayer.isInGame)
+        bool isHandled = HandleLeftPlayerTurn(currentPlayer);
+        if(isHandled)
         {
-            // Check if the left player didn't fold yet and then takeAction
-            if(currentPlayer.state != Player.State.FOLD)
-            {
-                UnityMainThread.wkr.AddJob(() => {
-                    table.TakeAction(currentPlayer.name, Player.State.FOLD);
-
-                    // UpdateGameSceneRoutine again
-                    UpdateGameScene(currentPlayer);
-                });
-                yield break;
-            }
+            yield break;
         }
 
         /* Check iterator turn */
@@ -428,6 +441,13 @@ public class GameSceneUpdater : MonoBehaviour
         {
             // Recursive RoundFinRoutine here
             yield return StartCoroutine(RoundFinRoutine());
+            yield break;
+        }
+
+        /* Check if the turn is left player */
+        bool isHandled = HandleLeftPlayerTurn(GameManager.gameTable.GetCurrentPlayer());
+        if(isHandled)
+        {
             yield break;
         }
         
@@ -593,6 +613,11 @@ public class GameSceneUpdater : MonoBehaviour
         // PlayerCanvas - Init playerCanvas and Show rankings and totalChips
         foreach(PlayerCanvas c in playerCanvas)
         {
+            if(!c.gameObject.activeSelf)
+            {
+                // Left player's canvas
+                continue;
+            }
             c.playerState = Player.State.IDLE;
             c.GameOver();
         }
@@ -609,8 +634,10 @@ public class GameSceneUpdater : MonoBehaviour
         screenCanvas.lobbyBtnAnim.SetTrigger("in");
     }
 
+    private bool is_prepare_running = false;
     private IEnumerator PrepareNextPotRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
     {
+        is_prepare_running = true;
         yield return new WaitForSeconds(3.5f);
 
         /* Play table preparation animations */
@@ -619,6 +646,7 @@ public class GameSceneUpdater : MonoBehaviour
         /* Go to next pot */
         GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
         StartGame();
+        is_prepare_running = false;
     }
 
     private IEnumerator WaitForTurningPoint(AnimTurningPointHandler handler)
@@ -632,6 +660,25 @@ public class GameSceneUpdater : MonoBehaviour
     /****************************************************************************************************************
     *                                                Extra methods
     ****************************************************************************************************************/
+    /* Return true if the handling took place */
+    private bool HandleLeftPlayerTurn(Player current)
+    {
+        // Check if the turn is left player
+        if(!current.isInGame)
+        {
+            // Check if the player didn't fold yet and then takeAction
+            if(current.state != Player.State.FOLD)
+            {
+                GameManager.gameTable.TakeAction(current.name, Player.State.FOLD);
+
+                // UpdateGameSceneRoutine
+                UpdateGameScene(current);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private PlayerCanvas GetPlayerCanvasFromName(string name)
     {
         foreach(PlayerCanvas c in playerCanvas)
@@ -655,19 +702,19 @@ public class GameSceneUpdater : MonoBehaviour
 
     private bool IsShowDownOver()
     {
-        int cnt = 0;
+        int showDownOver = 0;
 
         foreach(PlayerCanvas canvas in playerCanvas)
         {
-            cnt += canvas.card1.gameObject.activeSelf ? 1 : 0;
+            showDownOver += canvas.card1.gameObject.activeSelf ? 1 : 0;
         }
 
         int showDownCnt = 0;
         foreach(Player p in GameManager.gameTable.players)
         {
-            showDownCnt += p.state != Player.State.FOLD ? 1 : 0;
+            showDownCnt += (p.state != Player.State.FOLD && p.isInGame) ? 1 : 0;
         }
         
-        return showDownCnt == cnt ? true : false;
+        return showDownOver == showDownCnt ? true : false;
     }
 }
