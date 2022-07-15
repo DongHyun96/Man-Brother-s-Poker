@@ -168,6 +168,9 @@ public class ScreenCanvas : MonoBehaviour
     // Public method for current turn response
     public void EnableTurn(PieButton.ActionState state, int callChips = 0)
     {
+        // Play Turn indicating sound
+        SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.ACTION, 0);
+        
         UpdateActionGUI(state, callChips);
         TogglePieButtonAnim(true);
     }
@@ -400,6 +403,12 @@ public class ScreenCanvas : MonoBehaviour
         if(pIdx != idx || !current.name.Equals(GameManager.thisPlayer.name))
         {
             return;
+        }
+
+        // Toggle betting panel off if it is on
+        if(bettingPanelAnim.GetBool("isIn"))
+        {
+            ToggleBettingPanelAnim();
         }
 
         // Forces the action to be taken

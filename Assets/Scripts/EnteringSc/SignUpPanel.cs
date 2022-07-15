@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SignUpPanel : MonoBehaviour
@@ -27,6 +28,7 @@ public class SignUpPanel : MonoBehaviour
         MainMessage msg = new MainMessage(MainMessage.MessageType.SIGNUP, inputField.text, GameManager.thisPlayer.character);
         MainMsgHandler.SendMessage(msg);
         //anim.SetTrigger("Hide");
+
     }
 
 }

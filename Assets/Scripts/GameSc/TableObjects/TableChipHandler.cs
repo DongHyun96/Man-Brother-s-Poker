@@ -38,6 +38,22 @@ public class TableChipHandler : MonoBehaviour
         this.buyIn = buyIn;
     }
 
+    // For audio
+    public bool IsBetChipsIn()
+    {
+        foreach(GameObject o in betChipsContainer)
+        {
+            if(o != null)
+            {
+                if(o.transform.childCount > 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void UpdateChips(ContentType type, int idx, int chips)
     {
         switch(type)

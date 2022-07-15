@@ -101,6 +101,9 @@ public class PlayerCanvas : MonoBehaviour
 
                     // Init contents
                     UpdateActionPanel(value);
+
+                    // Play TakeActionSound
+                    SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.ACTION, 1);
                     
                     // Action routine
                     StartCoroutine(ActionAnimationRoutine());
@@ -114,6 +117,9 @@ public class PlayerCanvas : MonoBehaviour
 
                     UpdateTab(player);
                     UpdateActionPanel(value, player.roundBet);
+
+                    // Play TakeActionSound
+                    SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.ACTION, 1);
 
                     StartCoroutine(ActionAnimationRoutine());
                     break;

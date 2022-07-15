@@ -199,6 +199,7 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Animate cards - Table first and then screen cards */
         int myIdx = table.GetIterPosByName(GameManager.thisPlayer.name);
+        
         yield return StartCoroutine(worldAnimHandler.PreflopRoutine(table, myIdx));
 
         // If the player is bankrupt, do not Toggle cards
@@ -516,6 +517,9 @@ public class GameSceneUpdater : MonoBehaviour
             camController.SetCamToWinnerPos(winnerIdx);
         }
 
+        // Play pot winning sfx
+        SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.WINNING, 0);
+
         yield return new WaitForSeconds(5.0f);
         
         /* Set cam to original position */
@@ -575,6 +579,9 @@ public class GameSceneUpdater : MonoBehaviour
         // Cam works
         camController.SetCamToWinnerPos(idx);
 
+        // Play pot winning sfx
+        SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.WINNING, 0);
+
         yield return new WaitForSeconds(5.0f);
 
         /* Set cam to original position */
@@ -609,6 +616,9 @@ public class GameSceneUpdater : MonoBehaviour
         // Init SCreenCanvas and show Game Over UI ( & Exit to Lobby btn )
         screenCanvas.InitCanvas();
         screenCanvas.stage = GameTable.Stage.GAME_FIN;
+
+        // Play gameWin sfx
+        SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.WINNING, 1);
 
         // PlayerCanvas - Init playerCanvas and Show rankings and totalChips
         foreach(PlayerCanvas c in playerCanvas)

@@ -38,9 +38,13 @@ public class L_PanelChat : MonoBehaviour
         {
             return;
         }
-        
+
         // Send message to server side
         MainMessage message = new MainMessage(MainMessage.MessageType.CHAT, GameManager.thisPlayer.name, inputField.text);
         MainMsgHandler.SendMessage(message);
+
+        // Activate inputfield again for convenience and erase field
+        inputField.ActivateInputField();
+        inputField.text = "";
     }
 }

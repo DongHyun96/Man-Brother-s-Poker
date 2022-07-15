@@ -174,8 +174,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.36666667
-    functionName: DestroyChild
+  - time: 0
+    functionName: PlayChipSound
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -190,6 +190,13 @@ AnimationClip:
     messageOptions: 0
   - time: 0.36666667
     functionName: OnAnimTurningPoint
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.36666667
+    functionName: DestroyChild
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

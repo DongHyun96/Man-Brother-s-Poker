@@ -107,6 +107,12 @@ public class WorldAnimHandler : MonoBehaviour
     {
         /* Collecting players' chip into pot */
         
+        // Play collecting chips sound if there is chips
+        if(chipHandler.IsBetChipsIn())
+        {
+            SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.CHIP, 1);
+        }
+
         /* Update betting chips to zero and then move chips */
         for(int i = 0; i < players.Count; i++)
         {
@@ -119,6 +125,10 @@ public class WorldAnimHandler : MonoBehaviour
 
     public IEnumerator PreflopRoutine(GameTable table, int myIdx)
     {
+        // Play card shuffling sound
+        SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.CARD, 0);
+        yield return new WaitForSeconds(1f);
+
         List<Player> players = table.players;
         cardHandler.DrawCard(TableCardHandler.DrawType.DISCARD, 0, new Card(Card.Suit.CLUB, 0));
 
@@ -196,6 +206,7 @@ public class WorldAnimHandler : MonoBehaviour
                 chipHandler.MoveChips(TableChipHandler.AnimType.POT_TO_PLAYER, idx, chips, p.totalChips);
             }
         }
+
         AnimTurningPointHandler h = chipHandler.m_potChips[potChipIdx].GetComponent<AnimTurningPointHandler>();
         yield return StartCoroutine(WaitForTurningPoint(h));
     }

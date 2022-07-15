@@ -57,6 +57,9 @@ public class TableCardHandler : MonoBehaviour
     /* Do this by animation events */
     public void GatherCardsToDeck()
     {
+        // Play gathering sound
+        SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.CARD, 4);
+
         for(int i = 0; i < playerFirstCards.Count; i++)
         {
             Animator firstCardAnim = playerFirstCards[i].GetComponent<Animator>();
