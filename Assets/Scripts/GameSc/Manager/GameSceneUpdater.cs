@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Diagnostics;
 /*
 * Controls GameScene UI & GUI animation update
 * Controls characters animation
@@ -248,7 +249,8 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Update totalChips and pot chips or enable fold image */
         screenCanvas.state = p.state;
-
+        Stopwatch watch = new Stopwatch(); 
+        watch.Start();
         /* Animate target player's animations */
         int targetIdx = table.GetIterPosByName(p.name);
         switch(p.state)
@@ -266,10 +268,13 @@ public class GameSceneUpdater : MonoBehaviour
                 yield return StartCoroutine(worldAnimHandler.AnimateFold(targetIdx));
                 break;
         }
+        watch.Stop();
+        print("Animate Target player's anim time: " + watch.ElapsedMilliseconds);
 
         /* Wait for couple of sec here */
         yield return new WaitForSeconds(1.5f);
-
+        
+        watch.Start();
         /* check if the stage is finished */
         switch(table.stage)
         {
@@ -301,7 +306,8 @@ public class GameSceneUpdater : MonoBehaviour
                 //screenCanvas.state = p.state;
                 break;
         }
-
+        watch.Stop();
+        print("checking stage fin time: " + watch.ElapsedMilliseconds);
         Player currentPlayer = table.GetCurrentPlayer();
         
         /* Check if the turn is left player */
@@ -310,7 +316,8 @@ public class GameSceneUpdater : MonoBehaviour
         {
             yield break;
         }
-
+        
+        watch.Start();
         /* Check iterator turn */
         if(GameManager.thisPlayer.name.Equals(currentPlayer.name))
         {
@@ -344,6 +351,8 @@ public class GameSceneUpdater : MonoBehaviour
                 case GameTable.TableStatus.ALLIN:
                     break;
             }
+            watch.Stop();
+            print("Checking iterator turn time: " + watch.ElapsedMilliseconds);
             // Enable light
             int idx = table.GetIterPosByName(GameManager.thisPlayer.name);
             lights[idx].SetActive(true);
@@ -351,6 +360,7 @@ public class GameSceneUpdater : MonoBehaviour
         
         /* Enable iterator turn on iterTurn player's canvas */
         GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
+        print("After UpdateGameSceneRoutine Fin: " + TimeUtils.GetCurrentDate());
     }
 
 

@@ -113,7 +113,6 @@ public class GameMsgHandler : MonoBehaviour
                     break;
                 case GameMessage.MessageType.TOSS:
                     UnityMainThread.wkr.AddJob(() => {
-                        
                         // Saving deck and players' isInGame
                         List<Card> deck = GameManager.gameTable.deck;
                         List<Player> players = GameManager.gameTable.players;

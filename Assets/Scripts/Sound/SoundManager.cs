@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 /* Controls Volume & mute */
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager instance;
+    private static SoundManager instance;
 
     public AudioMixer masterMixer;
 
