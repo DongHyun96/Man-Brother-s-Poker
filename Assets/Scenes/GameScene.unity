@@ -26534,11 +26534,7 @@ MonoBehaviour:
   bgList:
   - {fileID: 8300000, guid: e2dec2d3329b5a443bd8abb766b9e7f3, type: 3}
   - {fileID: 8300000, guid: c37f72ccd9c9efe418a906213de98d63, type: 3}
-  - {fileID: 8300000, guid: b053a8d24fecdeb4497a39ab913a1531, type: 3}
   - {fileID: 8300000, guid: a571ef54588e2b949885f27be3b15509, type: 3}
-  - {fileID: 8300000, guid: e4cfec8ee6dd6db4985e760a78b09bf3, type: 3}
-  - {fileID: 8300000, guid: 580efc54ba6a3a446b7060a8546204ef, type: 3}
-  - {fileID: 8300000, guid: 7a511cace5f7dc746bc96f809e6f9d99, type: 3}
   - {fileID: 8300000, guid: fc83d2c17a31e9546bbcd942482eb4ed, type: 3}
   - {fileID: 8300000, guid: cd777eaf4f2371349acaeb8beda82bad, type: 3}
 --- !u!82 &1523681905

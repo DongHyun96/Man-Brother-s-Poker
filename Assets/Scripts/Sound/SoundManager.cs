@@ -10,6 +10,9 @@ public class SoundManager : MonoBehaviour
 
     public AudioMixer masterMixer;
 
+    public const float MAX = -12f;
+    public const float MIN = -30f;
+
     private void Awake() {
         if(instance == null)
         {
@@ -22,6 +25,19 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private void Start() {
+        // Init volumes
+        float bgmVol = PlayerPrefs.GetFloat("bgmVol");
+        float sfxVol = PlayerPrefs.GetFloat("sfxVol");
+
+        bgmVol = bgmVol == 0 ? MAX : bgmVol;
+        sfxVol = sfxVol == 0 ? MAX : sfxVol;
+
+        // Set game Volumes
+        SetBgmLvl(bgmVol);
+        SetSfxLvl(sfxVol);
+    }
+
     public static SoundManager GetInstance()
     {
         return instance;
@@ -29,12 +45,48 @@ public class SoundManager : MonoBehaviour
 
     public void SetBgmLvl(float bgmLvl)
     {
+        if(bgmLvl == MIN)
+        {
+            masterMixer.SetFloat("bgmVolume", -80f); // Mute
+            return;
+        }
         masterMixer.SetFloat("bgmVolume", bgmLvl);
     }
 
     public void SetSfxLvl(float sfxLvl)
     {
+        if(sfxLvl == MIN)
+        {
+            masterMixer.SetFloat("sfxVolume", -80f); // Mute
+            return;
+        }
         masterMixer.SetFloat("sfxVolume", sfxLvl);
+    }
+
+    public float GetBgmLvl()
+    {
+        float returnValue;
+        masterMixer.GetFloat("bgmVolume",out returnValue);
+        return returnValue;
+    }
+
+    public float GetSfxLvl()
+    {
+        float returnValue;
+        masterMixer.GetFloat("sfxVolume",out returnValue);
+        return returnValue;
+    }
+
+    // Save volume data
+    private void OnApplicationQuit() {
+
+        float bgmVol, sfxVol;
+        masterMixer.GetFloat("bgmVolume", out bgmVol);
+        masterMixer.GetFloat("sfxVolume", out sfxVol);
+
+        // Set player data
+        PlayerPrefs.SetFloat("bgmVol", bgmVol);
+        PlayerPrefs.SetFloat("sfxVol", sfxVol);
     }
     
 }
