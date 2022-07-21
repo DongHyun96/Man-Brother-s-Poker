@@ -551,7 +551,7 @@ public class GameSceneUpdater : MonoBehaviour
         
             yield return new WaitForSeconds(0.5f);
 
-            /* ShowDown / Animation needed */
+            /* ShowDown */
             foreach(Player p in GameManager.gameTable.potWinnerManager.showDown)
             {
                 int pIdx = GameManager.gameTable.GetIterPosByName(p.name);

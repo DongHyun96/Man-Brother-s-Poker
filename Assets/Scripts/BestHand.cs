@@ -14,8 +14,12 @@ public class BestHand
     {
         List<Card> cards = new List<Card>();
 
-        cards.AddRange(playerCards);
-        cards.AddRange(communityCards);
+        // Deep copy
+        List<Card> pCards = playerCards.ConvertAll(c => new Card(c.suit, c.num));
+        List<Card> cCards = communityCards.ConvertAll(c => new Card(c.suit, c.num));
+
+        cards.AddRange(pCards);
+        cards.AddRange(cCards);
 
         // Init bestHand and bestHandCombi
         CalculateBestHand(cards);

@@ -21,29 +21,10 @@ public class PotWinnerManager
         HandleBackStraightException(players); // Change back straight ace number to -1(Lowest)
         
         CalculatePots(players);
-
-        foreach(KeyValuePair<int, List<Player>> kvPair in pots)
-        {
-            Debug.Log("Pots: " + kvPair.Key);
-            foreach(Player p in kvPair.Value)
-            {
-                Debug.Log(p.name);
-            }
-            Debug.Log("");
-        }
         
         CalculateWinners(pots);
-        foreach(KeyValuePair<int, List<Player>> kvPair in potWinnerStack)
-        {
-            Debug.Log("Pot winner(pot size): " + kvPair.Key);
-            foreach(Player p in kvPair.Value)
-            {
-                Debug.Log(p.name);
-            }
-            Debug.Log("");
-        }
-
-
+        
+        // ResetBackStraightNumber();
     }
 
     public List<Player> GetMainPotWinners()

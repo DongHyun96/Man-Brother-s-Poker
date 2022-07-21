@@ -31,7 +31,7 @@ public class ScriptTester : MonoBehaviour
     void Start()
     {
 
-        Stack<int> stack = new Stack<int>();
+        /* Stack<int> stack = new Stack<int>();
 
         stack.Push(0);
         stack.Push(1);
@@ -44,9 +44,16 @@ public class ScriptTester : MonoBehaviour
         foreach(int i in intArray)
         {
             print(i);
-        }
+        } */
 
-        
+        List<Card> cards = new List<Card>();
+        cards.Add(new Card(Card.Suit.CLUB, 0));
+        cards.Add(new Card(Card.Suit.CLUB, 1));
+        cards.Add(new Card(Card.Suit.CLUB, 2));
+
+        List<Card> newCards = cards.ConvertAll(c => new Card(c.suit, c.num));
+        newCards[0].num = 100;
+        print(cards[0].num);
     }
 
     private void InitDeck()
