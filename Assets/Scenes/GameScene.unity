@@ -248,6 +248,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 628395138}
+  ActionTextAnim: {fileID: 0}
 --- !u!1 &12582099
 GameObject:
   m_ObjectHideFlags: 0
@@ -3732,6 +3733,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 1191650619}
+  ActionTextAnim: {fileID: 0}
 --- !u!1 &151999031
 GameObject:
   m_ObjectHideFlags: 0
@@ -4920,6 +4922,7 @@ GameObject:
   m_Component:
   - component: {fileID: 219063226}
   - component: {fileID: 219063227}
+  - component: {fileID: 219063228}
   m_Layer: 0
   m_Name: PieButtons
   m_TagString: Untagged
@@ -4968,6 +4971,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &219063228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219063225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cfcaa0f73267c944bbe099ef1c9ed24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons:
+  - {fileID: 569709280}
+  - {fileID: 792967780}
+  - {fileID: 1552418721}
 --- !u!1 &224412972
 GameObject:
   m_ObjectHideFlags: 0
@@ -14514,6 +14533,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 215456386}
+  ActionTextAnim: {fileID: 0}
 --- !u!1001 &761624801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15065,6 +15085,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 543260154}
+  ActionTextAnim: {fileID: 0}
 --- !u!1001 &788200684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29054,6 +29075,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 2125875793}
+  ActionTextAnim: {fileID: 0}
 --- !u!1 &1552418719
 GameObject:
   m_ObjectHideFlags: 0
@@ -30808,6 +30830,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 1469513118}
+  ActionTextAnim: {fileID: 0}
 --- !u!1 &1615487943
 GameObject:
   m_ObjectHideFlags: 0
@@ -34592,6 +34615,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fill: {fileID: 318110513}
+  ActionTextAnim: {fileID: 0}
 --- !u!1 &1805602166
 GameObject:
   m_ObjectHideFlags: 0

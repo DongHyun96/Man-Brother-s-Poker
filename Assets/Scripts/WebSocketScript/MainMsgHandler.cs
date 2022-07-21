@@ -177,6 +177,15 @@ public class MainMsgHandler : MonoBehaviour
     void Start() {
         // Listener
         webSocket.OnMessage += ReceiveMessage;
+        
+        // This is for keeping connection
+        InvokeRepeating("SendDummy", 10f, 40f);
+    }
+
+    private void SendDummy()
+    {
+        MainMessage dummyMessage = new MainMessage(MainMessage.MessageType.DUMMY);
+        SendMessage(dummyMessage);
     }
 
 }

@@ -17,6 +17,7 @@ public class MainMessage
 	 * CHAT : Chat in Lobby panel.
 	 * REMOVE : When some player turns off the game completely.
 	 * UPDATE : Update player's isInvitable etc.
+	 * DUMMY : Use this type to keep the connection between client and aws socket
 	 */
 	[JsonConverter(typeof(StringEnumConverter))]
 	public enum MessageType{
@@ -36,7 +37,10 @@ public class MainMessage
 		UPDATE,
 
 		[EnumMember(Value = "GET")]
-		GET
+		GET,
+
+		[EnumMember(Value = "DUMMY")]
+		DUMMY
 
 	}
 

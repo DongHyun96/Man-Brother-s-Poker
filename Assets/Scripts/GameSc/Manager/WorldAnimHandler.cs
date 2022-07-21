@@ -213,9 +213,12 @@ public class WorldAnimHandler : MonoBehaviour
 
     private IEnumerator WaitForTurningPoint(AnimTurningPointHandler handler)
     {
-        while(!handler.IsTurningPointPassed)
+        /* while(!handler.IsTurningPointPassed)
         {
             yield return null;
-        }
+        } */
+        yield return new WaitUntil(() => handler.IsTurningPointPassed);
+
+        // yield return new WaitForSecondsRealtime
     }
 }

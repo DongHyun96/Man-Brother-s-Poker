@@ -33,11 +33,15 @@ public class Timer : MonoBehaviour
 
             isTimerActive = value;
         }
+
+        get => isTimerActive;
     }
 
     private bool isTimerActive = false;
 
     private const float t = 15f;
+
+    [SerializeField] private Animator ActionTextAnim;
 
     private void FixedUpdate() 
     {

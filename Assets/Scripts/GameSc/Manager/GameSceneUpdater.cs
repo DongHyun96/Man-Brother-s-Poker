@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Diagnostics;
+using System.Linq;
 /*
 * Controls GameScene UI & GUI animation update
 * Controls characters animation
@@ -22,6 +23,48 @@ public class GameSceneUpdater : MonoBehaviour
     public List<GameObject> lights;
 
     public bool isFirstGameStart = false;
+
+    private struct EnableTurnStruct
+    {
+        public int readyCount;
+        public bool isReadyChecked;
+
+        public int turnIdx;
+        public PieButton.ActionState actionState;
+        public int callChips;
+
+        public EnableTurnStruct(int readyCount, bool isReadyChecked, int turnIdx, 
+        PieButton.ActionState actionState, int callChips) {
+            this.readyCount = readyCount;
+            this.isReadyChecked = isReadyChecked;
+            this.turnIdx = turnIdx;
+            this.actionState = actionState;
+            this.callChips =callChips;        
+        }
+
+        public void InitTurnValues(int turnIdx, PieButton.ActionState actionState, int callChips)
+        {
+            this.turnIdx = turnIdx;
+            this.actionState = actionState;
+            this.callChips = callChips;
+        }
+
+        // Enable turn for playerCanvas and screenCanvas
+        public void EnableTurn(List<PlayerCanvas> pcanvas, ScreenCanvas sCanvas, List<GameObject> lights)
+        {
+            isReadyChecked = true;
+            readyCount = 0;
+
+            int myIdx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
+            if(myIdx == turnIdx)
+            {
+                sCanvas.EnableTurn(actionState, callChips);
+                lights[myIdx].SetActive(true);
+            }
+
+            pcanvas[turnIdx].EnableTurn();
+        }
+    };
 
     public static GameSceneUpdater GetInstance()
     {
@@ -110,11 +153,32 @@ public class GameSceneUpdater : MonoBehaviour
         {
             if(GameManager.gameTable.GetCurrentPlayer().state != Player.State.FOLD)
             {
+                enableTurnStruct.isReadyChecked = true;
+                enableTurnStruct.readyCount = 0;
                 GameManager.gameTable.TakeAction(name, Player.State.FOLD);
                 UpdateGameScene(targetPlayer);
             }
         }
     }
+
+    // This refs for check if the players are all ready for enable turn
+    private EnableTurnStruct enableTurnStruct = new EnableTurnStruct(0, false, 0, PieButton.ActionState.CHECK_BET_FOLD, 0);
+
+    // Check everyone is available for EnableTurn
+    public void CheckReady()
+    {
+        if(!enableTurnStruct.isReadyChecked)
+        {
+            enableTurnStruct.readyCount++;
+            int leftPlayerCnt = GameManager.gameTable.players.Count(item => item.isInGame);
+
+            if(enableTurnStruct.readyCount >= leftPlayerCnt)
+            {
+                enableTurnStruct.EnableTurn(playerCanvas, screenCanvas, lights);
+            }
+        }
+    }  
+
 
     /****************************************************************************************************************
     *                                                Starting methods
@@ -129,6 +193,8 @@ public class GameSceneUpdater : MonoBehaviour
     ****************************************************************************************************************/
     private IEnumerator GameStartRoutine(GameTable table)
     {
+        enableTurnStruct.isReadyChecked = false;
+
         print("Entering GameStartRoutine");
         
         /* Hide left players */
@@ -223,17 +289,17 @@ public class GameSceneUpdater : MonoBehaviour
             yield break;
         }
 
-        /* Enable turn */
-        playerCanvas[current_UTG].EnableTurn();
-        if(myIdx == current_UTG)
-        {
-            screenCanvas.EnableTurn(PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
-            lights[myIdx].SetActive(true);
-        }
+        /* Init Enable turn struct */
+        enableTurnStruct.InitTurnValues(current_UTG, PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
+
+        // Send ready msg
+        GameMsgHandler.SendReady();
     }
 
     private IEnumerator UpdateGameSceneRoutine(Player p)
     {
+        enableTurnStruct.isReadyChecked = false;
+
         GameTable table = GameManager.gameTable;
 
         /* Turn off the lights */
@@ -249,8 +315,7 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Update totalChips and pot chips or enable fold image */
         screenCanvas.state = p.state;
-        Stopwatch watch = new Stopwatch(); 
-        watch.Start();
+
         /* Animate target player's animations */
         int targetIdx = table.GetIterPosByName(p.name);
         switch(p.state)
@@ -268,13 +333,11 @@ public class GameSceneUpdater : MonoBehaviour
                 yield return StartCoroutine(worldAnimHandler.AnimateFold(targetIdx));
                 break;
         }
-        watch.Stop();
-        print("Animate Target player's anim time: " + watch.ElapsedMilliseconds);
+
 
         /* Wait for couple of sec here */
         yield return new WaitForSeconds(1.5f);
         
-        watch.Start();
         /* check if the stage is finished */
         switch(table.stage)
         {
@@ -306,8 +369,7 @@ public class GameSceneUpdater : MonoBehaviour
                 //screenCanvas.state = p.state;
                 break;
         }
-        watch.Stop();
-        print("checking stage fin time: " + watch.ElapsedMilliseconds);
+
         Player currentPlayer = table.GetCurrentPlayer();
         
         /* Check if the turn is left player */
@@ -317,8 +379,7 @@ public class GameSceneUpdater : MonoBehaviour
             yield break;
         }
         
-        watch.Start();
-        /* Check iterator turn */
+        /* Init enableTurn Struct fields */
         if(GameManager.thisPlayer.name.Equals(currentPlayer.name))
         {
             // CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
@@ -326,7 +387,7 @@ public class GameSceneUpdater : MonoBehaviour
             {
                 case GameTable.TableStatus.IDLE:
                 case GameTable.TableStatus.CHECK:
-                    screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD);
+                    enableTurnStruct.InitTurnValues(table.iterPos, PieButton.ActionState.CHECK_BET_FOLD, 0);
                     break;
                 case GameTable.TableStatus.BET:
                     int big = table.GetNext(table.SB_Pos);
@@ -337,30 +398,29 @@ public class GameSceneUpdater : MonoBehaviour
                         if(table.roundBetMax == currentPlayer.roundBet)
                         {
                             // All players didn't raised
-                            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
+                            enableTurnStruct.InitTurnValues(table.iterPos, PieButton.ActionState.CHECK_RAISE_FOLD, table.roundBetMax);
                             break;
                         }
                     }
                     int currentPTotal = currentPlayer.totalChips + currentPlayer.roundBet;
                     PieButton.ActionState a = currentPTotal <= table.roundBetMax ?
                     PieButton.ActionState.ALLIN_FOLD : PieButton.ActionState.CALL_RAISE_FOLD;
-                    screenCanvas.EnableTurn(a, table.roundBetMax);
-
-
+                    enableTurnStruct.InitTurnValues(table.iterPos, a, table.roundBetMax);
                     break;
                 case GameTable.TableStatus.ALLIN:
                     break;
             }
-            watch.Stop();
-            print("Checking iterator turn time: " + watch.ElapsedMilliseconds);
+
             // Enable light
             int idx = table.GetIterPosByName(GameManager.thisPlayer.name);
             lights[idx].SetActive(true);
         }
         
-        /* Enable iterator turn on iterTurn player's canvas */
-        GetPlayerCanvasFromName(table.GetCurrentPlayer().name).EnableTurn(); // Enable timer from playerCanvas
-        print("After UpdateGameSceneRoutine Fin: " + TimeUtils.GetCurrentDate());
+        /* Init turnIdx */
+        enableTurnStruct.turnIdx = table.iterPos;
+
+        // Send ready msg
+        GameMsgHandler.SendReady();
     }
 
 
@@ -462,16 +522,11 @@ public class GameSceneUpdater : MonoBehaviour
             yield break;
         }
         
-        /* Enable turn */
-        GetPlayerCanvasFromName(GameManager.gameTable.GetCurrentPlayer().name).EnableTurn();
-        if(GameManager.thisPlayer.name.Equals(GameManager.gameTable.GetCurrentPlayer().name))
-        {
-            screenCanvas.EnableTurn(PieButton.ActionState.CHECK_BET_FOLD, 0);
-            
-            // light
-            int idx = GameManager.gameTable.GetIterPosByName(GameManager.thisPlayer.name);
-            lights[idx].SetActive(true);
-        }
+        /* Init Turn fields */
+        enableTurnStruct.InitTurnValues(GameManager.gameTable.iterPos, PieButton.ActionState.CHECK_BET_FOLD, 0);
+
+        // Send ready msg
+        GameMsgHandler.SendReady();
     }
 
 
@@ -667,14 +722,6 @@ public class GameSceneUpdater : MonoBehaviour
         GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
         StartGame();
         is_prepare_running = false;
-    }
-
-    private IEnumerator WaitForTurningPoint(AnimTurningPointHandler handler)
-    {
-        while(!handler.IsTurningPointPassed)
-        {
-            yield return null;
-        }
     }
 
     /****************************************************************************************************************

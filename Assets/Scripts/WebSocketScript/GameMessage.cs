@@ -10,7 +10,7 @@ public class GameMessage
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MessageType{
-        REGISTER, DECK, TOSS, SHOWDOWN, LEAVE
+        REGISTER, DECK, TOSS, SHOWDOWN, LEAVE, DUMMY, READY_CHECK
     }
     public MessageType type;
 
@@ -23,6 +23,17 @@ public class GameMessage
     public List<Card> deck = new List<Card>();
 
     public GameMessage() {}
+
+    public GameMessage(MessageType type)
+    {
+        this.type = type;
+    }
+
+    public GameMessage(Guid id, MessageType type)
+    {
+        this.id = id;
+        this.type = type;
+    }
 
     public GameMessage(Guid id, MessageType type, string sender, GameTable table)
     {

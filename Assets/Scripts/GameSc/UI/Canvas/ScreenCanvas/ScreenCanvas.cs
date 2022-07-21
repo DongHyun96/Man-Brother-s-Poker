@@ -170,6 +170,9 @@ public class ScreenCanvas : MonoBehaviour
     {
         // Play Turn indicating sound
         SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.ACTION, 0);
+
+        // Set pie button interactable to true
+        pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(true);
         
         UpdateActionGUI(state, callChips);
         TogglePieButtonAnim(true);
@@ -347,6 +350,9 @@ public class ScreenCanvas : MonoBehaviour
      Receive updated gameTable from server -> Update gameTable and UI */
     public void OnPieLeft() // CHECK, CALL, ALLIN
     {
+        // Set pie button interactable to false
+        pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(false);
+
         switch(pieButtons[0].State)
         {
             case PieButton.ActionState.CHECK_BET_FOLD:
@@ -375,6 +381,9 @@ public class ScreenCanvas : MonoBehaviour
     {
         if(pieButtons[0].State == PieButton.ActionState.ALLIN_FOLD) // When player should have to all in or fold
         {
+            // Set pie button interactable to false
+            pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(false);
+            
             GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.ALLIN);
 
             GameMsgHandler.TossTable();
@@ -388,6 +397,9 @@ public class ScreenCanvas : MonoBehaviour
 
     public void OnPieButtom() // Fold btn
     {
+        // Set pie button interactable to false
+        pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(false);
+
         GameManager.gameTable.TakeAction(GameManager.thisPlayer.name, Player.State.FOLD);
 
         GameMsgHandler.TossTable();

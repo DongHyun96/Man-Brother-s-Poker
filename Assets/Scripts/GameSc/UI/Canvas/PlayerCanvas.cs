@@ -184,6 +184,7 @@ public class PlayerCanvas : MonoBehaviour
             StartCoroutine(WinnerTextRoutine());
         }
     }
+    
 
     private IEnumerator WinnerTextRoutine()
     {

@@ -39,7 +39,9 @@ public class RoomMessage
 		[EnumMember(Value = "GET")]
 		GET,
 		[EnumMember(Value = "GAMESTART")]
-		GAMESTART
+		GAMESTART,
+		[EnumMember(Value = "DUMMY")]
+		DUMMY
 
 	}
 	public MessageType type;

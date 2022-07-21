@@ -178,6 +178,9 @@ public class RoomMsgHandler : MonoBehaviour
 
     private void Start() {
         webSocket.OnMessage += ReceiveMessage;
+
+        // This is for keeping connection
+        InvokeRepeating("SendDummy", 10f, 40f);
     }
 
     /* This function will use when player leaves the room ( Precisely left from gamescene ) */
@@ -212,4 +215,9 @@ public class RoomMsgHandler : MonoBehaviour
         }
     }
     
+    private void SendDummy()
+    {
+        RoomMessage dummy = new RoomMessage(RoomMessage.MessageType.DUMMY);
+        SendMessage(dummy);
+    }
 }

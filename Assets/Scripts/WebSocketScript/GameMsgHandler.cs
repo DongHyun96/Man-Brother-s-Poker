@@ -53,6 +53,13 @@ public class GameMsgHandler : MonoBehaviour
         //websocket.Send(JsonConvert.SerializeObject(message, Formatting.Indented));
     }
 
+    public static void SendReady()
+    {
+        GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.READY_CHECK);
+        Debug.Log("Sending ready msg");
+        websocket.Send(JsonConvert.SerializeObject(message));
+    }
+
     private static void ReceiveMessage(object s, MessageEventArgs e)
     {
         try
@@ -134,6 +141,11 @@ public class GameMsgHandler : MonoBehaviour
                         GameSceneUpdater.GetInstance().ShowDownCardsByPlayer(message.sender, message.cardShowDown);
                     });
                     break;
+                case GameMessage.MessageType.READY_CHECK:
+                    UnityMainThread.wkr.AddJob(() => {
+                        GameSceneUpdater.GetInstance().CheckReady();
+                    });
+                    break;
                 case GameMessage.MessageType.LEAVE:
                     UnityMainThread.wkr.AddJob(() => {
                         // When someone left the game
@@ -181,8 +193,13 @@ public class GameMsgHandler : MonoBehaviour
 #endif
 
         // REGISTER the gameTable and this player to server
-        StartCoroutine(DelayRegisterRoutine());
+        //StartCoroutine(DelayRegisterRoutine());
+        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.REGISTER,
+         GameManager.thisPlayer.name, GameManager.gameTable);
+        SendMessage(msg);
 
+        // This is for keeping connection
+        InvokeRepeating("SendDummy", 10f, 40f);
     }
 
     private IEnumerator DelayRegisterRoutine()
@@ -197,4 +214,8 @@ public class GameMsgHandler : MonoBehaviour
         SendMessage(msg);
     }
 
+    private void SendDummy()
+    {
+        GameMessage dummy = new GameMessage(GameMessage.MessageType.DUMMY);
+    }
 }
