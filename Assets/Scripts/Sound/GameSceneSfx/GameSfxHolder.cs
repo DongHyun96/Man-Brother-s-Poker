@@ -24,7 +24,8 @@ public class GameSfxHolder : SfxHolder
     [SerializeField] private List<AudioClip> canvasCardClips;
 
     // (PlayerCanvas sounds) tabPanel in, tabPanel out
-    [SerializeField] private List<AudioClip> playerCanvasClips; 
+    [SerializeField] private List<AudioClip> playerCanvasClips;
+
 
     protected override void Awake()
     {

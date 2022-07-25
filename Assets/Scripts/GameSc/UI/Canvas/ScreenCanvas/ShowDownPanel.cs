@@ -35,6 +35,12 @@ public class ShowDownPanel : MonoBehaviour
         timer.IsTimerActive = true;
     }
 
+    private void OnDisable() 
+    {
+        // Turn off timer sfx
+        timer.StopSfx();    
+    }
+
     public void OnUpper()
     {
         List<bool> showDownBool = new List<bool>();

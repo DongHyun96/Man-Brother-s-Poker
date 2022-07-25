@@ -18,6 +18,9 @@ public class Timer : MonoBehaviour
             {
                 // Reset timer fill amount
                 fill.fillAmount = 0f;
+
+                // Set isSfxPlaying to false
+                isSfxPlaying = false;
             }
             
             Animator animator = gameObject.GetComponent<Animator>();
@@ -39,9 +42,11 @@ public class Timer : MonoBehaviour
 
     private bool isTimerActive = false;
 
-    private const float t = 15f;
+    private const float t = 20f;
 
     [SerializeField] private Animator ActionTextAnim;
+    
+    private bool isSfxPlaying = false;
 
     private void FixedUpdate() 
     {
@@ -49,7 +54,14 @@ public class Timer : MonoBehaviour
         {
             if(fill.fillAmount < 1)
             {
-                fill.fillAmount += Time.deltaTime * (1 / t);
+                fill.fillAmount += Time.deltaTime * (1 / t); 
+
+                if(fill.fillAmount >= 0.75f && !isSfxPlaying)
+                {
+                    // Play ticking sound
+                    gameObject.GetComponent<AudioSource>().Play();
+                    isSfxPlaying = true;
+                }
             }
             else
             {
@@ -58,5 +70,10 @@ public class Timer : MonoBehaviour
                 IsTimerActive = false;
             }
         }
+    }
+
+    public void StopSfx()
+    {
+        gameObject.GetComponent<AudioSource>().Stop();
     }
 }
