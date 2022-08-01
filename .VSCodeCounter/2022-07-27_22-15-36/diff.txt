@@ -1,0 +1,51 @@
+Date : 2022-07-27 22:15:36
+Directory : c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts
+Total : 18 files,  96 codes, 33 comments, 31 blanks, all 160 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         18 |         96 |         33 |         31 |        160 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                           | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                              |         18 |         96 |         33 |         31 |        160 |
+| GameSc                                                                                                         |          7 |         75 |         12 |         25 |        112 |
+| GameSc\Manager                                                                                                 |          2 |         44 |          6 |         14 |         64 |
+| GameSc\UI                                                                                                      |          5 |         31 |          6 |         11 |         48 |
+| GameSc\UI\Canvas                                                                                               |          5 |         31 |          6 |         11 |         48 |
+| GameSc\UI\Canvas\ScreenCanvas                                                                                  |          3 |         23 |          5 |          8 |         36 |
+| Sound                                                                                                          |          1 |          0 |          0 |          1 |          1 |
+| Sound\GameSceneSfx                                                                                             |          1 |          0 |          0 |          1 |          1 |
+| Test                                                                                                           |          1 |         -4 |         14 |         -3 |          7 |
+| WebSocketScript                                                                                                |          7 |         41 |          5 |          9 |         55 |
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                       | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\BestHand.cs                                          | C#       |          2 |          1 |          1 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\Manager\GameSceneUpdater.cs                   | C#       |         44 |          5 |         13 |         62 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\Manager\WorldAnimHandler.cs                   | C#       |          0 |          1 |          1 |          2 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\PlayerCanvas.cs                     | C#       |         -3 |         -1 |         -1 |         -5 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\InteractableToggler.cs | C#       |         15 |          0 |          3 |         18 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ScreenCanvas.cs        | C#       |          4 |          4 |          4 |         12 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\ScreenCanvas\ShowDownPanel.cs       | C#       |          4 |          1 |          1 |          6 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\GameSc\UI\Canvas\Timer.cs                            | C#       |         11 |          2 |          4 |         17 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\PotWinnerManager.cs                                  | C#       |        -18 |          1 |         -2 |        -19 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Sound\GameSceneSfx\GameSfxHolder.cs                  | C#       |          0 |          0 |          1 |          1 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\Test\ScriptTester.cs                                 | C#       |         -4 |         14 |         -3 |          7 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\GameMessage.cs                       | C#       |          9 |          0 |          2 |         11 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\GameMsgHandler.cs                    | C#       |         16 |          1 |          2 |         19 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\MainMessage.cs                       | C#       |          2 |          1 |          1 |          4 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\MainMsgHandler.cs                    | C#       |          6 |          1 |          2 |          9 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\RoomMessage.cs                       | C#       |          2 |          0 |          0 |          2 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\RoomMsgHandler.cs                    | C#       |          6 |          1 |          1 |          8 |
+| c:\Users\wadan\Desktop\Man-Brother-s-Poker\Assets\Scripts\WebSocketScript\UrlBase.cs                           | C#       |          0 |          1 |          1 |          2 |
+| Total                                                                                                          |          |         96 |         33 |         31 |        160 |
++----------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -184,8 +184,10 @@ public class MainMsgHandler : MonoBehaviour
 
     private void SendDummy()
     {
-        MainMessage dummyMessage = new MainMessage(MainMessage.MessageType.DUMMY);
-        SendMessage(dummyMessage);
+        UnityMainThread.wkr.AddJob(() => {
+            MainMessage dummyMessage = new MainMessage(MainMessage.MessageType.DUMMY);
+            SendMessage(dummyMessage);
+        });
     }
 
 }

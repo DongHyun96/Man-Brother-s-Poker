@@ -217,7 +217,9 @@ public class RoomMsgHandler : MonoBehaviour
     
     private void SendDummy()
     {
-        RoomMessage dummy = new RoomMessage(RoomMessage.MessageType.DUMMY);
-        SendMessage(dummy);
+        UnityMainThread.wkr.AddJob(() => {
+            RoomMessage dummy = new RoomMessage(RoomMessage.MessageType.DUMMY);
+            SendMessage(dummy);
+        });
     }
 }

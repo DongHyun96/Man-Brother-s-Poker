@@ -222,7 +222,7 @@ public class ScreenCanvas : MonoBehaviour
         foldImage.gameObject.SetActive(false);
 
         /* Init pot Chips and player chips */
-        UpdatePotChips(0);
+        UpdatePotChips(GameManager.gameTable.pot);
         Player p = GameManager.gameTable.GetPlayerByName(GameManager.thisPlayer.name);
         UpdateTotalChips(p.totalChips);
     }

@@ -55,9 +55,11 @@ public class GameMsgHandler : MonoBehaviour
 
     public static void SendReady()
     {
-        GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.READY_CHECK);
-        Debug.Log("Sending ready msg");
-        websocket.Send(JsonConvert.SerializeObject(message));
+        UnityMainThread.wkr.AddJob(() => {
+            GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.READY_CHECK);
+            Debug.Log("Sending ready msg");
+            websocket.Send(JsonConvert.SerializeObject(message));
+        });
     }
 
     private static void ReceiveMessage(object s, MessageEventArgs e)
@@ -165,9 +167,15 @@ public class GameMsgHandler : MonoBehaviour
     }
     private void Awake() 
     {
+        // Init websocket
+        websocket  = new WebSocket(UrlBase.addressBase + "gameEcho");
+
         websocket.Connect();
+
+        // Make Subscription on OnMessage
         websocket.OnMessage += ReceiveMessage;
     }
+
 
     private void Start()
     {

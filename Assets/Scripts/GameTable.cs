@@ -17,8 +17,8 @@ public class GameTable
     public int SB_Pos; // For the next round start
 
     /*
-    * ROUND_FIN : when round is finished(proflop, flop...)
-    * POT_FIN : when pot is finished
+    * ROUND_FIN : When round is finished(proflop, flop...)
+    * POT_FIN : When pot is finished
     * GAME_FIN : When game over
     * ------------------------------------------------------------------------------
     * PREFLOP -> ROUND_FIN -> FLOP -> ROUND_FIN -> ... -> POT_FIN -> ... -> GAME_FIN

@@ -154,6 +154,12 @@ public class WorldAnimHandler : MonoBehaviour
         }
         while(idx != table.SB_Pos);
 
+        // ThisPlayer bankrupt case
+        if(table.players[myIdx].state == Player.State.FOLD)
+        {
+            yield break;
+        }
+        
         AnimTurningPointHandler h = cardHandler.playerSecondCards[myIdx].GetComponent<AnimTurningPointHandler>();
         yield return StartCoroutine(WaitForTurningPoint(h));
     }

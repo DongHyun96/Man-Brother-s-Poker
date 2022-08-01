@@ -148,18 +148,35 @@ public class GameSceneUpdater : MonoBehaviour
                 return;
         }
 
+        if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN)
+        {
+            // All in case
+            return;
+        }
+
         // If it is left player's turn and didn't fold yet
         if(GameManager.gameTable.GetCurrentPlayer().name.Equals(name))
         {
             if(GameManager.gameTable.GetCurrentPlayer().state != Player.State.FOLD)
             {
-                enableTurnStruct.isReadyChecked = true;
-                enableTurnStruct.readyCount = 0;
-                GameManager.gameTable.TakeAction(name, Player.State.FOLD);
-                UpdateGameScene(targetPlayer);
+                // Wait for enableTurn and then takeAction
+                StartCoroutine(OnPlayerLeft_TakeActionRoutine(targetPlayer));
             }
         }
     }
+
+    private IEnumerator OnPlayerLeft_TakeActionRoutine(Player targetPlayer)
+    {
+        Timer timer = GetPlayerCanvasFromName(targetPlayer.name).timer;
+
+        // Wait for EnableTurn
+        yield return new WaitUntil(() => timer.IsTimerActive);
+
+        // Take action
+        GameManager.gameTable.TakeAction(targetPlayer.name, Player.State.FOLD);
+        UpdateGameScene(targetPlayer);
+    }
+    
 
     // This refs for check if the players are all ready for enable turn
     private EnableTurnStruct enableTurnStruct = new EnableTurnStruct(0, false, 0, PieButton.ActionState.CHECK_BET_FOLD, 0);
@@ -196,7 +213,8 @@ public class GameSceneUpdater : MonoBehaviour
         enableTurnStruct.isReadyChecked = false;
 
         print("Entering GameStartRoutine");
-        
+        print("table.stage = " + table.stage);
+        // print("table")
         /* Hide left players */
         for(int i = 0; i < table.players.Count; i++)
         {
@@ -252,6 +270,7 @@ public class GameSceneUpdater : MonoBehaviour
 
         screenCanvas.InitCanvas();
         screenCanvas.stage = GameTable.Stage.PREFLOP;
+        
 
         /* Init players' chip */
         for(int i = 0; i < table.players.Count; i++)
@@ -286,8 +305,11 @@ public class GameSceneUpdater : MonoBehaviour
         bool isHandled = HandleLeftPlayerTurn(table.GetCurrentPlayer());
         if(isHandled)
         {
+            print("From GameStartRoutine - isHandled");
             yield break;
         }
+
+        print("Before Init Enable turn struct");
 
         /* Init Enable turn struct */
         enableTurnStruct.InitTurnValues(current_UTG, PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
@@ -410,10 +432,6 @@ public class GameSceneUpdater : MonoBehaviour
                 case GameTable.TableStatus.ALLIN:
                     break;
             }
-
-            // Enable light
-            int idx = table.GetIterPosByName(GameManager.thisPlayer.name);
-            lights[idx].SetActive(true);
         }
         
         /* Init turnIdx */
