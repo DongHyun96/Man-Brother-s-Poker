@@ -61,7 +61,7 @@ public class GameTable
             {
                 case Stage.PREFLOP:
                     Debug.Log("Entering preflop");
-        
+                    Debug.Log("Card counts: " + deck.Count);
                     // Init players
                     foreach(Player p in players)
                     {
@@ -78,9 +78,9 @@ public class GameTable
                         }
                     }
 
-                    // init new SB_Pos and iterPos(UTG) / Have to consider player's broken or not
+                    // init new SB_Pos and iterPos(Set it to BB)
                     SB_Pos = GetNext(SB_Pos);
-                    iterPos = GetNext(GetNext(SB_Pos));
+                    iterPos = GetNext(SB_Pos); // Big blind pos
 
                     // Init table fields
                     tableStatus = TableStatus.IDLE;
@@ -94,7 +94,7 @@ public class GameTable
                         return;
                     }
 
-                    // Small, big betting
+                    // Small, big betting(Take Action)
                     Player small = players[SB_Pos];
                     Player big = players[GetNext(SB_Pos)];
 
@@ -102,9 +102,7 @@ public class GameTable
                     tableStatus = TableStatus.BET;
                     pot += small.roundBet;
 
-                    pot += (big.totalChips <= sbChip * 2) ? big.totalChips - big.roundBet : sbChip * 2 - big.roundBet;
-                    big.Raise(sbChip * 2);
-                    roundBetMax = big.roundBet;
+                    TakeAction(big.name, Player.State.RAISE, sbChip * 2);
 
                     // Draw cards to player
                     DrawCard(); // Remove first cards
@@ -115,9 +113,16 @@ public class GameTable
                         do
                         {
                             players[temp].cards.Add(DrawCard());
-                            temp = GetNext(temp);
+                            temp = GetNext(temp, true);
                         } while(temp != SB_Pos);
                     }
+
+                    // Check if the stage is over
+                    if(m_stage == Stage.ROUND_FIN)
+                    {
+                        return;
+                    }
+                    
                     break;
                 case Stage.FLOP:
                     Debug.Log("Entering Flop");
@@ -196,20 +201,15 @@ public class GameTable
         get => m_tableStatus;
         set
         {
-            if(value == TableStatus.ALLIN)
-            {
-                /* Get ShowDown order */
-                
-                /* Draw cards to community card till the end */
-
-                /* 정산 */
-            }
             m_tableStatus = value;
         }
     }
 
     [JsonIgnore]
     public List<Card> deck = new List<Card>();
+    
+    [JsonIgnore]
+    public List<Card> nextDeck = new List<Card>(); // Used when it is all in status
 
     public List<Card> communityCards = new List<Card>();
 
@@ -325,14 +325,22 @@ public class GameTable
         return tempIter;
     }
 
-    public int GetNext(int inputPos)
+    // isIniting is used for SB BB and drawing cards to player for preventing BB ALL IN case exception
+    public int GetNext(int inputPos, bool isIniting = false)
     {
         int tempIter = inputPos;
         while(tempIter < players.Count - 1)
         {
             tempIter++;
 
-            if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
+            if(isIniting)
+            {
+                if(players[tempIter].state != Player.State.FOLD)
+                {
+                    return tempIter;
+                }
+            }
+            else if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN) // Normal case
             {
                 return tempIter;
             }
@@ -343,7 +351,14 @@ public class GameTable
         while(tempIter != inputPos)
         {
             tempIter++;
-            if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
+            if(isIniting)
+            {
+                if(players[tempIter].state != Player.State.FOLD)
+                {
+                    return tempIter;
+                }
+            }
+            else if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
             {
                 return tempIter;
             }
@@ -518,10 +533,21 @@ public class GameTable
                 return true; // When everyone checked except fold and all in
             case TableStatus.BET:
 
-                // PREFLOP case exception (After small blind action, big blind has one exception chance to make decision)
-                if(stage == Stage.PREFLOP && roundBetMax == sbChip * 2 && iterPos == SB_Pos)
+                // PREFLOP case exception
+                if(stage == Stage.PREFLOP)
                 {
-                    return false;
+                    // After small blind action, big blind has one exception chance to make decision,
+                    // But when the big blind state is ALLIN, round is over
+                    if(iterPos == SB_Pos)
+                    {
+                        if(roundBetMax <= sbChip * 2)
+                        {
+                            Player bigBlind = players[GetNext(SB_Pos, true)];
+                            return bigBlind.state == Player.State.ALLIN;
+                        }
+                    }
+                    
+
                 }
 
                 // Normal case

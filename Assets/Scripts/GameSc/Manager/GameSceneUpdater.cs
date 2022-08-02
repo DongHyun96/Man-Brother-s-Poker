@@ -244,7 +244,7 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         int smallPos = table.SB_Pos;
-        int bigPos = table.GetNext(smallPos);
+        int bigPos = table.GetNext(smallPos, true);
         int current_UTG = table.iterPos;
 
         // Set up playerCanvas
@@ -301,6 +301,33 @@ public class GameSceneUpdater : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
+        /* check if the stage is finished */
+        switch(table.stage)
+        {
+            case GameTable.Stage.ROUND_FIN:
+                // Round fin animation routine needed
+                //screenCanvas.state = p.state;
+                StartCoroutine(RoundFinRoutine());
+                yield break;
+            case GameTable.Stage.UNCONTESTED:
+                Player winner = new Player();
+                foreach(Player player in table.players)
+                {
+                    if(player.state != Player.State.FOLD)
+                    {
+                        winner = player;
+                        break;
+                    }
+                }
+                StartCoroutine(UncontestedRoutine(winner));
+                yield break;
+            case GameTable.Stage.POT_FIN:
+                StartCoroutine(PotFinRoutine());
+                yield break;
+            default:
+                break;
+        }
+
         /* Check if the turn is left player */
         bool isHandled = HandleLeftPlayerTurn(table.GetCurrentPlayer());
         if(isHandled)
@@ -312,7 +339,7 @@ public class GameSceneUpdater : MonoBehaviour
         print("Before Init Enable turn struct");
 
         /* Init Enable turn struct */
-        enableTurnStruct.InitTurnValues(current_UTG, PieButton.ActionState.CALL_RAISE_FOLD, table.sbChip * 2);
+        enableTurnStruct.InitTurnValues(current_UTG, PieButton.ActionState.CALL_RAISE_FOLD, table.players[bigPos].totalBet);
 
         // Send ready msg
         GameMsgHandler.SendReady();
@@ -731,10 +758,18 @@ public class GameSceneUpdater : MonoBehaviour
     private IEnumerator PrepareNextPotRoutine(Stack<KeyValuePair<int, List<Player>>> potWinnerStack)
     {
         is_prepare_running = true;
+
         yield return new WaitForSeconds(3.5f);
 
         /* Play table preparation animations */
         yield return StartCoroutine(worldAnimHandler.PrepareNextPotRoutine(potWinnerStack));
+
+        // If the table status was all in, init deck here
+        if(GameManager.gameTable.tableStatus == GameTable.TableStatus.ALLIN)
+        {
+            print("Init Deck by next deck");
+            GameManager.gameTable.deck = GameManager.gameTable.nextDeck;
+        }
         
         /* Go to next pot */
         GameManager.gameTable.stage = GameTable.Stage.PREFLOP;
@@ -787,19 +822,19 @@ public class GameSceneUpdater : MonoBehaviour
 
     private bool IsShowDownOver()
     {
-        int showDownOver = 0;
+        int showDownOver = 0; // PCanvas enabled card count
 
         foreach(PlayerCanvas canvas in playerCanvas)
         {
             showDownOver += canvas.card1.gameObject.activeSelf ? 1 : 0;
         }
 
-        int showDownCnt = 0;
+        int showDownCnt = 0; // Alive and isInGame player count
         foreach(Player p in GameManager.gameTable.players)
         {
             showDownCnt += (p.state != Player.State.FOLD && p.isInGame) ? 1 : 0;
         }
         
-        return showDownOver == showDownCnt ? true : false;
+        return showDownOver >= showDownCnt ? true : false;
     }
 }

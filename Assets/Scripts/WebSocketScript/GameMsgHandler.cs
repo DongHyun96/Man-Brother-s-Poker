@@ -79,6 +79,12 @@ public class GameMsgHandler : MonoBehaviour
                         GameManager.gameTable.deck = message.deck;
                     });
                     break;
+                case GameMessage.MessageType.NEXT_DECK:
+                    UnityMainThread.wkr.AddJob(() =>
+                    {
+                        GameManager.gameTable.nextDeck = message.deck;
+                    });
+                    break;
                 case GameMessage.MessageType.REGISTER:
 #if TEST
                     if(GameManager.thisPlayer.name.Equals("InitialName"))
@@ -124,9 +130,13 @@ public class GameMsgHandler : MonoBehaviour
                     UnityMainThread.wkr.AddJob(() => {
                         // Saving deck and players' isInGame
                         List<Card> deck = GameManager.gameTable.deck;
+                        List<Card> nextDeck = GameManager.gameTable.nextDeck;
                         List<Player> players = GameManager.gameTable.players;
+
                         GameManager.gameTable = message.table; // Update gameTable
+
                         GameManager.gameTable.deck = deck; // Set deck again (because server - client doesn't share deck in TOSS msg)
+                        GameManager.gameTable.nextDeck = nextDeck;
                         for(int i = 0; i < players.Count; i++)
                         {
                             // Set isInGame

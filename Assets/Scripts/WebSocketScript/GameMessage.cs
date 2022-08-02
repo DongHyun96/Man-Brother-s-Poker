@@ -10,7 +10,7 @@ public class GameMessage
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MessageType{
-        REGISTER, DECK, TOSS, SHOWDOWN, LEAVE, DUMMY, READY_CHECK
+        REGISTER, DECK, NEXT_DECK, TOSS, SHOWDOWN, LEAVE, DUMMY, READY_CHECK
     }
     public MessageType type;
 

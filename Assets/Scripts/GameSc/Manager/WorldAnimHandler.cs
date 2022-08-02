@@ -140,7 +140,7 @@ public class WorldAnimHandler : MonoBehaviour
         {
             Card c = players[idx].cards[0];
             cardHandler.DrawCard(TableCardHandler.DrawType.FIRST, idx, c); 
-            idx = table.GetNext(idx);
+            idx = table.GetNext(idx, true);
             yield return new WaitForSeconds(0.2f);
         }
         while(idx != table.SB_Pos);
@@ -149,7 +149,7 @@ public class WorldAnimHandler : MonoBehaviour
         {
             Card c = players[idx].cards[1];
             cardHandler.DrawCard(TableCardHandler.DrawType.SECOND, idx, c);
-            idx = table.GetNext(idx);
+            idx = table.GetNext(idx, true);
             yield return new WaitForSeconds(0.2f);
         }
         while(idx != table.SB_Pos);
