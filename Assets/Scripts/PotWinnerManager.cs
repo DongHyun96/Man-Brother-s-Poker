@@ -18,6 +18,16 @@ public class PotWinnerManager
 
     public PotWinnerManager(List<Player> players)
     {
+        // If the player count is one, then it is uncontested situation
+        // Set potWinnerManager
+        if(players.Count == 1)
+        {
+            KeyValuePair<int, List<Player>> kvPair = new KeyValuePair<int, List<Player>>(GameManager.gameTable.pot, players);
+            potWinnerStack.Push(kvPair);
+
+            return;
+        }
+
         HandleBackStraightException(players); // Change back straight ace number to -1(Lowest)
         
         CalculatePots(players);

@@ -62,6 +62,16 @@ public class GameMsgHandler : MonoBehaviour
         });
     }
 
+    // Used when only sb bb left and it is automatically all-in status
+    public static void RequestNextDeck()
+    {
+        UnityMainThread.wkr.AddJob(() => {
+            GameMessage message = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.NEXT_DECK);
+            Debug.Log("Sending Next-Deck request");
+            websocket.Send(JsonConvert.SerializeObject(message));
+        });
+    }
+
     private static void ReceiveMessage(object s, MessageEventArgs e)
     {
         try

@@ -707,17 +707,16 @@ public class GameSceneUpdater : MonoBehaviour
         /* Update player tab */
         UpdateTabs();
 
-        /* Prepare Next pot */
+        // Init PotWinnerManager in gameTable
+        GameManager.gameTable.potWinnerManager = new PotWinnerManager(new List<Player>(){winner});
 
-        /* Making PotWinnerStack */
-        Stack<KeyValuePair<int, List<Player>>> PWS = new Stack<KeyValuePair<int, List<Player>>>();
-        List<Player> uncontestedPlayer = new List<Player>();
-        uncontestedPlayer.Add(winner);
+        // If this player is winner, show showDown choose panel
+        if(GameManager.thisPlayer.name.Equals(winner.name))
+        {
+            screenCanvas.chooseShowDown.SetActive(true);
+        }
 
-        KeyValuePair<int, List<Player>> kvPair = new KeyValuePair<int, List<Player>>(GameManager.gameTable.pot, uncontestedPlayer);
-        PWS.Push(kvPair);
-
-        yield return StartCoroutine(PrepareNextPotRoutine(PWS));
+        // yield return StartCoroutine(PrepareNextPotRoutine(PWS));
     }
 
     private IEnumerator GameFinRoutine()

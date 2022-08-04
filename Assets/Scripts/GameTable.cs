@@ -104,6 +104,13 @@ public class GameTable
 
                     TakeAction(big.name, Player.State.RAISE, sbChip * 2);
 
+                    // If it is automatically all in status by BB action, then get next-deck by requesting to server
+                    // This rarely happens
+                    if(tableStatus == TableStatus.ALLIN)
+                    {
+                        GameMsgHandler.RequestNextDeck();
+                    }
+                    
                     // Draw cards to player
                     DrawCard(); // Remove first cards
                     // Give card to small blind first
