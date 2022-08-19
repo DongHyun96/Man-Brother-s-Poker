@@ -116,8 +116,9 @@ public class GameSceneUpdater : MonoBehaviour
         if(IsShowDownOver())
         {
             Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
+
             StartCoroutine(PrepareNextPotRoutine(PWS));
-        }
+        } 
     }
 
     // When someone leaves the game
@@ -135,12 +136,12 @@ public class GameSceneUpdater : MonoBehaviour
         switch(GameManager.gameTable.stage)
         {
             case GameTable.Stage.ROUND_FIN:
-            case GameTable.Stage.UNCONTESTED:
             case GameTable.Stage.GAME_FIN:
                 return;
             case GameTable.Stage.POT_FIN:
+            case GameTable.Stage.UNCONTESTED:
                 // Check if the showDown is over by leaving
-                if(IsShowDownOver() && !is_prepare_running && GameManager.gameTable.stage == GameTable.Stage.POT_FIN)
+                if(IsShowDownOver() && !is_prepare_running)
                 {
                     Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
                     StartCoroutine(PrepareNextPotRoutine(PWS));
@@ -396,15 +397,8 @@ public class GameSceneUpdater : MonoBehaviour
                 StartCoroutine(RoundFinRoutine());
                 yield break;
             case GameTable.Stage.UNCONTESTED:
-                Player winner = new Player();
-                foreach(Player player in table.players)
-                {
-                    if(player.state != Player.State.FOLD)
-                    {
-                        winner = player;
-                        break;
-                    }
-                }
+            
+                Player winner = GameManager.gameTable.potWinnerManager.potWinnerStack.Peek().Value[0];
                 StartCoroutine(UncontestedRoutine(winner));
                 yield break;
             case GameTable.Stage.POT_FIN:
@@ -706,9 +700,6 @@ public class GameSceneUpdater : MonoBehaviour
 
         /* Update player tab */
         UpdateTabs();
-
-        // Init PotWinnerManager in gameTable
-        GameManager.gameTable.potWinnerManager = new PotWinnerManager(new List<Player>(){winner});
 
         // If this player is winner, show showDown choose panel
         if(GameManager.thisPlayer.name.Equals(winner.name))

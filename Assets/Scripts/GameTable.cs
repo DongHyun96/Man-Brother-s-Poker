@@ -161,6 +161,10 @@ public class GameTable
                     communityCards.Add(DrawCard());
                     break;
                 case Stage.UNCONTESTED:
+                    // Get winner
+                    Player winner = players.Find(p => p.state != Player.State.FOLD);
+
+                    potWinnerManager = new PotWinnerManager(new List<Player>(){winner});
                     break;
                 case Stage.ROUND_FIN:
                     break;
