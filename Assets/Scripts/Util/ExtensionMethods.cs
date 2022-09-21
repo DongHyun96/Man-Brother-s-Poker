@@ -1,7 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public static class ExtensionMethods
 {
@@ -22,15 +24,4 @@ public static class ExtensionMethods
         return Math.Round(Value * Temp) / Temp;
     }
 
-    public static int GetMaxValue(List<int> integers)
-    {
-        int max = 0;
-
-        for(int i = 0; i < integers.Count; i++)
-        {
-            max = i == 0 ? integers[i] : max;    
-            max = max < integers[i] ? integers[i] : max;
-        }
-        return max;
-    }
 }

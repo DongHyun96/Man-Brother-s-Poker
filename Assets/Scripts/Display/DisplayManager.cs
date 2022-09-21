@@ -4,28 +4,27 @@ using UnityEngine;
 
 public class DisplayManager : MonoBehaviour
 {
-    private static DisplayManager instance;
-
+    private static DisplayManager m_instance;
+    public static DisplayManager Instance
+    {
+        get => m_instance;
+        private set{ m_instance = value; }
+    }
     private void Awake() {
-        if(instance == null)
+        if(Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
 
             // Init d_mode
             d_mode = (Screen.fullScreenMode == FullScreenMode.FullScreenWindow) ?
             DisplayMode.FULL : DisplayMode.WINDOWED;
         }
-        else if(instance != this)
+        else if(Instance != this)
         {
             Destroy(gameObject);
         }
     }
-    public static DisplayManager GetInstance()
-    {
-        return instance;
-    }
-
 
     public enum DisplayMode{
         FULL, WINDOWED 

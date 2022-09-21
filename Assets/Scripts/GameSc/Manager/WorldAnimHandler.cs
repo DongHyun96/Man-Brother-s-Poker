@@ -108,7 +108,7 @@ public class WorldAnimHandler : MonoBehaviour
         /* Collecting players' chip into pot */
         
         // Play collecting chips sound if there is chips
-        if(chipHandler.IsBetChipsIn())
+        if(chipHandler.IsBetChipsIn)
         {
             SfxHolder.GetInstance().PlaySfx(GameSfxHolder.SoundType.CHIP, 1);
         }

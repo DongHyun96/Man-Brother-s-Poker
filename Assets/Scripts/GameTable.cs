@@ -26,16 +26,18 @@ public class GameTable
     */
 
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum Stage{
+    public enum Stage
+    {
         PREFLOP, FLOP, TURN, RIVER, ROUND_FIN, UNCONTESTED, POT_FIN, GAME_FIN
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum TableStatus{
+    public enum TableStatus
+    {
         // IDLE, CHECK, BET ,ALLIN, FINISHED, FINAL_WINNER
         IDLE, CHECK, BET, ALLIN
     }
-    
+
     public Room.Mode mode;
 
     [JsonProperty("stage")]
@@ -50,20 +52,20 @@ public class GameTable
     public Stage stage
     {
         get => m_stage;
-        
+
         set
         {
             /* if(tableStatus != TableStatus.IDLE)
             {
                 return;
             } */
-            switch(value)
+            switch (value)
             {
                 case Stage.PREFLOP:
                     Debug.Log("Entering preflop");
                     Debug.Log("Card counts: " + deck.Count);
                     // Init players
-                    foreach(Player p in players)
+                    foreach (Player p in players)
                     {
                         p.state = Player.State.IDLE;
                         p.roundBet = 0;
@@ -72,7 +74,7 @@ public class GameTable
                         p.cards.Clear();
 
                         // Check Bankrupt and isInGame
-                        if(p.totalChips <= 0 || !p.isInGame)
+                        if (p.totalChips <= 0 || !p.isInGame)
                         {
                             p.state = Player.State.FOLD;
                         }
@@ -88,7 +90,7 @@ public class GameTable
                     pot = 0;
 
                     // Check if the game is over
-                    if(IsGameOver())
+                    if (isGameOver)
                     {
                         stage = Stage.GAME_FIN;
                         return;
@@ -106,30 +108,30 @@ public class GameTable
 
                     // If it is automatically all in status by BB action, then get next-deck by requesting to server
                     // This rarely happens
-                    if(tableStatus == TableStatus.ALLIN)
+                    if (tableStatus == TableStatus.ALLIN)
                     {
                         GameMsgHandler.RequestNextDeck();
                     }
-                    
+
                     // Draw cards to player
                     DrawCard(); // Remove first cards
                     // Give card to small blind first
-                    for(int i = 0; i < 2; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         int temp = SB_Pos;
                         do
                         {
                             players[temp].cards.Add(DrawCard());
                             temp = GetNext(temp, true);
-                        } while(temp != SB_Pos);
+                        } while (temp != SB_Pos);
                     }
 
                     // Check if the stage is over
-                    if(m_stage == Stage.ROUND_FIN)
+                    if (m_stage == Stage.ROUND_FIN)
                     {
                         return;
                     }
-                    
+
                     break;
                 case Stage.FLOP:
                     Debug.Log("Entering Flop");
@@ -138,7 +140,7 @@ public class GameTable
                     /* Draw Cards */
                     DrawCard(); // Remove first card
 
-                    for(int i = 0; i < 3; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         communityCards.Add(DrawCard());
                     }
@@ -150,7 +152,7 @@ public class GameTable
 
                     /* Draw Card */
                     DrawCard();
-                    communityCards.Add(DrawCard()); 
+                    communityCards.Add(DrawCard());
                     break;
                 case Stage.RIVER:
                     Debug.Log("Entering River");
@@ -164,13 +166,13 @@ public class GameTable
                     // Get winner
                     Player winner = players.Find(p => p.state != Player.State.FOLD);
 
-                    potWinnerManager = new PotWinnerManager(new List<Player>(){winner});
+                    potWinnerManager = new PotWinnerManager(new List<Player>() { winner });
                     break;
                 case Stage.ROUND_FIN:
                     break;
                 case Stage.POT_FIN:
                     /* Get Players' best hand */
-                    foreach(Player p in players)
+                    foreach (Player p in players)
                     {
                         p.bestHand = new BestHand(p.cards, communityCards);
                     }
@@ -188,9 +190,9 @@ public class GameTable
     private void FlopTurnRiverRoutine()
     {
         /* Init players */
-        foreach(Player p in players)
+        foreach (Player p in players)
         {
-            if(p.state != Player.State.ALLIN && p.state != Player.State.FOLD)
+            if (p.state != Player.State.ALLIN && p.state != Player.State.FOLD)
             {
                 p.state = Player.State.IDLE;
             }
@@ -205,7 +207,7 @@ public class GameTable
          ? SB_Pos : GetNext(SB_Pos);
         roundBetMax = 0;
     }
-    
+
     [JsonIgnore]
     public TableStatus tableStatus
     {
@@ -218,7 +220,7 @@ public class GameTable
 
     [JsonIgnore]
     public List<Card> deck = new List<Card>();
-    
+
     [JsonIgnore]
     public List<Card> nextDeck = new List<Card>(); // Used when it is all in status
 
@@ -231,7 +233,140 @@ public class GameTable
 
     public PotWinnerManager potWinnerManager;
 
-    public GameTable() {}
+    // Boolean
+
+    // Check whether PREFLOP, FLOP... is over
+    [JsonIgnore]
+    private bool isRoundOver
+    {
+        get
+        {
+            switch (tableStatus)
+            {
+                case TableStatus.IDLE:
+                    return false;
+                case TableStatus.CHECK:
+
+                    // PREFLOP case exception(Big blind check)
+                    if (stage == Stage.PREFLOP && iterPos == GetNext(SB_Pos))
+                    {
+                        return true;
+                    }
+
+                    foreach (Player p in players)
+                    {
+                        if (p.state != Player.State.FOLD && p.state != Player.State.ALLIN && p.state != Player.State.CHECK)
+                        {
+                            return false;
+                        }
+                    }
+                    return true; // When everyone checked except fold and all in
+                case TableStatus.BET:
+
+                    // PREFLOP case exception
+                    if (stage == Stage.PREFLOP)
+                    {
+                        // After small blind action, big blind has one exception chance to make decision,
+                        // But when the big blind state is ALLIN, round is over
+                        if (iterPos == SB_Pos)
+                        {
+                            if (roundBetMax <= sbChip * 2)
+                            {
+                                Player bigBlind = players[GetNext(SB_Pos, true)];
+                                return bigBlind.state == Player.State.ALLIN;
+                            }
+                        }
+
+
+                    }
+
+                    // Normal case
+                    foreach (Player p in players)
+                    {
+                        if (p.state == Player.State.FOLD || p.state == Player.State.ALLIN)
+                        {
+                            continue;
+                        }
+
+                        if (p.roundBet != roundBetMax)
+                        {
+                            return false;
+                        }
+                    }
+                    return true; // When every player's bet is same except fold and allIn(side pot)
+                default:
+                    return false; //Dummy
+            }
+        }
+    }
+
+    [JsonIgnore]
+    private bool isUncontested
+    {
+        get
+        {
+            int cnt = 0;
+
+            foreach (Player p in players)
+            {
+                cnt += p.state == Player.State.FOLD ? 1 : 0;
+            }
+
+            if (cnt == players.Count - 1)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // Premise - IsRoundOver checked already
+    [JsonIgnore]
+    private bool isPotOver
+    {
+        get
+        {
+            if (stage == Stage.RIVER)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    [JsonIgnore]
+    private bool isGameOver
+    {
+        get
+        {
+            int leftCount = 0;
+            int bankruptCount = 0;
+            foreach (Player p in players)
+            {
+                if (p.totalChips <= 0)
+                {
+                    bankruptCount++;
+                    continue;
+                }
+                leftCount += !p.isInGame ? 1 : 0;
+            }
+
+            // if only one player remains
+            if (leftCount + bankruptCount >= players.Count - 1)
+            {
+                return true;
+            }
+
+            if (mode == Room.Mode.CHICKEN || mode == Room.Mode.HEADS)
+            {
+                return bankruptCount > 0;
+            }
+
+            return false;
+        }
+    }
+
+    public GameTable() { }
 
     public GameTable(Guid id, List<Player> players, Room.Mode mode, Room.BuyIn buyIn)
     {
@@ -246,10 +381,10 @@ public class GameTable
     ****************************************************************************************************************/
     private void InitBuyIn_And_Sb(Room.BuyIn buyIn)
     {
-        switch(buyIn)
+        switch (buyIn)
         {
             case Room.BuyIn.ONE:
-                foreach(Player p in players)
+                foreach (Player p in players)
                 {
                     p.totalChips = 1000;
                 }
@@ -257,7 +392,7 @@ public class GameTable
                 sbChip = 5;
                 break;
             case Room.BuyIn.FIVE:
-                foreach(Player p in players)
+                foreach (Player p in players)
                 {
                     p.totalChips = 5000;
                 }
@@ -266,25 +401,25 @@ public class GameTable
                 break;
 
             case Room.BuyIn.TEN:
-                foreach(Player p in players)
+                foreach (Player p in players)
                 {
                     p.totalChips = 10000;
-                }   
+                }
                 buy = 10000;
                 sbChip = 50;
                 break;
 
             case Room.BuyIn.TWENTY:
-                foreach(Player p in players)
+                foreach (Player p in players)
                 {
                     p.totalChips = 20000;
                 }
                 buy = 20000;
-                sbChip  = 100;
+                sbChip = 100;
                 break;
 
             case Room.BuyIn.FIFTY:
-                foreach(Player p in players)
+                foreach (Player p in players)
                 {
                     p.totalChips = 50000;
                 }
@@ -293,12 +428,12 @@ public class GameTable
                 break;
 
             case Room.BuyIn.HUNDRED:
-                foreach(Player p in players)
+                foreach (Player p in players)
                 {
                     p.totalChips = 100000;
                 }
                 buy = 100000;
-                sbChip  = 500;
+                sbChip = 500;
                 break;
 
             default:
@@ -312,11 +447,11 @@ public class GameTable
     public int GetPrev(int inputPos) // Returns the first previous player with status != FOLD, ALLIN
     {
         int tempIter = inputPos;
-        while(tempIter > 0)
+        while (tempIter > 0)
         {
             tempIter--;
 
-            if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
+            if (players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
             {
                 return tempIter;
             }
@@ -324,10 +459,10 @@ public class GameTable
         // tempIter reaches 0
         tempIter = players.Count;
 
-        while(tempIter != inputPos)
+        while (tempIter != inputPos)
         {
             tempIter--;
-            if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
+            if (players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
             {
                 return tempIter;
             }
@@ -340,18 +475,18 @@ public class GameTable
     public int GetNext(int inputPos, bool isIniting = false)
     {
         int tempIter = inputPos;
-        while(tempIter < players.Count - 1)
+        while (tempIter < players.Count - 1)
         {
             tempIter++;
 
-            if(isIniting)
+            if (isIniting)
             {
-                if(players[tempIter].state != Player.State.FOLD)
+                if (players[tempIter].state != Player.State.FOLD)
                 {
                     return tempIter;
                 }
             }
-            else if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN) // Normal case
+            else if (players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN) // Normal case
             {
                 return tempIter;
             }
@@ -359,17 +494,17 @@ public class GameTable
         // tempIter reaches top
         tempIter = -1;
 
-        while(tempIter != inputPos)
+        while (tempIter != inputPos)
         {
             tempIter++;
-            if(isIniting)
+            if (isIniting)
             {
-                if(players[tempIter].state != Player.State.FOLD)
+                if (players[tempIter].state != Player.State.FOLD)
                 {
                     return tempIter;
                 }
             }
-            else if(players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
+            else if (players[tempIter].state != Player.State.FOLD && players[tempIter].state != Player.State.ALLIN)
             {
                 return tempIter;
             }
@@ -403,13 +538,13 @@ public class GameTable
     public void TakeAction(string actor, Player.State action, int chips = 0)
     {
         Player player = GetPlayerByName(actor);
-        if(player == null)
+        if (player == null)
         {
             return;
         }
 
         // Update player and gameTable status or stage
-        switch(action)
+        switch (action)
         {
             case Player.State.CHECK:
                 player.Check(); // Update player
@@ -430,7 +565,7 @@ public class GameTable
 
                 // Update gameTable's pot before updating player's roundBet
                 pot += (player.totalChips <= chips) ? player.totalChips - player.roundBet : chips - player.roundBet;
-                
+
                 player.Call(chips); // Update player
 
                 break;
@@ -441,15 +576,15 @@ public class GameTable
                 player.Raise(chips);
 
                 roundBetMax = player.roundBet;
-            
+
                 break;
             case Player.State.ALLIN:
                 pot += player.totalChips - player.roundBet;
                 player.AllIn();
-                
+
                 // Update gameTable status if it is first bet
                 // Check All in status when the round finished
-                if(tableStatus != TableStatus.BET)
+                if (tableStatus != TableStatus.BET)
                 {
                     tableStatus = TableStatus.BET;
                 }
@@ -460,7 +595,7 @@ public class GameTable
             case Player.State.FOLD:
                 player.Fold();
                 // Check if it is uncontested
-                if(IsUncontested())
+                if (isUncontested)
                 {
                     stage = Stage.UNCONTESTED;
                     return;
@@ -469,19 +604,19 @@ public class GameTable
         }
 
         // check if the table round is over
-        if(IsRoundOver())
+        if (isRoundOver)
         {
             Debug.Log("Round over from GameTable");
-            
+
             // Check if it is uncontested
-            if(IsUncontested())
+            if (isUncontested)
             {
                 stage = Stage.UNCONTESTED;
                 return;
             }
 
             // Check if the pot is over
-            if(IsPotOver())
+            if (isPotOver)
             {
                 stage = Stage.POT_FIN;
                 return;
@@ -490,20 +625,20 @@ public class GameTable
             // Check if the table status is ALLIN
             int foldCnt = 0;
             int allInCnt = 0;
-            foreach(Player p in players)
+            foreach (Player p in players)
             {
                 foldCnt += p.state == Player.State.FOLD ? 1 : 0;
                 allInCnt += p.state == Player.State.ALLIN ? 1 : 0;
             }
 
-            if(players.Count - foldCnt - allInCnt <= 1)
+            if (players.Count - foldCnt - allInCnt <= 1)
             {
                 // Change tableStatus to ALLIN and change stage to roundFin
                 tableStatus = TableStatus.ALLIN;
                 stage = Stage.ROUND_FIN;
                 return;
             }
-            else 
+            else
             {
                 // ROUND_FIN
                 stage = Stage.ROUND_FIN;
@@ -513,140 +648,22 @@ public class GameTable
 
         // Update iterpos
         Next();
-        
-    }
-    /****************************************************************************************************************
-    *                                                Boolean methods
-    ****************************************************************************************************************/
 
-    // Check whether PREFLOP, FLOP... is over
-    private bool IsRoundOver()
-    {
-        switch(tableStatus)
-        {
-            case TableStatus.IDLE:
-                return false;
-            case TableStatus.CHECK:
-                
-                // PREFLOP case exception(Big blind check)
-                if(stage == Stage.PREFLOP && iterPos == GetNext(SB_Pos))
-                {
-                    return true;
-                }
-                
-                foreach(Player p in players)
-                {
-                    if(p.state != Player.State.FOLD && p.state != Player.State.ALLIN && p.state != Player.State.CHECK)
-                    {
-                        return false;
-                    }
-                }
-                return true; // When everyone checked except fold and all in
-            case TableStatus.BET:
-
-                // PREFLOP case exception
-                if(stage == Stage.PREFLOP)
-                {
-                    // After small blind action, big blind has one exception chance to make decision,
-                    // But when the big blind state is ALLIN, round is over
-                    if(iterPos == SB_Pos)
-                    {
-                        if(roundBetMax <= sbChip * 2)
-                        {
-                            Player bigBlind = players[GetNext(SB_Pos, true)];
-                            return bigBlind.state == Player.State.ALLIN;
-                        }
-                    }
-                    
-
-                }
-
-                // Normal case
-                foreach(Player p in players)
-                {
-                    if(p.state == Player.State.FOLD || p.state == Player.State.ALLIN)
-                    {
-                        continue;
-                    }
-
-                    if(p.roundBet != roundBetMax)
-                    {
-                        return false;
-                    }
-                }
-                return true; // When every player's bet is same except fold and allIn(side pot)
-            default:
-                return false; //Dummy
-        }
     }
 
-    private bool IsUncontested()
-    {
-        int cnt = 0;
-
-        foreach(Player p in players)
-        {
-            cnt += p.state == Player.State.FOLD ? 1 : 0;
-        }
-
-        if(cnt == players.Count - 1)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    /* Premise - IsRoundOver checked already */
-    private bool IsPotOver()
-    {
-        if(stage == Stage.RIVER)
-        {
-            return true;
-        }
-        return false;
-    }
-
-
-    private bool IsGameOver()
-    {
-        int leftCount = 0;
-        int bankruptCount = 0;
-        foreach(Player p in players)
-        {
-            if(p.totalChips <= 0)
-            {
-                bankruptCount++;
-                continue;
-            }
-            leftCount += !p.isInGame ? 1 : 0;
-        }
-
-        // if only one player remains
-        if(leftCount + bankruptCount >= players.Count - 1)
-        {
-            return true;
-        }
-
-        if(mode == Room.Mode.CHICKEN || mode == Room.Mode.HEADS)
-        {
-            return bankruptCount > 0;
-        }
-
-        return false;
-    }
     /****************************************************************************************************************
     *                                                Pot related methods
     ****************************************************************************************************************/
     public bool IsInShowDown(string name)
     {
-        if(potWinnerManager == null)
+        if (potWinnerManager == null)
         {
             return false;
         }
 
-        foreach(Player p in potWinnerManager.showDown)
+        foreach (Player p in potWinnerManager.showDown)
         {
-            if(name.Equals(p.name))
+            if (name.Equals(p.name))
             {
                 return true;
             }
@@ -657,29 +674,29 @@ public class GameTable
     public void PayEachPotWinners()
     {
         /* Uncontested */
-        if(stage == Stage.UNCONTESTED)
+        if (stage == Stage.UNCONTESTED)
         {
-            foreach(Player p in players)
+            foreach (Player p in players)
             {
                 // Give pot money to last stand player
-                if(p.state != Player.State.FOLD)
+                if (p.state != Player.State.FOLD)
                 {
                     p.totalChips += pot;
                 }
             }
             return;
         }
-        
+
         /* All round fin */
-        if(potWinnerManager == null)
+        if (potWinnerManager == null)
         {
             Debug.Log("potWinner not initialized while stage is POT_FIN");
             throw new ArgumentNullException();
         }
-        
-        foreach(KeyValuePair<int, List<Player>> potPair in potWinnerManager.potWinnerStack)
+
+        foreach (KeyValuePair<int, List<Player>> potPair in potWinnerManager.potWinnerStack)
         {
-            foreach(Player p in potPair.Value)
+            foreach (Player p in potPair.Value)
             {
                 GetPlayerByName(p.name).totalChips += potPair.Key / potPair.Value.Count;
             }
@@ -690,9 +707,9 @@ public class GameTable
     ****************************************************************************************************************/
     public Player GetPlayerByName(string name)
     {
-        foreach(Player p in players)
+        foreach (Player p in players)
         {
-            if(p.name.Equals(name))
+            if (p.name.Equals(name))
             {
                 return p;
             }
@@ -702,9 +719,9 @@ public class GameTable
 
     public int GetIterPosByName(string name)
     {
-        for(int i = 0; i < players.Count; i++)
+        for (int i = 0; i < players.Count; i++)
         {
-            if(players[i].name.Equals(name))
+            if (players[i].name.Equals(name))
             {
                 return i;
             }
@@ -722,13 +739,13 @@ public class GameTable
         sorted.RemoveAll(p => (!p.isInGame));
 
         int winnerChips = -100;
-        foreach(Player p in sorted)
+        foreach (Player p in sorted)
         {
             // Init winnerChips
             winnerChips = winnerChips == -100 ? p.totalChips : winnerChips;
 
             // Poker Champion!
-            if(p.totalChips == winnerChips)
+            if (p.totalChips == winnerChips)
             {
                 int idx = GetIterPosByName(p.name);
                 result.Add(idx);

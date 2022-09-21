@@ -17,7 +17,7 @@ public class GameCharacter : MonoBehaviour
     public void Init(Player.Character c)
     {
         /* Setting character and animator */
-        GameObject container = CharacterHolder.GetInstance().GetCharacterObj(c);
+        GameObject container = CharacterHolder.Instance.GetCharacterObj(c);
         characterObject = Instantiate(container, transform.position, transform.rotation);
         animator = characterObject.GetComponent<Animator>();
     }

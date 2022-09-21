@@ -6,16 +6,22 @@ using System;
 
 public class PasswordPanel : MonoBehaviour
 {
-    public static PasswordPanel instance;
+    private static PasswordPanel m_instance;
+
+    public static PasswordPanel Instance
+    {
+        get => m_instance;
+        private set{ m_instance = value; }
+    }
     private Guid id;
 
     public InputField inputField;
     public Text warning;
 
     private void Awake() {
-        if(instance == null)
+        if(Instance == null)
         {
-            instance = this.GetComponent<PasswordPanel>();
+            Instance = this.GetComponent<PasswordPanel>();
         }
         this.gameObject.SetActive(false);
     }
@@ -44,11 +50,6 @@ public class PasswordPanel : MonoBehaviour
         // Hide this Panel
         this.gameObject.SetActive(false);
 
-    }
-
-    public static PasswordPanel GetInstance()
-    {
-        return instance;
     }
 
     public void OpenPanel(Guid id)

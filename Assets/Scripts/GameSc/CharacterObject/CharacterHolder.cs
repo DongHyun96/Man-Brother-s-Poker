@@ -7,16 +7,19 @@ public class CharacterHolder : MonoBehaviour
     /* In order -->  MALE, MALE_CAP, FEMALE, POCICE, ZOMBIE */
     [SerializeField] private List<GameObject> characters;
     
-    private static CharacterHolder instance;
-
-    public static CharacterHolder GetInstance()
+    private static CharacterHolder m_instance;
+    public static CharacterHolder Instance
     {
-        if(instance == null)
+        get
         {
-            instance = FindObjectOfType<CharacterHolder>();
+            if(m_instance == null) {
+                m_instance = FindObjectOfType<CharacterHolder>();
+
+            }
+            return m_instance;
         }
-        return instance;
     }
+
 
     public GameObject GetCharacterObj(Player.Character c)
     {

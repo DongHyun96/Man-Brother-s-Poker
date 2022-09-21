@@ -22,12 +22,8 @@ public class PieButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CHECK_BET_FOLD, CALL_RAISE_FOLD, CHECK_RAISE_FOLD, ALLIN_FOLD
     }
 
-    public ActionState State
-    {
-        get => state;
-    }
 
-    private ActionState state;
+    public ActionState state{ get; private set; }
 
     void Start()
     {

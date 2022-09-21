@@ -26,12 +26,7 @@ public class BettingPanel : MonoBehaviour
     
     // These for slider area restriction, these are actual chip values (e.g.1K room => 0, 1000)
     private int floor; // 0
-    private int ceil; // 1000
-
-    public int Ceil
-    {
-        get => ceil;
-    }
+    public int ceil{ get; private set; } // 1000
 
     public void InitContents(int minChips)
     {

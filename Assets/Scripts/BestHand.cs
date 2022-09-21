@@ -376,5 +376,5 @@ public class BestHand
         this.hand = hand;
         this.bestHandCombi = cards;
     }
-
+    
 }

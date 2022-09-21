@@ -7,15 +7,17 @@ using Cinemachine;
 
 public class EntCamController : MonoBehaviour
 {
-    public static EntCamController instance;
-
-    public static EntCamController GetInstance()
+    private static EntCamController m_instance;
+    public static EntCamController Instance
     {
-        if(instance == null)
+        get
         {
-            instance = FindObjectOfType<EntCamController>();
+            if(m_instance == null) {
+                m_instance = FindObjectOfType<EntCamController>();
+            }
+            return m_instance;
         }
-        return instance;
+        private set{ m_instance = value; }
     }
 
     // Character select panel

@@ -14,15 +14,16 @@ public class EntPanelController : MonoBehaviour
     public Animator anim_Inviting;
     public Animator anim_Menu;
 
-    public static EntPanelController instance;
-
-    public static EntPanelController GetInstance()
+    private static EntPanelController m_instance;
+    public static EntPanelController Instance
     {
-        if(instance == null)
+        get
         {
-            instance = FindObjectOfType<EntPanelController>();
+            if(m_instance == null) {
+                m_instance = FindObjectOfType<EntPanelController>();
+            }
+            return m_instance;
         }
-        return instance;
     }
 
     public enum Panel{

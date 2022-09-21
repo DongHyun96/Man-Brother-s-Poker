@@ -37,7 +37,7 @@ public abstract class MenuFunctions : MonoBehaviour
                     buttonsPanel.SetActive(false);
 
                     // Init Display mode toggle
-                    int isOnIdx = (int)DisplayManager.GetInstance().displayMode;
+                    int isOnIdx = (int)DisplayManager.Instance.displayMode;
                     screenMode[isOnIdx].isOn = true;
 
                     // Init slider value
@@ -89,7 +89,7 @@ public abstract class MenuFunctions : MonoBehaviour
         {
             if(screenMode[i].isOn)
             {
-                DisplayManager.GetInstance().displayMode = (DisplayManager.DisplayMode)i;
+                DisplayManager.Instance.displayMode = (DisplayManager.DisplayMode)i;
                 break;
             }
         }

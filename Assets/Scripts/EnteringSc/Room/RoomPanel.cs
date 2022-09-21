@@ -45,7 +45,7 @@ public class RoomPanel : MonoBehaviour
     public Text warning;
 
     private void Awake() {
-        EnteringSceneUpdater.GetInstance().onRoomPlayerUpdate += UpdatePlayerToPanels;
+        EnteringSceneUpdater.Instance.onRoomPlayerUpdate += UpdatePlayerToPanels;
     }
 
     /**
@@ -373,7 +373,7 @@ public class RoomPanel : MonoBehaviour
     /*****************************************************************************************************************/
     public void ToggleInvPanel()
     {
-        EntPanelController.GetInstance().UpdatePanel(EntPanelController.Panel.INVITE);
+        EntPanelController.Instance.UpdatePanel(EntPanelController.Panel.INVITE);
     }
 
     /*****************************************************************************************************************/

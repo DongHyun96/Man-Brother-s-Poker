@@ -12,7 +12,7 @@ public class L_PanelChat : MonoBehaviour
 
      void Awake()
     {
-        EnteringSceneUpdater.GetInstance().onLobbyChatUpdate += AddChat;  // Subscribe
+        EnteringSceneUpdater.Instance.onLobbyChatUpdate += AddChat;  // Subscribe
     }
 
     public void AddChat(string name, string chat)

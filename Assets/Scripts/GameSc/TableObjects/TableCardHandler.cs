@@ -21,7 +21,7 @@ public class TableCardHandler : MonoBehaviour
         List<GameObject> cardList = GetCorrespondingCardList(type, out trigger);
 
         /* Set Card */
-        GameObject prefab = CardHolder.GetInstance().GetCardPrefab(c);
+        GameObject prefab = CardHolder.Instance.GetCardPrefab(c);
         GameObject container = Instantiate(prefab, prefab.transform.position, prefab.transform.rotation);
         SetParent(container.transform, cardList[idx].transform);
 
@@ -92,11 +92,11 @@ public class TableCardHandler : MonoBehaviour
         // child.localScale = 20 * Vector3.one;
     }
 
-    private IEnumerator example()
+    /* private IEnumerator example()
     {
         yield return new WaitForSeconds(7.0f);
         Card c = new Card(Card.Suit.HEART, 12);
-        /* Draw cards to player test */
+        // Draw cards to player test
         DrawCard(DrawType.DISCARD, 0, c);
         for(int i = 0; i < 6; i++)
         {
@@ -111,7 +111,7 @@ public class TableCardHandler : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        /* Draw cards to community test */
+        // Draw cards to community test
         DrawCard(DrawType.DISCARD, 1, c);
         for(int i = 0; i < 3; i++)
         {
@@ -120,12 +120,12 @@ public class TableCardHandler : MonoBehaviour
         }
         yield return new WaitForSeconds(3.0f);
 
-        /* Fold player cards */
+        // Fold player cards
         FoldPlayerCards(3);
         FoldPlayerCards(4);
         yield return new WaitForSeconds(3.0f);
 
-        /* Flip players card */
+        // Flip players card
         for(int i = 0; i < 6; i++)
         {
             FlipPlayerCard(0, i);
@@ -134,10 +134,10 @@ public class TableCardHandler : MonoBehaviour
         }
 
         yield return new WaitForSeconds(5.0f);
-        /* Gather cards to deck */
+        // Gather cards to deck
         GatherCardsToDeck();
 
-    }
+    } */
 
     private List<GameObject> GetCorrespondingCardList(DrawType t, out string trigger)
     {

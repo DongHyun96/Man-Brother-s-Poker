@@ -56,7 +56,7 @@ public class RoomMsgHandler : MonoBehaviour
                         // Update RoomPanel if currently LOBBY state
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
-                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyRoomsUpdate.Invoke();
                         }
                     });
                     break;
@@ -71,14 +71,14 @@ public class RoomMsgHandler : MonoBehaviour
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY) // If LOBBY state, update roomPanel
                         {
-                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyRoomsUpdate.Invoke();
                             return;
                         }
 
                         if(GameManager.thisPlayerRoom.id == message.id) // If the room is currently this player's room
                         {
                             GameManager.thisPlayerRoom = message.room;
-                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.ENTER_ROOM);
+                            EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.ENTER_ROOM);
                         }
                         
                     }
@@ -93,20 +93,20 @@ public class RoomMsgHandler : MonoBehaviour
                         // Update corresponding room in room table
                         GameManager.rooms[message.id] = message.room;
 
-                        /* if(EnteringSceneUpdater.GetInstance() == null)
+                        /* if(EnteringSceneUpdater.Instance == null)
                         {
                             return;
                         } */
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
-                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyRoomsUpdate.Invoke();
                             return;
                         }
                         if(GameManager.thisPlayerRoom.id == message.id)
                         {
                             GameManager.thisPlayerRoom = message.room;
-                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.LEAVE_ROOM);
+                            EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.LEAVE_ROOM);
                         }
                     });
                     break;
@@ -114,7 +114,7 @@ public class RoomMsgHandler : MonoBehaviour
                     UnityMainThread.wkr.AddJob(() => {
                         print(message.id);
                         print(message.sender);
-                        EnteringSceneUpdater.GetInstance().ReceiveInvitation(message.id, message.sender);
+                        EnteringSceneUpdater.Instance.ReceiveInvitation(message.id, message.sender);
                     });
                     break;
                 case RoomMessage.MessageType.UPDATE: // Update room features(No player info change involved)
@@ -124,13 +124,13 @@ public class RoomMsgHandler : MonoBehaviour
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
-                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyRoomsUpdate.Invoke();
                             return;
                         }
                         if(GameManager.thisPlayerRoom.id == message.id) // Current room feature changed
                         {
                             GameManager.thisPlayerRoom = message.room;
-                            EnteringSceneUpdater.GetInstance().onRoomUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onRoomUpdate.Invoke();
                         }
                     });
                     break;
@@ -144,7 +144,7 @@ public class RoomMsgHandler : MonoBehaviour
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
-                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyRoomsUpdate.Invoke();
                         }
 
                     });
@@ -155,7 +155,7 @@ public class RoomMsgHandler : MonoBehaviour
                         Dictionary<Guid, Room> receivedRooms = message.roomMap;
                         GameManager.rooms = receivedRooms;
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
-                            EnteringSceneUpdater.GetInstance().onLobbyRoomsUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyRoomsUpdate.Invoke();
                     });
                     break;
                 case RoomMessage.MessageType.GAMESTART: // Host starts the game
@@ -207,11 +207,11 @@ public class RoomMsgHandler : MonoBehaviour
         // Handle change
         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
         {
-            EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+            EnteringSceneUpdater.Instance.onLobbyPlayersUpdate.Invoke();
         }
         else if(GameManager.GetInstance().state == GameManager.State.ROOM)
         {
-            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.INV_ADD);
+            EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.sender, RoomPanel.UpdateType.INV_ADD);
         }
     }
     

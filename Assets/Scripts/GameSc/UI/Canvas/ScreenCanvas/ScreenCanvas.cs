@@ -90,7 +90,7 @@ public class ScreenCanvas : MonoBehaviour
                     winnerPanel.InitWinnerPanel();
                     winnerPanel.ShowPanel();
 
-                    /* Hide upper buttons and buttom left */
+                    /* Hide upper buttons and bottom left */
                     upperPanel.SetActive(false);
                     bottomLeft.transform.localScale = Vector3.zero; // For animator problem
                     // bottomLeft.SetActive(false);
@@ -353,7 +353,7 @@ public class ScreenCanvas : MonoBehaviour
         // Set pie button interactable to false
         pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(false);
 
-        switch(pieButtons[0].State)
+        switch(pieButtons[0].state)
         {
             case PieButton.ActionState.CHECK_BET_FOLD:
             case PieButton.ActionState.CHECK_RAISE_FOLD:
@@ -379,7 +379,7 @@ public class ScreenCanvas : MonoBehaviour
 
     public void OnPieRight()
     {
-        if(pieButtons[0].State == PieButton.ActionState.ALLIN_FOLD) // When player should have to all in or fold
+        if(pieButtons[0].state == PieButton.ActionState.ALLIN_FOLD) // When player should have to all in or fold
         {
             // Set pie button interactable to false
             pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(false);
@@ -395,7 +395,7 @@ public class ScreenCanvas : MonoBehaviour
         ToggleBettingPanelAnim();
     }
 
-    public void OnPieButtom() // Fold btn
+    public void OnPieBottom() // Fold btn
     {
         // Set pie button interactable to false
         pieButtonAnim.gameObject.GetComponent<InteractableToggler>().SetInteractable(false);
@@ -424,7 +424,7 @@ public class ScreenCanvas : MonoBehaviour
         }
 
         // Forces the action to be taken
-        switch(pieButtons[0].State)
+        switch(pieButtons[0].state)
         {
             case PieButton.ActionState.CHECK_BET_FOLD:
             case PieButton.ActionState.CHECK_RAISE_FOLD:
@@ -432,7 +432,7 @@ public class ScreenCanvas : MonoBehaviour
                 break;
             case PieButton.ActionState.CALL_RAISE_FOLD:
             case PieButton.ActionState.ALLIN_FOLD:
-                OnPieButtom();
+                OnPieBottom();
                 break;
         }
     }
@@ -455,12 +455,12 @@ public class ScreenCanvas : MonoBehaviour
 
     public void OnBettingPanelBet()
     {
-        switch(pieButtons[0].State)
+        switch(pieButtons[0].state)
         {
             case PieButton.ActionState.CHECK_BET_FOLD: // Bet
                 Player.State pState = Player.State.BET;
                 // All in case
-                if(bettingPanel.Ceil == bettingPanel.betChips)
+                if(bettingPanel.ceil == bettingPanel.betChips)
                 {
                     pState = Player.State.ALLIN;
                 }
@@ -471,7 +471,7 @@ public class ScreenCanvas : MonoBehaviour
             case PieButton.ActionState.CHECK_RAISE_FOLD:
                 Player.State s = Player.State.RAISE;
                 // All in case
-                if(bettingPanel.Ceil == bettingPanel.betChips)
+                if(bettingPanel.ceil == bettingPanel.betChips)
                 {
                     s = Player.State.ALLIN;
                 }

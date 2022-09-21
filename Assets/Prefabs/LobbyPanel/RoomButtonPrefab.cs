@@ -112,7 +112,7 @@ public class RoomButtonPrefab : MonoBehaviour
         // Check if the room has required password
         if(!String.IsNullOrEmpty(GameManager.rooms[id].password))
         {
-            PasswordPanel.GetInstance().OpenPanel(id);
+            PasswordPanel.Instance.OpenPanel(id);
             return;
         }
         

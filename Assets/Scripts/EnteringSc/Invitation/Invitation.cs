@@ -13,7 +13,7 @@ public class Invitation : MonoBehaviour
     private const float t = 10f;
 
     void Awake() { // Subscribe to EnteringSceneUpdater delegate event
-        EnteringSceneUpdater.GetInstance().onReceiveInv += Init;
+        EnteringSceneUpdater.Instance.onReceiveInv += Init;
         this.gameObject.SetActive(false);
     }
 

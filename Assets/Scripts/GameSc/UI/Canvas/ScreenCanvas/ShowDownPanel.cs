@@ -68,7 +68,7 @@ public class ShowDownPanel : MonoBehaviour
         ButtonRoutine(showDownBool);
     }
 
-    public void OnButtom()
+    public void OnBottom()
     {
         List<bool> showDownBool = new List<bool>();
         showDownBool.Add(false);

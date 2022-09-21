@@ -7,7 +7,17 @@ using System;
 
 public class EnteringSceneUpdater : MonoBehaviour
 {
-    private static EnteringSceneUpdater instance;
+    private static EnteringSceneUpdater m_instance;
+    public static EnteringSceneUpdater Instance
+    {
+        get
+        {
+            if(m_instance == null) {
+                m_instance = FindObjectOfType<EnteringSceneUpdater>();
+            }
+            return m_instance;
+        }
+    }
 
     // Lobby Updaters
     public UnityEvent onLobbyPlayersUpdate;
@@ -23,15 +33,6 @@ public class EnteringSceneUpdater : MonoBehaviour
     // Invitation updater
     public delegate void ReceivingInvitation(Guid id, string sender);
     public event ReceivingInvitation onReceiveInv;
-
-    public static EnteringSceneUpdater GetInstance()
-    {
-        if(instance == null)
-        {
-            instance = FindObjectOfType<EnteringSceneUpdater>();
-        }
-        return instance; // It may be null if it calls in invalid scene.
-    }
 
     public void InitLobby()
     {

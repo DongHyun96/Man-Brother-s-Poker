@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class CamController : MonoBehaviour
 {
-    private bool isMovable = true;
+    public bool isMovable{ get; private set; }
     private bool isLerpingToPrev = false;
-
-    public bool IsMovable{
-        get => isMovable;
-    }
 
     public Transform centralAxis;
     public float camSpeed;

@@ -14,6 +14,8 @@ public class SignUpPanel : MonoBehaviour
     void Awake()
     {   
         warning = transform.Find("DupText").gameObject;
+
+        inputField.onValueChanged.AddListener(delegate { RemoveSpaces(); });
     }
 
 
@@ -29,6 +31,11 @@ public class SignUpPanel : MonoBehaviour
         MainMsgHandler.SendMessage(msg);
         //anim.SetTrigger("Hide");
 
+    }
+
+    private void RemoveSpaces()
+    {
+        inputField.text = inputField.text.Replace(" ", "");
     }
 
 }

@@ -24,6 +24,26 @@ public class GameSceneUpdater : MonoBehaviour
 
     public bool isFirstGameStart = false;
 
+    private bool IsShowDownOver{
+        get
+        {
+            int showDownOver = 0; // PCanvas enabled card count
+
+            foreach(PlayerCanvas canvas in playerCanvas)
+            {
+                showDownOver += canvas.card1.gameObject.activeSelf ? 1 : 0;
+            }
+
+            int showDownCnt = 0; // Alive and isInGame player count
+            foreach(Player p in GameManager.gameTable.players)
+            {
+                showDownCnt += (p.state != Player.State.FOLD && p.isInGame) ? 1 : 0;
+            }
+
+            return showDownOver >= showDownCnt ? true : false;
+        }
+    }
+
     private struct EnableTurnStruct
     {
         public int readyCount;
@@ -89,10 +109,10 @@ public class GameSceneUpdater : MonoBehaviour
 
 
     // Facade methods to update the canvas and anim
-    public void UpdateGameScene(Player p)
+    public void UpdateGameScene(Player updater)
     {
         try{
-            StartCoroutine(UpdateGameSceneRoutine(p));
+            StartCoroutine(UpdateGameSceneRoutine(updater));
         }
         catch(Exception e)
         {
@@ -113,7 +133,7 @@ public class GameSceneUpdater : MonoBehaviour
         StartCoroutine(worldAnimHandler.AnimateShowDown(pIdx, showDownBool));
         
         /* Check if the show down is over */
-        if(IsShowDownOver())
+        if(IsShowDownOver)
         {
             Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
 
@@ -141,7 +161,7 @@ public class GameSceneUpdater : MonoBehaviour
             case GameTable.Stage.POT_FIN:
             case GameTable.Stage.UNCONTESTED:
                 // Check if the showDown is over by leaving
-                if(IsShowDownOver() && !is_prepare_running)
+                if(IsShowDownOver && !is_prepare_running)
                 {
                     Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
                     StartCoroutine(PrepareNextPotRoutine(PWS));
@@ -346,7 +366,7 @@ public class GameSceneUpdater : MonoBehaviour
         GameMsgHandler.SendReady();
     }
 
-    private IEnumerator UpdateGameSceneRoutine(Player p)
+    private IEnumerator UpdateGameSceneRoutine(Player updater)
     {
         enableTurnStruct.isReadyChecked = false;
 
@@ -359,16 +379,16 @@ public class GameSceneUpdater : MonoBehaviour
         }
 
         /* Update target playerCanvas */
-        PlayerCanvas targetCanvas = GetPlayerCanvasFromName(p.name);
-        targetCanvas.playerState = p.state;
+        PlayerCanvas targetCanvas = GetPlayerCanvasFromName(updater.name);
+        targetCanvas.playerState = updater.state;
         UpdateTabs();
 
         /* Update totalChips and pot chips or enable fold image */
-        screenCanvas.state = p.state;
+        screenCanvas.state = updater.state;
 
         /* Animate target player's animations */
-        int targetIdx = table.GetIterPosByName(p.name);
-        switch(p.state)
+        int targetIdx = table.GetIterPosByName(updater.name);
+        switch(updater.state)
         {
             case Player.State.CHECK:
                 yield return new WaitForSeconds(0.5f);
@@ -377,7 +397,7 @@ public class GameSceneUpdater : MonoBehaviour
             case Player.State.CALL:
             case Player.State.RAISE:
             case Player.State.ALLIN:
-                yield return StartCoroutine(worldAnimHandler.AnimateBetting(targetIdx, p));
+                yield return StartCoroutine(worldAnimHandler.AnimateBetting(targetIdx, updater));
                 break;
             case Player.State.FOLD:
                 yield return StartCoroutine(worldAnimHandler.AnimateFold(targetIdx));
@@ -627,7 +647,7 @@ public class GameSceneUpdater : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         
         /* Set cam to original position */
-        if(!camController.IsMovable)
+        if(!camController.isMovable)
         {
             camController.SetCamToPrev();
         }
@@ -642,7 +662,7 @@ public class GameSceneUpdater : MonoBehaviour
         UpdateTabs();
         
         /* If all cards are shown, Go to next pot game */
-        if(IsShowDownOver())
+        if(IsShowDownOver)
         {
             Stack<KeyValuePair<int, List<Player>>> PWS = GameManager.gameTable.potWinnerManager.potWinnerStack;
             yield return StartCoroutine(PrepareNextPotRoutine(PWS));
@@ -809,22 +829,5 @@ public class GameSceneUpdater : MonoBehaviour
             c.UpdateTab(p);
         }
     }
-
-    private bool IsShowDownOver()
-    {
-        int showDownOver = 0; // PCanvas enabled card count
-
-        foreach(PlayerCanvas canvas in playerCanvas)
-        {
-            showDownOver += canvas.card1.gameObject.activeSelf ? 1 : 0;
-        }
-
-        int showDownCnt = 0; // Alive and isInGame player count
-        foreach(Player p in GameManager.gameTable.players)
-        {
-            showDownCnt += (p.state != Player.State.FOLD && p.isInGame) ? 1 : 0;
-        }
-        
-        return showDownOver >= showDownCnt ? true : false;
-    }
 }
+

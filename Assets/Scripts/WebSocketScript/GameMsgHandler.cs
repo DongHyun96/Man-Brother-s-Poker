@@ -230,18 +230,6 @@ public class GameMsgHandler : MonoBehaviour
         InvokeRepeating("SendDummy", 10f, 40f);
     }
 
-    private IEnumerator DelayRegisterRoutine()
-    {
-        // Wait for random seconds
-        System.Random rnd = new System.Random();
-        float rand = rnd.Next(0, 7);
-        yield return new WaitForSeconds(rand);
-        
-        GameMessage msg = new GameMessage(GameManager.thisPlayerRoom.id, GameMessage.MessageType.REGISTER,
-         GameManager.thisPlayer.name, GameManager.gameTable);
-        SendMessage(msg);
-    }
-
     private void SendDummy()
     {
         GameMessage dummy = new GameMessage(GameMessage.MessageType.DUMMY);

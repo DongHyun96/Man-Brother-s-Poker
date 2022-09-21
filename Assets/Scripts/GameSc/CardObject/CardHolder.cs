@@ -10,15 +10,16 @@ public class CardHolder : MonoBehaviour
     [SerializeField] private List<GameObject> clubs;
 
 
-    private static CardHolder instance;
-
-    public static CardHolder GetInstance()
+    private static CardHolder m_instance;
+    public static CardHolder Instance
     {
-        if(instance == null)
+        get
         {
-            instance = FindObjectOfType<CardHolder>();
+            if(m_instance == null) {
+                m_instance = FindObjectOfType<CardHolder>();
+            }
+            return m_instance;
         }
-        return instance;
     }
 
     public GameObject GetCardPrefab(Card c)

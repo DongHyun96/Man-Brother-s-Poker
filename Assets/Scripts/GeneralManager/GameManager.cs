@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static Player thisPlayer;
-
+    
     private static GameManager instance;
 
     // For faster search, Using dictionary instead of list, (name, Player) pair
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
         set{
 
-            EntCamController camController = EntCamController.GetInstance();
+            EntCamController camController = EntCamController.Instance;
 
             switch(value)
             {
@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        StartCoroutine(EntCamController.GetInstance().GameToLobbyRoutine());
+        StartCoroutine(EntCamController.Instance.GameToLobbyRoutine());
     }
 
 }

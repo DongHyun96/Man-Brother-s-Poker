@@ -21,17 +21,20 @@ public class ChipHolder : MonoBehaviour
 
     [SerializeField] private List<GameObject> potPrefabs;
 
-    private static ChipHolder instance;
-
-    public static ChipHolder GetInstance()
+    private static ChipHolder m_instance;
+    public static ChipHolder Instance
     {
-        if(instance == null)
+        get
         {
-           instance = FindObjectOfType<ChipHolder>();
+            if(m_instance == null)
+            {
+               m_instance = FindObjectOfType<ChipHolder>();
+            }
+            return m_instance;
         }
-        return instance;
     }
 
+    
     /* Return empty gameObject if chip is 0 */
     public GameObject GetChipPrefab(int chips, int buyIn)
     {

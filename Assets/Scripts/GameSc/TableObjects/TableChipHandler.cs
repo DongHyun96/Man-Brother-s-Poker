@@ -33,26 +33,29 @@ public class TableChipHandler : MonoBehaviour
         BET, BET_TO_POT, POT_TO_PLAYER
     }
 
+    // For audio
+    public bool IsBetChipsIn{
+        get
+        {
+            foreach(GameObject o in betChipsContainer)
+            {
+                if(o != null)
+                {
+                    if(o.transform.childCount > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
     public void InitBuyIn(int buyIn)
     {
         this.buyIn = buyIn;
     }
 
-    // For audio
-    public bool IsBetChipsIn()
-    {
-        foreach(GameObject o in betChipsContainer)
-        {
-            if(o != null)
-            {
-                if(o.transform.childCount > 0)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     public void UpdateChips(ContentType type, int idx, int chips)
     {
@@ -78,7 +81,7 @@ public class TableChipHandler : MonoBehaviour
         List<GameObject> chipList = GetCorrespondingChipList(type, out trigger, out destContent);
 
         /* Set contents */
-        GameObject prefab = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
+        GameObject prefab = ChipHolder.Instance.GetChipPrefab(chips, buyIn);
         if(prefab != null)
         {
             GameObject container = Instantiate(prefab);
@@ -108,7 +111,7 @@ public class TableChipHandler : MonoBehaviour
             Destroy(playerChipsContainer[idx]);
         }
 
-        GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
+        GameObject container = ChipHolder.Instance.GetChipPrefab(chips, buyIn);
         if(container != null)
         {
             playerChipsContainer[idx] = Instantiate(container, playerChipsT[idx].position, playerChipsT[idx].rotation);
@@ -123,7 +126,7 @@ public class TableChipHandler : MonoBehaviour
             Destroy(betChipsContainer[idx]);
         }
 
-        GameObject container = ChipHolder.GetInstance().GetChipPrefab(chips, buyIn);
+        GameObject container = ChipHolder.Instance.GetChipPrefab(chips, buyIn);
         if(container != null)
         {
             betChipsContainer[idx] = Instantiate(container, bettingChipsT[idx].position, bettingChipsT[idx].rotation);
@@ -137,7 +140,7 @@ public class TableChipHandler : MonoBehaviour
             Destroy(potChipsContainer);
         }
 
-        GameObject container = ChipHolder.GetInstance().GetPotPrefab(chips, buyIn);
+        GameObject container = ChipHolder.Instance.GetPotPrefab(chips, buyIn);
         if(container != null)
         {
             potChipsContainer = Instantiate(container, potChipsT.position, potChipsT.rotation);

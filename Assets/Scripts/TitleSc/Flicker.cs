@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Flicker : MonoBehaviour
 {
 
-    private float flickSpeed = 0.8f;
+    private const float flickSpeed = 0.8f;
 
     public Image border;
     public Text text;
@@ -14,13 +14,13 @@ public class Flicker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        border.color = updateColor(border.color);
-        text.color = updateColor(text.color);
+        border.color = UpdateColor(border.color);
+        text.color = UpdateColor(text.color);
     }
 
     private bool flag = false; // false - go down, true - go up
 
-    private Color updateColor(Color c)
+    private Color UpdateColor(Color c)
     {
         if(c.a >= 1f)
             flag = false;

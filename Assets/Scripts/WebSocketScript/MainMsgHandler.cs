@@ -85,11 +85,11 @@ public class MainMsgHandler : MonoBehaviour
                             // Check whether current state is LOBBY and then update players panel
                             if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                             {
-                                EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                                EnteringSceneUpdater.Instance.onLobbyPlayersUpdate.Invoke();
                             }
                             else if(GameManager.GetInstance().state == GameManager.State.ROOM) // Update inviting panel
                             {
-                                EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_ADD);
+                                EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_ADD);
                             }
                         });
                     }
@@ -108,7 +108,7 @@ public class MainMsgHandler : MonoBehaviour
                         // check LOBBY state
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
-                            EnteringSceneUpdater.GetInstance().UpdateChat(message.name, message.msg);
+                            EnteringSceneUpdater.Instance.UpdateChat(message.name, message.msg);
                         }
                     });
                     break;
@@ -119,12 +119,12 @@ public class MainMsgHandler : MonoBehaviour
 
                         if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                         {
-                            EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                            EnteringSceneUpdater.Instance.onLobbyPlayersUpdate.Invoke();
                         }
                         else if(GameManager.GetInstance().state == GameManager.State.ROOM)
                         {
                             // Update inviting panel in Room Panel
-                            EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_REMOVE);
+                            EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_REMOVE);
                         }
                     });
                     break;
@@ -139,14 +139,14 @@ public class MainMsgHandler : MonoBehaviour
 
                             if(GameManager.GetInstance().state == GameManager.State.LOBBY)
                             {
-                                EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                                EnteringSceneUpdater.Instance.onLobbyPlayersUpdate.Invoke();
                             }
                             else if(GameManager.GetInstance().state == GameManager.State.ROOM)
                             {
                                 if(message.invitable)
-                                    EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_ADD);
+                                    EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_ADD);
                                 else
-                                    EnteringSceneUpdater.GetInstance().UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_REMOVE);
+                                    EnteringSceneUpdater.Instance.UpdatePlayerInRoom(message.name, RoomPanel.UpdateType.INV_REMOVE);
                             }
                         });
                     }
@@ -160,7 +160,7 @@ public class MainMsgHandler : MonoBehaviour
                         receivedPlayers.Remove(GameManager.thisPlayer.name);  // Remove self
                         GameManager.allOthers = receivedPlayers;
 
-                        EnteringSceneUpdater.GetInstance().onLobbyPlayersUpdate.Invoke();
+                        EnteringSceneUpdater.Instance.onLobbyPlayersUpdate.Invoke();
                     });
                     break;
                 default:
