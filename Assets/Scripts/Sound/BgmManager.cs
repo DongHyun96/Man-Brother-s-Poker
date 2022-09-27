@@ -5,8 +5,8 @@ using System;
 
 public class BgmManager : MonoBehaviour
 {
-    public AudioSource bgSound;
-    public List<AudioClip> bgList;
+    [SerializeField] private AudioSource bgSound;
+    [SerializeField] private List<AudioClip> bgList;
 
     private void Start() {
 

@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour
 {
     private static SoundManager instance;
 
-    public AudioMixer masterMixer;
+    [SerializeField] private AudioMixer masterMixer;
 
     public const float MAX = -12f;
     public const float MIN = -30f;

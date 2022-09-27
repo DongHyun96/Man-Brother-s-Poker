@@ -9,7 +9,7 @@ public class EntSfxHolder : SfxHolder
         DOOR
     }
 
-    public List<AudioClip> doorClips;
+    [SerializeField] private List<AudioClip> doorClips;
 
     protected override void Awake()
     {
