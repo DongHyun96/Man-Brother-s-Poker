@@ -9,28 +9,28 @@ public class RoomPanel : MonoBehaviour
     private const int MAXIMUM_NUM_OF_INV = 20;
     public Guid id;
 
-    public Text title;
+    [SerializeField] private Text title;
 
-    public Text hostName; 
+    [SerializeField] private Text hostName; 
 
-    public Toggle[] buyIn;
-    public Toggle[] mode;
+    [SerializeField] private Toggle[] buyIn;
+    [SerializeField] private Toggle[] mode;
 
 
-    public GameObject playerPanel;
-    public GameObject invitingPanel;
+    [SerializeField] private GameObject playerPanel;
+    [SerializeField] private GameObject invitingPanel;
 
-    public GameObject playerPanel_host;   // Prefab
-    public GameObject playerPanel_player; // Prefab
+    [SerializeField] private GameObject playerPanel_host;   // Prefab
+    [SerializeField] private GameObject playerPanel_player; // Prefab
 
-    public GameObject invPanel_player;    // Prefab
+    [SerializeField] private GameObject invPanel_player;    // Prefab
 
-    public Button playBtn;
-    public Button inviteBtn;
-    public Button settingBtn;
+    [SerializeField] private Button playBtn;
+    [SerializeField] private Button inviteBtn;
+    [SerializeField] private Button settingBtn;
 
-    public InputField titleField;
-    public InputField passwordField;
+    [SerializeField] private InputField titleField;
+    [SerializeField] private InputField passwordField;
 
     // Prefabs Container
     private List<GameObject> playerPanel_prefabs = new List<GameObject>();
@@ -42,7 +42,8 @@ public class RoomPanel : MonoBehaviour
     }
 
     // Warning text
-    public Text warning;
+    [SerializeField] private Text warning;
+    
 
     private void Awake() {
         EnteringSceneUpdater.Instance.onRoomPlayerUpdate += UpdatePlayerToPanels;

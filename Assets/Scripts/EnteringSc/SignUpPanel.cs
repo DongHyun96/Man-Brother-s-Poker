@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class SignUpPanel : MonoBehaviour
 {
 
-    public Animator anim;
+    [SerializeField] private Animator anim;
     public static GameObject warning;
-    public InputField inputField;
+    [SerializeField] private InputField inputField;
 
     void Awake()
     {   
@@ -18,12 +18,12 @@ public class SignUpPanel : MonoBehaviour
         inputField.onValueChanged.AddListener(delegate { RemoveSpaces(); });
     }
 
-
     public void AcceptBtnPressed()
     {
         if(string.IsNullOrEmpty(inputField.text))
         {
-            SignUpPanel.warning.SetActive(true);
+            // SignUpPanel.warning.SetActive(true);
+            warning.SetActive(true);
             return;
         }
         

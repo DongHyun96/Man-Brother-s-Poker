@@ -7,13 +7,13 @@ using System;
 
 public class L_CreatingPanel : MonoBehaviour
 {
-    public InputField title;
-    public InputField password;
+    [SerializeField] private InputField title;
+    [SerializeField] private InputField password;
 
-    public ToggleGroup buyIn;
-    public ToggleGroup mode;
+    [SerializeField] private ToggleGroup buyIn;
+    [SerializeField] private ToggleGroup mode;
 
-    public GameObject warning;
+    [SerializeField] private GameObject warning;
 
     private void Start() {
         Toggle t = mode.ActiveToggles().FirstOrDefault();

@@ -8,11 +8,11 @@ public class CharacterSelect : MonoBehaviour
 
     private int current = 0;
 
-    public List<GameObject> characters = new List<GameObject>();
+    [SerializeField] private List<GameObject> characters = new List<GameObject>();
 
-    public GameObject characterContainers;
+    [SerializeField] private GameObject characterContainers;
 
-    public Animator SignUpAnim;
+    [SerializeField] private Animator SignUpAnim;
 
     public void OnLeftButton()
     {

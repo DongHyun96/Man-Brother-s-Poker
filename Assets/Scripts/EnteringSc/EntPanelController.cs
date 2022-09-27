@@ -7,12 +7,12 @@ using System;
 
 public class EntPanelController : MonoBehaviour
 {
-    public Animator anim_door;
-    public Animator anim_signUp;
-    public Animator anim_Lobby;
-    public Animator anim_Room;
-    public Animator anim_Inviting;
-    public Animator anim_Menu;
+    [SerializeField] private Animator anim_door;
+    [SerializeField] private Animator anim_signUp;
+    [SerializeField] private Animator anim_Lobby;
+    [SerializeField] private Animator anim_Room;
+    [SerializeField] private Animator anim_Inviting;
+    [SerializeField] private Animator anim_Menu;
 
     private static EntPanelController m_instance;
     public static EntPanelController Instance

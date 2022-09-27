@@ -297,11 +297,6 @@ public class ScreenCanvas : MonoBehaviour
         winnerPanel.InitWinnerPanel();
     }
 
-    private void UpdateSidePotPanel(List<Player> players)
-    {
-        sidePotPanel.InitSidePot(players);
-    }
-
     private void UpdateShowDownPanel(List<Card> cards)
     {
         if(cards.Count < 2)

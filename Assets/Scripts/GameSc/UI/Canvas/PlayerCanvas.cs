@@ -292,7 +292,7 @@ public class PlayerCanvas : MonoBehaviour
         card2.gameObject.SetActive(true);
 
         Color defaultColor = new Color(41 / 255f, 41 / 255f, 41 / 255f);
-        Sprite back = CardSprite.GetInstance().back;
+        Sprite back = CardSprite.GetInstance().GetBack();
 
         card1.color = isFirstOpen ? Color.white : defaultColor;
         card2.color = isSecondOpen ? Color.white : defaultColor;

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System;
 
+/* Used by MainMsgHandler & RoomMsgHandler */
 public class EnteringSceneUpdater : MonoBehaviour
 {
     private static EnteringSceneUpdater m_instance;

@@ -29648,7 +29648,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2042381944}
         m_TargetAssemblyTypeName: ScreenCanvas, Assembly-CSharp
-        m_MethodName: OnPieButtom
+        m_MethodName: OnPieBottom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

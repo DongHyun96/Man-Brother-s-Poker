@@ -7,9 +7,9 @@ using System;
 public class Invitation : MonoBehaviour
 {
     private Guid id;
-    public Text sender;
+    [SerializeField] private Text sender;
     
-    public Image fill;
+    [SerializeField] private Image fill;
     private const float t = 10f;
 
     void Awake() { // Subscribe to EnteringSceneUpdater delegate event

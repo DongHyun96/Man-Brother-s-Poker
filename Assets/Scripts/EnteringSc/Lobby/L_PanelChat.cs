@@ -6,11 +6,11 @@ using System;
 
 public class L_PanelChat : MonoBehaviour
 {
-    public Text chatText;
+    [SerializeField] private Text chatText;
 
-    public InputField inputField;
+    [SerializeField] private InputField inputField;
 
-     void Awake()
+    void Awake()
     {
         EnteringSceneUpdater.Instance.onLobbyChatUpdate += AddChat;  // Subscribe
     }

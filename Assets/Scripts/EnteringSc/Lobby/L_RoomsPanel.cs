@@ -4,7 +4,8 @@ using UnityEngine;
 using System;
 public class L_RoomsPanel : MonoBehaviour
 {
-    public GameObject prefab;
+    [SerializeField] private GameObject prefab;
+    
 
     public void InitRoomsPanel()
     {

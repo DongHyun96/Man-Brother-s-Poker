@@ -8,7 +8,7 @@ public class Timer : MonoBehaviour
 {
     public UnityEvent OnTimeOut;
 
-    public Image fill;
+    [SerializeField] private Image fill;
 
     public bool IsTimerActive
     {

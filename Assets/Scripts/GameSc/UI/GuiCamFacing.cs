@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GuiCamFacing : MonoBehaviour
 {
-    public Transform mLookAt;
+    [SerializeField] private Transform mLookAt;
 
     private void Update() {
 

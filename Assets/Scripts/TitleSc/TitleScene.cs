@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
-    public Image mask;
+    [SerializeField] private Image mask;
 
-    public GameObject titleObj;
-    public GameObject wordObj;
+    [SerializeField] private GameObject titleObj;
+    [SerializeField] private GameObject wordObj;
 
     private void Start() {
         // Initialize and connect websockets

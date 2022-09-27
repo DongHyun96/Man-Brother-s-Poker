@@ -8,13 +8,13 @@ public class IconSprite : MonoBehaviour
 {
     private static IconSprite instance;
 
-    public Sprite small;
-    public Sprite big;
-    public Sprite check;
-    public Sprite bet; // also used as call
-    public Sprite raise;
-    public Sprite allin;
-    public Sprite fold;
+    [SerializeField] private Sprite small;
+    [SerializeField] private Sprite big;
+    [SerializeField] private Sprite check;
+    [SerializeField] private Sprite bet; // also used as call
+    [SerializeField] private Sprite raise;
+    [SerializeField] private Sprite allin;
+    [SerializeField] private Sprite fold;
 
     public static IconSprite GetInstance()
     {

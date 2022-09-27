@@ -7,12 +7,12 @@ public class CamController : MonoBehaviour
     public bool isMovable{ get; private set; }
     private bool isLerpingToPrev = false;
 
-    public Transform centralAxis;
-    public float camSpeed;
+    [SerializeField] private Transform centralAxis;
+    [SerializeField] private float camSpeed;
 
-    public Camera mainCamera;
-    public List<Transform> playersTransform = new List<Transform>(); 
-    public Transform previousCamPos;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private List<Transform> playersTransform = new List<Transform>(); 
+    [SerializeField] private Transform previousCamPos;
     private int playerPosIdx;
 
     private float mouseX;
@@ -21,6 +21,10 @@ public class CamController : MonoBehaviour
     private const int ROT_MIN = 0;
     private const float ROT_MAX = 35f;
     private const float lerpT = 0.07f;
+
+    private void Awake() {
+        isMovable = true;
+    }
 
     /* Pin camera by player's mouse input function */
     void CamMove()

@@ -7,15 +7,15 @@ using System;
 public class WinnerPanel : MonoBehaviour
 {
 
-    public Text hands;
+    [SerializeField] private Text hands;
     
     public List<Image> playerCards;
     public List<Image> communityCards;
     
-    public Text winner;
-    public Text pots;
+    [SerializeField] private Text winner;
+    [SerializeField] private Text pots;
 
-    public SidePotPanel sidePotPanel;
+    [SerializeField] private SidePotPanel sidePotPanel;
 
     private Color defaultColor = new Color(41 / 255f, 41 / 255f, 41 / 255f);
 
@@ -60,12 +60,12 @@ public class WinnerPanel : MonoBehaviour
             
             foreach(Image img in playerCards)
             {
-                img.sprite = CardSprite.GetInstance().back;
+                img.sprite = CardSprite.GetInstance().GetBack();
                 img.color = defaultColor;
             }
             foreach(Image img in communityCards)
             {
-                img.sprite = CardSprite.GetInstance().back;
+                img.sprite = CardSprite.GetInstance().GetBack();
                 img.color = defaultColor;
             }
             for(int i = 0; i < GameManager.gameTable.communityCards.Count; i++)
@@ -190,7 +190,7 @@ public class WinnerPanel : MonoBehaviour
         KeyValuePair<int, List<Player>>[] kvPairArray = winnerStack.ToArray();
 
         // Clear
-        sidePotPanel.name.text = "";
+        sidePotPanel.ClearSidePot();
 
         // Fist side pot ~ Last side pot
         for(int i = 1; i < kvPairArray.Length; i++)

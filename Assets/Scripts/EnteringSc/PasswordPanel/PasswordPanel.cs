@@ -15,8 +15,8 @@ public class PasswordPanel : MonoBehaviour
     }
     private Guid id;
 
-    public InputField inputField;
-    public Text warning;
+    [SerializeField] private InputField inputField;
+    [SerializeField] private Text warning;
 
     private void Awake() {
         if(Instance == null)

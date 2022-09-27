@@ -7,11 +7,11 @@ using System;
 public class CardSprite : MonoBehaviour
 {
     
-    public List<Sprite> clubs;
-    public List<Sprite> diamonds;
-    public List<Sprite> hearts;
-    public List<Sprite> spades;
-    public Sprite back;
+    [SerializeField] private List<Sprite> clubs;
+    [SerializeField] private List<Sprite> diamonds;
+    [SerializeField] private List<Sprite> hearts;
+    [SerializeField] private List<Sprite> spades;
+    [SerializeField] private Sprite back;
     
     private static CardSprite instance;
 
@@ -23,6 +23,8 @@ public class CardSprite : MonoBehaviour
         }
         return instance;
     }
+
+
     public Sprite GetSprite(Card c)
     {
 
@@ -39,6 +41,12 @@ public class CardSprite : MonoBehaviour
             default:
                 return null;
         }
+    }
+
+
+    public Sprite GetBack()
+    {
+        return back;
     }
 
     

@@ -21,13 +21,13 @@ public class EntCamController : MonoBehaviour
     }
 
     // Character select panel
-    public GameObject characterSelectObj;    
+    [SerializeField] private GameObject characterSelectObj;    
 
     // Cinemachine cam, lobby pos, RoomPos
-    public CinemachineVirtualCamera currentCam;
-    public LobbyCamPos lobbyPos;
-    public RoomCamPos roomPos;
-    public GameCamPos gamePos;
+    [SerializeField] private CinemachineVirtualCamera currentCam;
+    [SerializeField] private LobbyCamPos lobbyPos;
+    [SerializeField] private RoomCamPos roomPos;
+    [SerializeField] private GameCamPos gamePos;
 
     private const int LOBBY_PATH_POS = 2;
     private const int ROOM_PATH_POS = 5;
@@ -35,13 +35,17 @@ public class EntCamController : MonoBehaviour
     private const int BETWEEN_LR = 4;
 
     // Changing panel events
-    public EntPanelController panelAnimController;
-    public UnityEvent onValidSignUp;
-    public UnityEvent onRoomToLobby;
-    public UnityEvent onPlayingToLobby;
+    [SerializeField] private EntPanelController panelAnimController;
+    [SerializeField] private UnityEvent onValidSignUp;
+    [SerializeField] private UnityEvent onRoomToLobby;
+    [SerializeField] private UnityEvent onPlayingToLobby;
 
-    public UnityEvent onLobbyToRoom;
+    [SerializeField] private UnityEvent onLobbyToRoom;
 
+
+
+    /* Use these Coroutine in GameManager */
+     
     public IEnumerator LogInToLobbyRoutine()
     {
         // Camera animation routine

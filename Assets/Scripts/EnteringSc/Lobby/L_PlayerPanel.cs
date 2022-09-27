@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class L_PlayerPanel : MonoBehaviour
 {
-    public GameObject thisPlayerObj;
-    public GameObject playerObj;
+    [SerializeField] private GameObject thisPlayerObj;
+    [SerializeField] private GameObject playerObj;
 
     private const int LIMIT = 20;
 
